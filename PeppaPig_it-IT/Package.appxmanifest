@@ -1,51 +1,42 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-
-  <Identity Name="3b0de95a-8ad7-4243-bca5-37ae54ec9b6b"
-            Publisher="CN=Davide"
-            Version="1.0.0.0" />
-
-  <mp:PhoneIdentity PhoneProductId="2d034f2d-836b-466c-9ca2-a7bb6b24e3f8" PhonePublisherId="68dec18f-239f-4612-a7be-70327947b555"/>
-
+  <Identity Name="3b0de95a-8ad7-4243-bca5-37ae54ec9b6b" Publisher="CN=Davide" Version="1.0.0.0" />
+  <mp:PhoneIdentity PhoneProductId="2d034f2d-836b-466c-9ca2-a7bb6b24e3f8" PhonePublisherId="68dec18f-239f-4612-a7be-70327947b555" />
   <Properties>
     <DisplayName>PeppaPig_it-IT</DisplayName>
     <PublisherDisplayName>Davide</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
-
   <Prerequisites>
     <OSMinVersion>6.3.1</OSMinVersion>
     <OSMaxVersionTested>6.3.1</OSMaxVersionTested>
   </Prerequisites>
-
   <Resources>
-    <Resource Language="x-generate"/>
+    <Resource Language="x-generate" />
   </Resources>
-
   <Applications>
-    <Application Id="x2d034f2dy836by466cy9ca2ya7bb6b24e3f8x"
-        Executable="AGHost.exe"
-        EntryPoint="MainPage.xaml">
-      <m3:VisualElements
-          DisplayName="PeppaPig_it-IT"
-          Square150x150Logo="Assets\SquareTile150x150.png"
-          Square44x44Logo="Assets\Logo.png"
-          Description="PeppaPig_it-IT"
-          ForegroundText="light"
-          BackgroundColor="#464646">
-        <m3:DefaultTile Square71x71Logo="Assets\SquareTile71x71.png"/>
+    <Application Id="x2d034f2dy836by466cy9ca2ya7bb6b24e3f8x" Executable="AGHost.exe" EntryPoint="MainPage.xaml">
+      <m3:VisualElements DisplayName="PeppaPig_it-IT" Square150x150Logo="Assets\SquareTile150x150.png" Square44x44Logo="Assets\Logo.png" Description="PeppaPig_it-IT" ForegroundText="light" BackgroundColor="#464646">
+        <m3:DefaultTile Square71x71Logo="Assets\SquareTile71x71.png">
+        </m3:DefaultTile>
         <m3:SplashScreen Image="SplashScreenImage.jpg" />
       </m3:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="AgHost.BackgroundTask">
-          <BackgroundTasks>
-          <Task Type="systemEvent" />
-          </BackgroundTasks>
+        <Extension Category="windows.fileTypeAssociation">
+          <FileTypeAssociation Name="test">
+            <DisplayName>test</DisplayName>
+            <SupportedFileTypes>
+              <FileType ContentType="movie/mp4">.mp4</FileType>
+            </SupportedFileTypes>
+          </FileTypeAssociation>
         </Extension>
       </Extensions>
     </Application>
   </Applications>
   <Capabilities>
+    <Capability Name="removableStorage" />
+    <Capability Name="picturesLibrary" />
+    <Capability Name="musicLibrary" />
   </Capabilities>
   <Extensions>
     <Extension Category="windows.activatableClass.inProcessServer">

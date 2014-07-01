@@ -28,6 +28,8 @@ using Centapp.CartoonCommon.Converters;
 using System.ComponentModel;
 using Microsoft.Phone.Net.NetworkInformation;
 using Centapp.CartoonCommon.Utility;
+using Windows.Storage;
+using Windows.Storage.Streams;
 
 namespace Centapp.CartoonCommon
 {
@@ -450,7 +452,7 @@ namespace Centapp.CartoonCommon
 #if SIMULATE_DWN
         void client_OpenReadCompleted(object sender, MyOpenReadCompletedEventArgs e)
 #else
-        void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
+        async void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
 #endif
         {
             App.ViewModel.Logger.Log("[client_OpenReadCompleted] ep: " + _curEpisode.Id);
@@ -518,27 +520,47 @@ namespace Centapp.CartoonCommon
 
                 try
                 {
-#if DEBUG
-                    //if (_curEpisode.Id == 2)
-                    //{
-                    //    throw new Exception("test");
-                    //}
-#endif
                     App.ViewModel.Logger.Log("[client_OpenReadCompleted] starting isostore save process of: " + curEpisodeFileName);
-                    using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(curEpisodeFileName, System.IO.FileMode.Create, _isoStore))
+
+                    if (AppInfo.Instance.UseSDCard)
                     {
-                        byte[] buffer = new byte[1024];
-                        //while (e.Result.Read(buffer, 0, buffer.Length) > 0)
-                        //{
-                        //    stream.Write(buffer, 0, buffer.Length);
-                        //}
-                        //18-07-2013 - così non viene scritto tutto il buffer ma solo i dati realmente necessari
-                        int bytesRead;
-                        while ((bytesRead = e.Result.Read(buffer, 0, buffer.Length)) > 0)
+                        var stream = e.Result;
+                        StorageFolder pictLibrary = Windows.Storage.KnownFolders.PicturesLibrary;
+                        StorageFolder storageFolder = await pictLibrary.CreateFolderAsync("PeppaBackup");
+                        //StorageFolder storageFolder = (await pictLibrary.GetFoldersAsync()).FirstOrDefault();
+
+                        if (storageFolder != null)
                         {
-                            stream.Write(buffer, 0, bytesRead);
+                            StorageFile sampleFile = await storageFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
+                            IRandomAccessStream outStream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                            using (var outputStream = outStream.GetOutputStreamAt(0))
+                            {
+                                DataWriter dataWriter = new DataWriter(outputStream);
+
+                                byte[] buffer = new byte[1024];
+                                int bytesRead;
+                                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    dataWriter.WriteBytes(buffer);
+                                }
+                                await dataWriter.StoreAsync();
+                                await outputStream.FlushAsync();
+                            }
                         }
                     }
+                    else
+                    {
+                        using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(curEpisodeFileName, System.IO.FileMode.Create, _isoStore))
+                        {
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = e.Result.Read(buffer, 0, buffer.Length)) > 0)
+                            {
+                                stream.Write(buffer, 0, bytesRead);
+                            }
+                        }
+                    }
+
                     App.ViewModel.Logger.Log("[client_OpenReadCompleted] end OK isostore save process of: " + curEpisodeFileName);
                     //_currentEpisodeDownloadRetryNum = 0; //dwn ok, reset contatore tentativi
                     _curEpisode.OfflineFileName = curEpisodeFileName;

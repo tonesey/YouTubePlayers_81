@@ -27,6 +27,7 @@
             <DisplayName>test</DisplayName>
             <SupportedFileTypes>
               <FileType ContentType="text/txt">.txt</FileType>
+              <FileType ContentType="image/png">.png</FileType>
             </SupportedFileTypes>
           </FileTypeAssociation>
         </Extension>
@@ -43,5 +44,6 @@
   </Extensions>
   <Capabilities>
     <Capability Name="removableStorage" />
+    <Capability Name="picturesLibrary" />
   </Capabilities>
 </Package>

@@ -26,6 +26,8 @@ namespace Centapp.CartoonCommon
             }
         }
 
+        public bool UseSDCard { get; set; }
+
         public string AppName { get; set; }
         public string IndexFile { get; set; }
         public bool UseJSon
