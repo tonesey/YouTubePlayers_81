@@ -290,6 +290,9 @@
       <Link>MainPage.xaml.cs</Link>
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\Common\MediaInfo.cs">
+      <Link>MediaInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Common\PlayerPage.xaml.cs">
       <Link>PlayerPage.xaml.cs</Link>
       <DependentUpon>PlayerPage.xaml</DependentUpon>

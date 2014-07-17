@@ -8,8 +8,6 @@ namespace Centapp.CartoonCommon
 {
     class AppInfo
     {
-
-        public const string OfflineIndexFileNameXml = "offline.xml";
         public const string OfflineIndexFileNameJSON = "offline.json";
         public const string DataBackupFileName = "backup.xml";
 
@@ -39,7 +37,6 @@ namespace Centapp.CartoonCommon
         }
 
         public bool DownloadIsAllowed { get; set; }
-        public bool OfflineRevertWarningRequired { get; set; }
 
         public bool InfoPageIsPivot { get; set; }
         public bool ShowOtherApps { get; set; }

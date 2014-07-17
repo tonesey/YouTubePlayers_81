@@ -17,6 +17,13 @@ using System.Globalization;
 namespace Centapp.CartoonCommon.Helpers
 {
 
+    public enum BackupSupportType
+    {
+        Undefined = -1,
+        IsolatedStorage = 0,
+        SDCard = 1
+    }
+
     public enum VersionFormat
     {
         V,
@@ -27,10 +34,10 @@ namespace Centapp.CartoonCommon.Helpers
     public class GenericHelper
     {
 
-
         public const string FavoriteEpisodesKey = "FavoriteEpisodesIds";
         public const string AppIsOfflineKey = "AppIsOffline";
         public const string OnlineUsagesKey = "OnlineUsages";
+        public const string OfflineSupportTypeKey = "OfflineSupportType";
 
         public const string UsageKeyName = "usage";
         public const string MaxNumberKeyName = "number";
@@ -39,7 +46,7 @@ namespace Centapp.CartoonCommon.Helpers
         public static List<int> FavoriteEpisodesIdsSettingValue { set; get; }
         public static bool AppIsOfflineSettingValue { set; get; }
         public static int OnlineUsagesSettingValue { set; get; }
-
+        public static BackupSupportType OfflineSupportTypeSettingValue { set; get; }
         #endregion
 
         public static void ReadAppSettings()
@@ -50,52 +57,34 @@ namespace Centapp.CartoonCommon.Helpers
             object appIsOffline = Readkey(AppIsOfflineKey);
             AppIsOfflineSettingValue = appIsOffline == null ? false : (bool)appIsOffline;
 
-            if (AppIsOfflineSettingValue)
+            object onlineUsagesCount = Readkey(OnlineUsagesKey);
+            OnlineUsagesSettingValue = (onlineUsagesCount == null || string.IsNullOrEmpty(onlineUsagesCount.ToString())) ? 0 : int.Parse(onlineUsagesCount.ToString());
+
+            object offlineSupportType = Readkey(OfflineSupportTypeKey);
+            OfflineSupportTypeSettingValue = (BackupSupportType)offlineSupportType;
+        }
+
+        internal static void RemoveOfflineData()
+        {
+            if (OfflineSupportTypeSettingValue == BackupSupportType.IsolatedStorage)
             {
-                if (AppInfo.Instance.UseJSon)
+                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    //è il caso di un'app precedente a 1.2.x in cui il file indice era in xml
-                    //l'app torna ad essere "online" in quando gli episodi sono cambiati
-                    using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
+                   // isoStore.DeleteFile(AppInfo.OfflineIndexFileNameXml);
+                    foreach (var item in isoStore.GetFileNames("ep*.mp4"))
                     {
-                        if (isoStore.FileExists(AppInfo.OfflineIndexFileNameXml))
-                        {
-                            AppIsOfflineSettingValue = false;
-                            RemoveOfflineData(isoStore);
-                        }
-                        AppInfo.Instance.OfflineRevertWarningRequired = true;
+                        isoStore.DeleteFile(item);
+                    }
+                    foreach (var item in isoStore.GetFileNames("thumb*.*"))
+                    {
+                        isoStore.DeleteFile(item);
                     }
                 }
             }
             else
             {
-                if (AppInfo.Instance.UseJSon)
-                {
-                    //per pulizia viene eliminato il vecchio file indice xml anche sulle versioni online
-                    using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
-                    {
-                        if (isoStore.FileExists(AppInfo.OfflineIndexFileNameXml))
-                        {
-                            RemoveOfflineData(isoStore);
-                        }
-                    }
-                }
-            }
-
-            object onlineUsagesCount = Readkey(OnlineUsagesKey);
-            OnlineUsagesSettingValue = (onlineUsagesCount == null || string.IsNullOrEmpty(onlineUsagesCount.ToString())) ? 0 : int.Parse(onlineUsagesCount.ToString());
-        }
-
-        private static void RemoveOfflineData(IsolatedStorageFile isoStore)
-        {
-            isoStore.DeleteFile(AppInfo.OfflineIndexFileNameXml);
-            foreach (var item in isoStore.GetFileNames("ep*.mp4"))
-            {
-                isoStore.DeleteFile(item);
-            }
-            foreach (var item in isoStore.GetFileNames("thumb*.*"))
-            {
-                isoStore.DeleteFile(item);
+                //TODO 
+                throw new NotImplementedException("RemoveOfflineData from SD");
             }
         }
 
@@ -109,7 +98,6 @@ namespace Centapp.CartoonCommon.Helpers
             {
                 IsolatedStorageSettings.ApplicationSettings.Add(key, value);
             }
-
             IsolatedStorageSettings.ApplicationSettings.Save();
         }
 
@@ -117,6 +105,12 @@ namespace Centapp.CartoonCommon.Helpers
         {
             OnlineUsagesSettingValue++;
             Writekey(OnlineUsagesKey, OnlineUsagesSettingValue);
+        }
+
+        internal static void SetOfflineBackupType(BackupSupportType backupType)
+        {
+            OfflineSupportTypeSettingValue = backupType;
+            Writekey(OfflineSupportTypeKey, OfflineSupportTypeSettingValue);
         }
 
         internal static void SetAppIsOffline(bool val)

@@ -115,7 +115,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.DwnInProgress = true;
 
 #if DEBUG
-            var episodes = App.ViewModel.Items.Take(3).ToList();
+            var episodes = App.ViewModel.Items.Take(1).ToList();
 #else
             var episodes = App.ViewModel.Items;
 #endif
@@ -525,13 +525,13 @@ namespace Centapp.CartoonCommon
                     if (AppInfo.Instance.UseSDCard)
                     {
                         var stream = e.Result;
-                        StorageFolder pictLibrary = Windows.Storage.KnownFolders.PicturesLibrary;
-                        StorageFolder storageFolder = await pictLibrary.CreateFolderAsync("PeppaBackup");
+                        StorageFolder storageFolderRef = Windows.Storage.KnownFolders.RemovableDevices;
+                        StorageFolder backupStorageFolder = await storageFolderRef.CreateFolderAsync("PeppaBackup");
                         //StorageFolder storageFolder = (await pictLibrary.GetFoldersAsync()).FirstOrDefault();
 
-                        if (storageFolder != null)
+                        if (backupStorageFolder != null)
                         {
-                            StorageFile sampleFile = await storageFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
+                            StorageFile sampleFile = await backupStorageFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
                             IRandomAccessStream outStream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
                             using (var outputStream = outStream.GetOutputStreamAt(0))
                             {

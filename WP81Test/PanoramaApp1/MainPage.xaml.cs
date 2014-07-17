@@ -33,13 +33,29 @@ namespace PanoramaApp1
 
             StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
             // Get the first child folder, which represents the SD card.
-            StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
+            StorageFolder firstFolder = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
 
+            StorageFolder sdCard = null;
+
+            sdCard = await firstFolder.GetFolderAsync("MyBackup");
+
+            if (sdCard == null)
+            {
+                sdCard = (await firstFolder.CreateFolderAsync("MyBackup"));
+            }
+            
             if (sdCard != null)
             {
                 //An SD card is present and the sdCard variable now contains a reference to it.
 
-                var sdFiles = (await sdCard.GetFilesAsync()).ToList();
+                //var sdFiles = (await sdCard.GetFilesAsync()).ToList();
+
+
+                //remove
+                var testFile = (await sdCard.GetFileAsync("sample.txt"));
+                if (testFile != null) {
+                    testFile.DeleteAsync(StorageDeleteOption.Default);
+                }
 
                 //StorageFolder folder = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
 
@@ -53,23 +69,6 @@ namespace PanoramaApp1
                     await dataWriter.StoreAsync();
                     await outputStream.FlushAsync();
                 }
-
-
-                //using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(curEpisodeFileName, System.IO.FileMode.Create, _isoStore))
-                //{
-                //    byte[] buffer = new byte[1024];
-                //    //while (e.Result.Read(buffer, 0, buffer.Length) > 0)
-                //    //{
-                //    //    stream.Write(buffer, 0, buffer.Length);
-                //    //}
-                //    //18-07-2013 - così non viene scritto tutto il buffer ma solo i dati realmente necessari
-                //    int bytesRead;
-                //    while ((bytesRead = e.Result.Read(buffer, 0, buffer.Length)) > 0)
-                //    {
-                //        stream.Write(buffer, 0, bytesRead);
-                //    }
-                //}
-
                 //file read
                 //var stream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.Read);
                 StorageFile readFile = await sdCard.GetFileAsync("sample.txt");

@@ -41,6 +41,7 @@ using Centapp.CartoonCommon;
 using Microsoft.Phone.Info;
 using Wp7Shared.Helpers;
 using Windows.Storage;
+using System.Threading.Tasks;
 //using Wp7Shared.Helpers;
 
 
@@ -61,6 +62,7 @@ namespace Centapp.CartoonCommon
         MyAppPromotion
     }
 
+  
 
     public delegate void PopupClosedEventHandler();
     public delegate void PopupCancelPressedActionToExecute();
@@ -138,10 +140,10 @@ namespace Centapp.CartoonCommon
 
             App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
             App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
-            
+
         }
 
-      
+
 
         void ViewModel_OnError(string msg, bool isFatalError)
         {
@@ -229,7 +231,7 @@ namespace Centapp.CartoonCommon
         // Load data for the ViewModel Items
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-          
+
         }
 
         private void UpdateAppInfos()
@@ -332,15 +334,15 @@ namespace Centapp.CartoonCommon
                     if (AppInfo.Instance.DownloadIsAllowed)
                     {
                         GenericHelper.IncrementOnlineUsagesCount();
-                        if (GenericHelper.OnlineUsagesSettingValue % 4 == 0)
-                        {
-                            switch (MessageBox.Show(AppResources.DownloadEpisodesQuestion, "", MessageBoxButton.OKCancel))
-                            {
-                                case MessageBoxResult.OK:
-                                    GotoDownloaderPage();
-                                    return;
-                            }
-                        }
+                        //if (GenericHelper.OnlineUsagesSettingValue % 4 == 0)
+                        //{
+                        //    switch (MessageBox.Show(AppResources.DownloadEpisodesQuestion, "", MessageBoxButton.OKCancel))
+                        //    {
+                        //        case MessageBoxResult.OK:
+                        //            GotoDownloaderPage();
+                        //            return;
+                        //    }
+                        //}
                     }
 
                     string id = GenericHelper.GetYoutubeID(selectedItem.Url);
@@ -669,7 +671,7 @@ namespace Centapp.CartoonCommon
             }
         }
 
-        void menuItemAdd_Click(object sender, RoutedEventArgs e)
+        async void menuItemAdd_Click(object sender, RoutedEventArgs e)
         {
             if (((App)Application.Current).IsTrial && !(_currentContextItem as ItemViewModel).IsAvailableInTrial)
             {
@@ -787,23 +789,74 @@ namespace Centapp.CartoonCommon
 
         #region offline backup
 
-        private void backupEpisodesButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private async void backupEpisodesButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             ExecBackup();
-
         }
 
-        private void ExecBackup()
+        private async void ExecBackup()
         {
-            decimal availGb = 0;
-            decimal requiredGb = 0;
-            if (!CheckAvailableSpace(out availGb, out requiredGb))
+            MessageBoxResult messageBoxResult;
+
+            if (GenericHelper.AppIsOfflineSettingValue)
             {
-                MessageBox.Show(string.Format(AppResources.notEnoughSpace, requiredGb));
-                return;
+                messageBoxResult = MessageBox.Show(AppResources.MessageAlreadyOffline, AppResources.Warning, MessageBoxButton.OKCancel);
+                if (messageBoxResult != MessageBoxResult.OK)
+                {
+                    return;
+                }
+                GenericHelper.SetAppIsOffline(false);
+                GenericHelper.RemoveOfflineData();
             }
 
-            MessageBoxResult messageBoxResult = MessageBox.Show(string.Format(AppResources.SpaceRequiredWarn, requiredGb), AppResources.Warning, MessageBoxButton.OKCancel);
+            //default
+            BackupSupportType backupSupportType = BackupSupportType.IsolatedStorage;
+
+            //tests if SDcard is available
+            bool isSDCardAvailable = await IsSDCardAvailable();
+            messageBoxResult = MessageBox.Show("$Do you want to store episodes into your SD card?", AppResources.Warning, MessageBoxButton.OKCancel);
+            if (messageBoxResult == MessageBoxResult.OK)
+            {
+                backupSupportType = BackupSupportType.SDCard;
+            }
+
+            //decimal availGb = 0;
+            //decimal requiredGb = 0;
+
+            MediaInfo mInfo = await CheckAvailableSpace(backupSupportType);
+
+            if (!mInfo.IsBackupAvailable)
+            {
+                if (backupSupportType == BackupSupportType.SDCard)
+                {
+                    //allow user to switch to isostore save option
+                    messageBoxResult = MessageBox.Show(string.Format("$Sorry but SD card ha noto available free space (required: {0}, available {1}).\nDo you want to store episode into your phone memory?", mInfo.RequiredGigaBytes, mInfo.AvailableGigaBytes),
+                                                        AppResources.Warning,
+                                                        MessageBoxButton.OKCancel);
+                    if (messageBoxResult == MessageBoxResult.OK)
+                    {
+                        backupSupportType = BackupSupportType.IsolatedStorage;
+                    }
+
+                    mInfo = await CheckAvailableSpace(backupSupportType);
+                    //recheck isostore for free space
+                    if (!mInfo.IsBackupAvailable)
+                    {
+                        //no space even into isostore - end
+                        MessageBox.Show(string.Format(AppResources.notEnoughSpace, mInfo.RequiredGigaBytes));
+                        return;
+                    }
+                }
+                else
+                {
+                    //no space even into isostore - end
+                    MessageBox.Show(string.Format(AppResources.notEnoughSpace, mInfo.RequiredGigaBytes));
+                    return;
+                }
+
+            }
+
+            messageBoxResult = MessageBox.Show(string.Format(AppResources.SpaceRequiredWarn, mInfo.RequiredGigaBytes), AppResources.Warning, MessageBoxButton.OKCancel);
             if (messageBoxResult != MessageBoxResult.OK)
             {
                 return;
@@ -828,37 +881,59 @@ namespace Centapp.CartoonCommon
                 return;
             }
 
-            if (GenericHelper.AppIsOfflineSettingValue)
-            {
-                messageBoxResult = MessageBox.Show(AppResources.MessageAlreadyOffline, AppResources.Warning, MessageBoxButton.OKCancel);
-                if (messageBoxResult != MessageBoxResult.OK)
-                {
-                    return;
-                }
-                GenericHelper.SetAppIsOffline(false);
-                using (IsolatedStorageFile isostore = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                    var storedFiles = isostore.GetFileNames("ep*.mp4");
-                    foreach (var item in storedFiles)
-                    {
-                        isostore.DeleteFile(item);
-                    }
-                }
+            //if (GenericHelper.AppIsOfflineSettingValue)
+            //{
+            //    messageBoxResult = MessageBox.Show(AppResources.MessageAlreadyOffline, AppResources.Warning, MessageBoxButton.OKCancel);
+            //    if (messageBoxResult != MessageBoxResult.OK)
+            //    {
+            //        return;
+            //    }
+            //    GenericHelper.SetAppIsOffline(false);
 
-                App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
-                App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
-                App.ViewModel.LoadData();
-            }
-            else
+            //     using (IsolatedStorageFile isostore = IsolatedStorageFile.GetUserStoreForApplication())
+            //    {
+            //        var storedFiles = isostore.GetFileNames("ep*.mp4");
+            //        foreach (var item in storedFiles)
+            //        {
+            //            isostore.DeleteFile(item);
+            //        }
+            //    }
+
+            //    App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
+            //    App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
+            //    App.ViewModel.LoadData();
+            //}
+            //else
+            //{
+            //    if (App.ViewModel.Items == null || App.ViewModel.Items.Count == 0)
+            //    {
+            //        //caso raro, si fa ripartire l'utente da zero
+            //        MessageBox.Show(AppResources.ServerTemporaryUnavailable);
+            //        throw new ForcedExitException("start backup error : " + AppResources.ServerTemporaryUnavailable);
+            //    }
+            //    GotoDownloaderPage();
+            //}
+
+
+            GotoDownloaderPage();
+
+
+
+        }
+
+        private async Task<bool> IsSDCardAvailable()
+        {
+            try
             {
-                if (App.ViewModel.Items == null || App.ViewModel.Items.Count == 0)
-                {
-                    //caso raro, si fa ripartire l'utente da zero
-                    MessageBox.Show(AppResources.ServerTemporaryUnavailable);
-                    throw new ForcedExitException("start backup error : " + AppResources.ServerTemporaryUnavailable);
-                }
-                GotoDownloaderPage();
+                StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
+                StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
+                return sdCard != null;
             }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
         }
 
         private bool CheckConnection()
@@ -884,25 +959,39 @@ namespace Centapp.CartoonCommon
             return false;
         }
 
-        private bool CheckAvailableSpace(out decimal availableGigaBytes, out decimal requiredGigaBytes)
+        public async Task<UInt64> GetFreeSpace(StorageFolder folder)
         {
-            availableGigaBytes = 0;
-            requiredGigaBytes = 0;
+            var retrivedProperties = await folder.Properties.RetrievePropertiesAsync(new string[] { "System.FreeSpace" });
+            return (UInt64)retrivedProperties["System.FreeSpace"];
+        }
+
+        private async Task<MediaInfo> CheckAvailableSpace(BackupSupportType backupType)
+        {
+            MediaInfo mInfo = new MediaInfo();
+            mInfo.AvailableGigaBytes = 0;
+            mInfo.RequiredGigaBytes = 0;
 
             int episodeDurationInSec = AppInfo.Instance.EpisodesLength;
             if (episodeDurationInSec == -1)
             {
-                return true; //dato non dichiarato nell'app: non è possibile eseguire il calcolo e torna true....
+                mInfo.IsBackupAvailable = false;
+                return mInfo; //dato non dichiarato nell'app: non è possibile eseguire il calcolo e torna true....
             }
 
             Int64 curAvail = -1;
-            using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+            if (backupType == BackupSupportType.IsolatedStorage)
             {
-                curAvail = store.AvailableFreeSpace;
+                using (var store = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    curAvail = store.AvailableFreeSpace;
+                }
+            }
+            else
+            {
+                curAvail = (Int64)await GetFreeSpace(KnownFolders.RemovableDevices);
             }
 
-            //availableGigaBytes = (double)(curAvail / 1024 / 1024 / 1024);
-            availableGigaBytes = Math.Round((decimal)((double)curAvail / 1024d / 1024d / 1024d), 1);
+            mInfo.AvailableGigaBytes = Math.Round((decimal)((double)curAvail / 1024d / 1024d / 1024d), 1);
 
             //int episodeDurationInSec = 300;
 
@@ -910,18 +999,16 @@ namespace Centapp.CartoonCommon
             int bytesPerSecond = 34952;
 
             Int64 estimatedRequiredSpace = App.ViewModel.Items.Count * episodeDurationInSec * bytesPerSecond;
-
-            //decimal test1 = Math.Round((decimal)((float)curAvail / 1024 / 1024 / 1024), 1);
-            //decimal test2 = Math.Round((decimal)((double)curAvail / 1024d / 1024d / 1024d), 1);
-            //requiredGigaBytes = (float)(estimatedRequiredSpace / 1024d / 1024 / 1024);
-            requiredGigaBytes = Math.Round((decimal)((double)estimatedRequiredSpace / 1024d / 1024d / 1024d), 1);
+            mInfo.RequiredGigaBytes = Math.Round((decimal)((double)estimatedRequiredSpace / 1024d / 1024d / 1024d), 1);
 
             if (estimatedRequiredSpace >= curAvail)
             {
-                return false;
+                mInfo.IsBackupAvailable = false;
             }
 
-            return true;
+            mInfo.IsBackupAvailable = true;
+
+            return mInfo;
         }
 
         private void ViewModel_OnLoadCompleted()
@@ -931,16 +1018,6 @@ namespace Centapp.CartoonCommon
 
             UpdateAppInfos();
             backupEpisodesButton.Visibility = AppInfo.Instance.DownloadIsAllowed ? Visibility.Visible : Visibility.Collapsed;
-            if (AppInfo.Instance.OfflineRevertWarningRequired)
-            {
-                AppInfo.Instance.OfflineRevertWarningRequired = false;
-                switch (MessageBox.Show(AppResources.OfflineRevertWarning, AppResources.Warning, MessageBoxButton.OKCancel))
-                {
-                    case MessageBoxResult.OK:
-                        GotoDownloaderPage();
-                        return;
-                }
-            }
         }
 
         async void ViewModel_OnLoadCompletedDownload()
@@ -951,19 +1028,17 @@ namespace Centapp.CartoonCommon
             //StorageFolder folder = KnownFolders.PicturesLibrary;
             //StorageFile sampleFile = await folder.CreateFileAsync("sample.txt", CreationCollisionOption.ReplaceExisting);
 
-            // Get the logical root folder for all external storage devices.
-            StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
-            // Get the first child folder, which represents the SD card.
-            StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
-
-            if (sdCard != null)
-            {
-                // An SD card is present and the sdCard variable now contains a reference to it.
-            }
-            else
-            {
-                // No SD card is present.
-            }
+            //// Get the logical root folder for all external storage devices.
+            //StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
+            //StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
+            //if (sdCard != null)
+            //{
+            //    // An SD card is present and the sdCard variable now contains a reference to it.
+            //}
+            //else
+            //{
+            //    // No SD card is present.
+            //}
 
         }
 
