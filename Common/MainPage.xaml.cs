@@ -32,17 +32,16 @@ using Microsoft.Phone.Net.NetworkInformation;
 using System.Windows.Media.Imaging;
 using System.Collections;
 using System.Reflection;
-using Wp7Shared.Exceptions;
 using System.Windows.Threading;
 using System.Windows.Controls.Primitives;
 using Centapp.CartoonCommon.ViewModels;
 using Centapp.CartoonCommon.Helpers;
 using Centapp.CartoonCommon;
 using Microsoft.Phone.Info;
-using Wp7Shared.Helpers;
 using Windows.Storage;
 using System.Threading.Tasks;
-//using Wp7Shared.Helpers;
+using Wp81Shared.Helpers;
+using Wp81Shared.Exceptions;
 
 
 namespace Centapp.CartoonCommon
@@ -62,19 +61,13 @@ namespace Centapp.CartoonCommon
         MyAppPromotion
     }
 
-  
-
     public delegate void PopupClosedEventHandler();
     public delegate void PopupCancelPressedActionToExecute();
 
     public partial class MainPage : PhoneApplicationPage
     {
         string _appVer = string.Empty;
-        //bool _useSMF = true;
-
         IsolatedStorageFile _curIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication();
-
-        //string _usagefileName = string.Format("usages_{0}.txt", DateTime.Now.To().Replace("/", "_"));
 
         #region settings
         IsolatedStorageSettings _settings = IsolatedStorageSettings.ApplicationSettings;
@@ -95,7 +88,7 @@ namespace Centapp.CartoonCommon
 #endif
             InitializeComponent();
 
-            //var test = Wp7Shared.Helpers.AppInfosHelper.GetId();
+            //var test = Wp81Shared.Helpers.AppInfosHelper.GetId();
             //CultureInfo cc, cuic;
             //cc = Thread.CurrentThread.CurrentCulture;
             //cuic = Thread.CurrentThread.CurrentUICulture;
@@ -140,10 +133,7 @@ namespace Centapp.CartoonCommon
 
             App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
             App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
-
         }
-
-
 
         void ViewModel_OnError(string msg, bool isFatalError)
         {
@@ -161,7 +151,7 @@ namespace Centapp.CartoonCommon
         {
             ShareLinkTask shareLinkTask = new ShareLinkTask();
             shareLinkTask.Title = "Check this app!";
-            shareLinkTask.LinkUri = new Uri(string.Format("http://www.windowsphone.com/s?appid={0}", Wp7Shared.Helpers.AppInfosHelper.GetId()), UriKind.Absolute);
+            shareLinkTask.LinkUri = new Uri(string.Format("http://www.windowsphone.com/s?appid={0}", AppInfosHelper.GetId()), UriKind.Absolute);
             shareLinkTask.Show();
         }
 
@@ -183,25 +173,6 @@ namespace Centapp.CartoonCommon
 
         void PanoramaMainControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (otherAppsPanoramaItem.Visibility == Visibility.Collapsed)
-            //{
-            //    return;
-            //}
-
-            //try
-            //{
-            //    if (PanoramaMainControl.SelectedItem == otherAppsPanoramaItem)
-            //    {
-            //        otherApps.UnFreezeAll();
-            //    }
-            //    else
-            //    {
-            //        otherApps.FreezeAll();
-            //    }
-            //}
-            //catch (Exception)
-            //{
-            //}
         }
 
         private void SetCaptions()
@@ -231,7 +202,6 @@ namespace Centapp.CartoonCommon
         // Load data for the ViewModel Items
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-
         }
 
         private void UpdateAppInfos()
@@ -241,13 +211,13 @@ namespace Centapp.CartoonCommon
             appInfo.Text = string.Format("v.{0} - {1}", new string[] { _appVer, trialOrReg });
             appInfo.Foreground = ((App)Application.Current).IsTrial ? new SolidColorBrush(Colors.Red) : new SolidColorBrush(Colors.White);
 
-            if (GenericHelper.AppIsOfflineSettingValue)
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 appInfo.Text += " (offline)";
             }
         }
 
-        void itemsList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        async void itemsList_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             if ((sender as ListBox).SelectedItem == null)
             {
@@ -264,9 +234,9 @@ namespace Centapp.CartoonCommon
             try
             {
 
-                //GenericHelper.AppIsOfflineSettingValue = false;
+                //AppInfo.Instance.AppIsOfflineSettingValue = false;
 
-                if (GenericHelper.AppIsOfflineSettingValue)
+                if (AppInfo.Instance.AppIsOfflineSettingValue)
                 {
                     #region OFFLINE
                     try
@@ -274,7 +244,6 @@ namespace Centapp.CartoonCommon
                         if (AppInfo.Instance.IsAdvertisingEnabled)
                         {
                             #region advertising ON
-
                             //KO
                             //C:\Data\Users\DefApps\AppData\{2D034F2D-836B-466C-9CA2-A7BB6B24E3F8}\Local\ep_1.mp4
                             //App.ViewModel.CurrentYoutubeMP4FileName = selectedItem.OfflineFileName;
@@ -286,10 +255,10 @@ namespace Centapp.CartoonCommon
                             App.ViewModel.IsDataLoading = true;
                             //OK
                             //Uri test1 = new Uri(@"C:\Data\Users\DefApps\AppData\{2D034F2D-836B-466C-9CA2-A7BB6B24E3F8}\Local\ep_1.mp4", UriKind.Absolute);
-                            Uri episodeUri = new Uri(@"C:\Data\Users\DefApps\AppData\{" + Wp7Shared.Helpers.AppInfosHelper.GetId() + @"}\Local\" + selectedItem.OfflineFileName,
+                            Uri episodeUri = new Uri(@"C:\Data\Users\DefApps\AppData\{" + Wp81Shared.Helpers.AppInfosHelper.GetId() + @"}\Local\" + selectedItem.OfflineFileName,
                                                     UriKind.Absolute);
                             App.ViewModel.CurrentYoutubeMP4Uri = episodeUri;
-                            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService, Dispatcher, "/PlayerPage.xaml");
+                            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService, Dispatcher, "/PlayerPage.xaml");
                             #endregion
                         }
                         else
@@ -333,16 +302,17 @@ namespace Centapp.CartoonCommon
 
                     if (AppInfo.Instance.DownloadIsAllowed)
                     {
-                        GenericHelper.IncrementOnlineUsagesCount();
-                        //if (GenericHelper.OnlineUsagesSettingValue % 4 == 0)
-                        //{
-                        //    switch (MessageBox.Show(AppResources.DownloadEpisodesQuestion, "", MessageBoxButton.OKCancel))
-                        //    {
-                        //        case MessageBoxResult.OK:
-                        //            GotoDownloaderPage();
-                        //            return;
-                        //    }
-                        //}
+                        GenericHelper.Instance.IncrementOnlineUsagesCount();
+                        if (AppInfo.Instance.OnlineUsagesSettingValue % 4 == 0)
+                        {
+                            switch (MessageBox.Show(AppResources.DownloadEpisodesQuestion, "", MessageBoxButton.OKCancel))
+                            {
+                                case MessageBoxResult.OK:
+                                    //GotoDownloaderPage();
+                                    await ExecBackup();
+                                    return;
+                            }
+                        }
                     }
 
                     string id = GenericHelper.GetYoutubeID(selectedItem.Url);
@@ -359,7 +329,7 @@ namespace Centapp.CartoonCommon
                         //                        if (ex == null && uri != null)
                         //                        {
                         //                            App.ViewModel.CurrentYoutubeMP4Uri = uri.Uri;
-                        //                            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService, Dispatcher, "/PlayerPage.xaml");
+                        //                            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService, Dispatcher, "/PlayerPage.xaml");
                         //                        }
                         //                        else
                         //                        {
@@ -429,7 +399,7 @@ namespace Centapp.CartoonCommon
         {
             ToggleNoInternetWarningTxt(false);
 
-            if (!NetworkInterface.GetIsNetworkAvailable() && !GenericHelper.AppIsOfflineSettingValue)
+            if (!NetworkInterface.GetIsNetworkAvailable() && !AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 ToggleNoInternetWarningTxt(true);
                 return;
@@ -461,14 +431,14 @@ namespace Centapp.CartoonCommon
         //    else
         //    {
         //        otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Visible;
-        //        otherApps.SetCurrentAppGuid(Wp7Shared.Helpers.AppInfosHelper.GetId());
+        //        otherApps.SetCurrentAppGuid(Wp81Shared.Helpers.AppInfosHelper.GetId());
         //        //otherApps.SetRequiredGenre(Wp7Shared.UserControls.Genre.KidsAndFamily);
         //    }
 
         //    if (currentCulture.Equals("it") || currentCulture.Equals("en"))
         //    {
         //        otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Visible;
-        //        otherApps.SetCurrentAppGuid(Wp7Shared.Helpers.AppInfosHelper.GetId());
+        //        otherApps.SetCurrentAppGuid(Wp81Shared.Helpers.AppInfosHelper.GetId());
         //        otherApps.SetRequiredGenre(Wp7Shared.UserControls.Genre.KidsAndFamily);
         //    }
         //    else
@@ -518,7 +488,7 @@ namespace Centapp.CartoonCommon
             contextMenu1.Items.Add(menuItemAdd1);
             menuItemAdd1.Click += new RoutedEventHandler(menuItemAdd_Click);
 
-            if (!GenericHelper.AppIsOfflineSettingValue)
+            if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 MenuItem menuItemShare1 = new MenuItem { Header = shareText };
                 contextMenu1.Items.Add(menuItemShare1);
@@ -649,7 +619,6 @@ namespace Centapp.CartoonCommon
         {
             try
             {
-
                 string epTitle = string.Empty;
                 if (AppInfo.Instance.UseResManager)
                 {
@@ -679,7 +648,7 @@ namespace Centapp.CartoonCommon
                 return;
             }
 
-            if (GenericHelper.AppIsOfflineSettingValue)
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 App.ViewModel.AddToFavorites(_currentContextItem);
             }
@@ -691,14 +660,11 @@ namespace Centapp.CartoonCommon
                     ExecBackup();
                 }
             }
-
-            //CheckEmptyFavoritesList();
         }
 
         void menuItemRemove_Click(object sender, RoutedEventArgs e)
         {
             App.ViewModel.RemoveFromFavorites(_currentContextItem);
-            //    CheckEmptyFavoritesList();
         }
         #endregion
 
@@ -715,11 +681,8 @@ namespace Centapp.CartoonCommon
                 }
 
                 FeedbackHelper.Default.Reviewed();
-
                 MarketplaceReviewTask task = new MarketplaceReviewTask();
                 task.Show();
-
-
             }
             catch (InvalidOperationException ignored)
             {
@@ -770,10 +733,9 @@ namespace Centapp.CartoonCommon
         #endregion
 
         #region license management
-
         private void GotoBuyPage(AppFunctionToLimit usage)
         {
-            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
+            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
                                                               Dispatcher,
                                                               string.Format("/BuyAppPage.xaml?" + GenericHelper.UsageKeyName + "={0}", usage.ToString()));
         }
@@ -781,7 +743,7 @@ namespace Centapp.CartoonCommon
 
         private void searchEpisodesButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
+            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
                                                               Dispatcher,
                                                               string.Format("/SearchEpisodes.xaml"));
         }
@@ -794,34 +756,31 @@ namespace Centapp.CartoonCommon
             ExecBackup();
         }
 
-        private async void ExecBackup()
+        private async Task ExecBackup()
         {
             MessageBoxResult messageBoxResult;
 
-            if (GenericHelper.AppIsOfflineSettingValue)
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 messageBoxResult = MessageBox.Show(AppResources.MessageAlreadyOffline, AppResources.Warning, MessageBoxButton.OKCancel);
                 if (messageBoxResult != MessageBoxResult.OK)
                 {
                     return;
                 }
-                GenericHelper.SetAppIsOffline(false);
-                GenericHelper.RemoveOfflineData();
+                GenericHelper.Instance.SetAppIsOffline(false);
+                await GenericHelper.Instance.RemoveOfflineData();
             }
 
             //default
             BackupSupportType backupSupportType = BackupSupportType.IsolatedStorage;
 
             //tests if SDcard is available
-            bool isSDCardAvailable = await IsSDCardAvailable();
+            bool isSDCardAvailable = await GenericHelper.Instance.IsSDCardAvailable();
             messageBoxResult = MessageBox.Show("$Do you want to store episodes into your SD card?", AppResources.Warning, MessageBoxButton.OKCancel);
             if (messageBoxResult == MessageBoxResult.OK)
             {
                 backupSupportType = BackupSupportType.SDCard;
             }
-
-            //decimal availGb = 0;
-            //decimal requiredGb = 0;
 
             MediaInfo mInfo = await CheckAvailableSpace(backupSupportType);
 
@@ -881,7 +840,7 @@ namespace Centapp.CartoonCommon
                 return;
             }
 
-            //if (GenericHelper.AppIsOfflineSettingValue)
+            //if (AppInfo.Instance.AppIsOfflineSettingValue)
             //{
             //    messageBoxResult = MessageBox.Show(AppResources.MessageAlreadyOffline, AppResources.Warning, MessageBoxButton.OKCancel);
             //    if (messageBoxResult != MessageBoxResult.OK)
@@ -889,7 +848,6 @@ namespace Centapp.CartoonCommon
             //        return;
             //    }
             //    GenericHelper.SetAppIsOffline(false);
-
             //     using (IsolatedStorageFile isostore = IsolatedStorageFile.GetUserStoreForApplication())
             //    {
             //        var storedFiles = isostore.GetFileNames("ep*.mp4");
@@ -898,7 +856,6 @@ namespace Centapp.CartoonCommon
             //            isostore.DeleteFile(item);
             //        }
             //    }
-
             //    App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
             //    App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
             //    App.ViewModel.LoadData();
@@ -915,26 +872,12 @@ namespace Centapp.CartoonCommon
             //}
 
 
+            AppInfo.Instance.CurrentBackupSupport = backupSupportType;
+
             GotoDownloaderPage();
-
-
-
         }
 
-        private async Task<bool> IsSDCardAvailable()
-        {
-            try
-            {
-                StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
-                StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
-                return sdCard != null;
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-            return false;
-        }
+     
 
         private bool CheckConnection()
         {
@@ -1044,7 +987,7 @@ namespace Centapp.CartoonCommon
 
         private void GotoDownloaderPage()
         {
-            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
+            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
                                                               Dispatcher,
                                                               string.Format("/DownloaderPage.xaml"));
         }
@@ -1054,7 +997,7 @@ namespace Centapp.CartoonCommon
 
         private void otherAppsButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
+            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
                                                   Dispatcher,
                                                   string.Format("/OtherAppsPage.xaml"));
 
@@ -1064,7 +1007,7 @@ namespace Centapp.CartoonCommon
         {
 
             var infoPage = AppInfo.Instance.InfoPageIsPivot ? "/InfoPagePivot.xaml" : "/InfoPage.xaml";
-            Wp7Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
+            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
                                                 Dispatcher,
                                                 string.Format(infoPage));
         }

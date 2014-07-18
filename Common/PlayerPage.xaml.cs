@@ -44,7 +44,7 @@ namespace Centapp.CartoonCommon
                 {
                     case AdvProvider.PubCenter:
                         //MS PubCenter
-                        adControlSoma.Visibility = System.Windows.Visibility.Collapsed;
+                        //adControlSoma.Visibility = System.Windows.Visibility.Collapsed;
                         adControlPubCenter.Visibility = System.Windows.Visibility.Visible;
                         adControlPubCenter.AdRefreshed -= adControl1_AdRefreshed;
                         adControlPubCenter.AdRefreshed += adControl1_AdRefreshed;
@@ -59,27 +59,27 @@ namespace Centapp.CartoonCommon
                     case AdvProvider.Sooma:
                         //SOOMA
                         adControlPubCenter.Visibility = System.Windows.Visibility.Collapsed;
-                        adControlSoma.IsHitTestVisible = false;
-                        adControlSoma.PopupAd = true;
-                        //adControlSoma.PopupAdDuration = 300;
-                        adControlSoma.AdSpaceHeight = 50;
-                        adControlSoma.AdSpaceWidth = 320;
-                        adControlSoma.Visibility = System.Windows.Visibility.Visible;
-                        adControlSoma.Pub = int.Parse(AppInfo.Instance.AdPublisherId);
-                        adControlSoma.Adspace = int.Parse(AppInfo.Instance.AdSpaceId);
-                        adControlSoma.Age = 12;
-                        adControlSoma.ShowErrors = false;
-                        adControlSoma.LocationUseOK = true;
-                        adControlSoma.StartAds();
-                        adControlSoma.NewAdAvailable -= adControlSoma_NewAdAvailable;
-                        adControlSoma.NewAdAvailable += adControlSoma_NewAdAvailable;
+                        //adControlSoma.IsHitTestVisible = false;
+                        //adControlSoma.PopupAd = true;
+                        ////adControlSoma.PopupAdDuration = 300;
+                        //adControlSoma.AdSpaceHeight = 50;
+                        //adControlSoma.AdSpaceWidth = 320;
+                        //adControlSoma.Visibility = System.Windows.Visibility.Visible;
+                        //adControlSoma.Pub = int.Parse(AppInfo.Instance.AdPublisherId);
+                        //adControlSoma.Adspace = int.Parse(AppInfo.Instance.AdSpaceId);
+                        //adControlSoma.Age = 12;
+                        //adControlSoma.ShowErrors = false;
+                        //adControlSoma.LocationUseOK = true;
+                        //adControlSoma.StartAds();
+                        //adControlSoma.NewAdAvailable -= adControlSoma_NewAdAvailable;
+                        //adControlSoma.NewAdAvailable += adControlSoma_NewAdAvailable;
                         break;
                     default:
                         _dt.Interval = TimeSpan.FromSeconds(10);
                         _dt.Tick -= _dt_Tick;
                         _dt.Tick += _dt_Tick;
                         adControlPubCenter.Visibility = System.Windows.Visibility.Collapsed;
-                        adControlSoma.Visibility = System.Windows.Visibility.Collapsed;
+                        //adControlSoma.Visibility = System.Windows.Visibility.Collapsed;
                         myAdv.Visibility = System.Windows.Visibility.Visible;
                         myAdv.Opacity = 0;
                         break;
@@ -140,18 +140,18 @@ namespace Centapp.CartoonCommon
             FadeInOrOut(myAdv);
         }
 
-        void adControlSoma_NewAdAvailable(object sender, EventArgs e)
-        {
-        }
+        //void adControlSoma_NewAdAvailable(object sender, EventArgs e)
+        //{
+        //}
 
         private void PhoneApplicationPage_BackKeyPress(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            switch (AppInfo.Instance.AdvProvider)
-            {
-                case AdvProvider.Sooma:
-                    adControlSoma.StopAds();
-                    break;
-            }
+            //switch (AppInfo.Instance.AdvProvider)
+            //{
+            //    case AdvProvider.Sooma:
+            //        adControlSoma.StopAds();
+            //        break;
+            //}
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -190,7 +190,7 @@ namespace Centapp.CartoonCommon
             {
                 //MEDIAPLAYER
                 //per customizzarlo: http://msdn.microsoft.com/en-us/library/ms748248(v=vs.110).aspx
-                if (GenericHelper.AppIsOfflineSettingValue)
+                if (AppInfo.Instance.AppIsOfflineSettingValue)
                 {
                     using (var store = IsolatedStorageFile.GetUserStoreForApplication())
                     {

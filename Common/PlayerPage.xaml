@@ -12,7 +12,6 @@
     xmlns:telerikCore="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core"
     xmlns:my="clr-namespace:Microsoft.Advertising.Mobile.UI;assembly=Microsoft.Advertising.Mobile.UI" 
     mc:Ignorable="d"
-    xmlns:soma="clr-namespace:SOMAWP7;assembly=SOMAWP7"
     SupportedOrientations="Landscape" Orientation="Landscape"  
     shell:SystemTray.IsVisible="False">
 
@@ -767,12 +766,12 @@
                 </my:AdControl.RenderTransform>
             </my:AdControl>
 
-            <soma:SomaAdViewer Visibility="Collapsed" Grid.Column="0" Name="adControlSoma"  Margin="-200,0,-200,0" Width="480" Height="80"  RenderTransformOrigin="0.5,0.5"
+            <!--<soma:SomaAdViewer Visibility="Collapsed" Grid.Column="0" Name="adControlSoma"  Margin="-200,0,-200,0" Width="480" Height="80"  RenderTransformOrigin="0.5,0.5"
                                  PopupAd="True" ShowErrors="True">
                 <soma:SomaAdViewer.RenderTransform>
                     <CompositeTransform Rotation="270"/>
                 </soma:SomaAdViewer.RenderTransform>
-            </soma:SomaAdViewer>
+            </soma:SomaAdViewer>-->
 
             <Image Name="myAdv" Width="80" Height="480" Source="banner_hunter.png" Tap="myAdv_Tap"></Image>
 

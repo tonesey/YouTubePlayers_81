@@ -21,7 +21,6 @@ using System.Threading;
 #else
 using Microsoft.Phone.Net.NetworkInformation;
 #endif
-using Wp7Shared.Exceptions;
 using Centapp.CartoonCommon.ViewModels;
 using Centapp.CartoonCommon;
 using System.IO;
@@ -29,9 +28,9 @@ using System.Xml.Linq;
 using Centapp.CartoonCommon;
 using System.Globalization;
 using System.Resources;
-using com.mtiks.winmobile;
 using Microsoft.Phone.Info;
-using Wp7Shared.Helpers;
+using Wp81Shared.Exceptions;
+using Wp81Shared.Helpers;
 
 namespace Centapp.CartoonCommon
 {
@@ -119,21 +118,12 @@ namespace Centapp.CartoonCommon
         private void InitApp()
         {
             ParseAppInfo();
-
-            try
-            {
-                if (!string.IsNullOrEmpty(AppInfo.Instance.MtiksId))
-                {
-                    mtiks.Instance.Start(AppInfo.Instance.MtiksId, Assembly.GetExecutingAssembly());
-                }
-            }
-            catch (Exception ex)
-            {
-            }
-
             CheckTrialState();
-            GenericHelper.ReadAppSettings();
-            if (!GenericHelper.AppIsOfflineSettingValue && !NetworkInterface.GetIsNetworkAvailable())
+            GenericHelper.Instance.ReadAppSettings();
+
+          
+
+            if (!AppInfo.Instance.AppIsOfflineSettingValue && !NetworkInterface.GetIsNetworkAvailable())
             {
                 MessageBox.Show(AppResources.noNetworkAvailable);
                 return;
@@ -255,28 +245,13 @@ namespace Centapp.CartoonCommon
         private void Application_Deactivated(object sender, DeactivatedEventArgs e)
         {
             _wasApplicationTerminated = false;
-
             // Ensure that required application state is persisted here.
-            try
-            {
-                mtiks.Instance.Stop();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         // Code to execute when the application is closing (eg, user hit Back)
         // This code will not execute when the application is deactivated
         private void Application_Closing(object sender, ClosingEventArgs e)
         {
-            try
-            {
-                mtiks.Instance.Stop();
-            }
-            catch (Exception)
-            {
-            }
         }
 
         // Code to execute if a navigation fails
@@ -305,14 +280,14 @@ namespace Centapp.CartoonCommon
                 extraInfos = "- App version: " + GenericHelper.GetAppversion() + "\n" +
                              "- OS ver: " + System.Environment.OSVersion.Version.ToString() + "\n" +
                              "- Trial: " + IsTrial + "\n" +
-                             "- Offline: " + GenericHelper.AppIsOfflineSettingValue;
+                             "- Offline: " + AppInfo.Instance.AppIsOfflineSettingValue;
                 extraInfos += "\n";
                 extraInfos += "Phone infos:\n";
 
                 string phoneNameStr = "-unknown-";
                 try
                 {
-                    var phoneInfo = Wp7Shared.Helpers.PhoneNameResolver.Resolve(DeviceStatus.DeviceManufacturer, DeviceStatus.DeviceName);
+                    var phoneInfo = Wp81Shared.Helpers.PhoneNameResolver.Resolve(DeviceStatus.DeviceManufacturer, DeviceStatus.DeviceName);
                     if (phoneInfo.IsResolved)
                     {
                         phoneNameStr = phoneInfo.FullCanonicalName;

@@ -24,12 +24,11 @@ using System.IO.IsolatedStorage;
 using System.Net.NetworkInformation;
 using Centapp.CartoonCommon.JSON;
 using Newtonsoft.Json;
-using Wp7Shared.Exceptions;
 using System.Reflection;
 using Centapp.CartoonCommon.Utility;
 using System.Xml;
 using System.Globalization;
-using Wp7Shared.Helpers;
+using Wp81Shared.Helpers;
 
 
 namespace Centapp.CartoonCommon.ViewModels
@@ -336,9 +335,8 @@ namespace Centapp.CartoonCommon.ViewModels
         #region online management
         public void DownloadItemsAsynch(string indexFileUrl)
         {
-#if !DEBUGOFFLINE
+#if !NOINTERNET
             WebClient client = new WebClient();
-
             client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
             client.OpenReadAsync(new Uri(indexFileUrl + "?" + Guid.NewGuid()), UriKind.Absolute);
 #else
@@ -346,12 +344,6 @@ namespace Centapp.CartoonCommon.ViewModels
             Stream localStream = asm.GetManifestResourceStream("Centapp.CartoonCommon.videosrc.json");
             client_OpenReadCompleted(localStream, null);
 #endif
-        }
-
-        void client_DownloadStringCompleted(object sender, DownloadStringCompletedEventArgs e)
-        {
-            var test = e.Result;
-
         }
 
         void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
@@ -557,7 +549,6 @@ namespace Centapp.CartoonCommon.ViewModels
                 #endregion
             }
 
-
             ObservableCollection<ItemViewModel> items = new ObservableCollection<ItemViewModel>();
             //int seasonCount = 0;
             // int index = 0;
@@ -584,7 +575,7 @@ namespace Centapp.CartoonCommon.ViewModels
                 ItemViewModel curEpisode = items.ElementAt(i - 1);
                 int episodeId = curEpisode.Id;
                 //curEpisode.Title = _cnv.Convert(episodeId);
-                if (GenericHelper.FavoriteEpisodesIdsSettingValue.Contains(episodeId))
+                if (AppInfo.Instance.FavoriteEpisodesIdsSettingValue.Contains(episodeId))
                 {
                     curEpisode.IsFavorite = true;
                 }
@@ -614,7 +605,7 @@ namespace Centapp.CartoonCommon.ViewModels
         public void LoadData()
         {
             IsDataLoading = true;
-            if (!GenericHelper.AppIsOfflineSettingValue)
+            if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 DownloadItemsAsynch(string.Format("http://centapp.altervista.org/{0}", AppInfo.Instance.IndexFile));
             }
@@ -630,11 +621,11 @@ namespace Centapp.CartoonCommon.ViewModels
         {
             int id = (item as ItemViewModel).Id;
             (item as ItemViewModel).IsFavorite = true;
-            if (!GenericHelper.FavoriteEpisodesIdsSettingValue.Contains(id))
+            if (!AppInfo.Instance.FavoriteEpisodesIdsSettingValue.Contains(id))
             {
-                GenericHelper.FavoriteEpisodesIdsSettingValue.Add(id);
+                AppInfo.Instance.FavoriteEpisodesIdsSettingValue.Add(id);
             }
-            GenericHelper.Writekey(GenericHelper.FavoriteEpisodesKey, GenericHelper.FavoriteEpisodesIdsSettingValue);
+            GenericHelper.Instance.Writekey(GenericHelper.FavoriteEpisodesKey, AppInfo.Instance.FavoriteEpisodesIdsSettingValue);
             NotifyPropertyChanged("FavoriteEpisodes");
         }
 
@@ -642,11 +633,11 @@ namespace Centapp.CartoonCommon.ViewModels
         {
             int id = (item as ItemViewModel).Id;
             (item as ItemViewModel).IsFavorite = false;
-            if (GenericHelper.FavoriteEpisodesIdsSettingValue.Contains(id))
+            if (AppInfo.Instance.FavoriteEpisodesIdsSettingValue.Contains(id))
             {
-                GenericHelper.FavoriteEpisodesIdsSettingValue.Remove(id);
+                AppInfo.Instance.FavoriteEpisodesIdsSettingValue.Remove(id);
             }
-            GenericHelper.Writekey(GenericHelper.FavoriteEpisodesKey, GenericHelper.FavoriteEpisodesIdsSettingValue);
+            GenericHelper.Instance.Writekey(GenericHelper.FavoriteEpisodesKey, AppInfo.Instance.FavoriteEpisodesIdsSettingValue);
             NotifyPropertyChanged("FavoriteEpisodes");
         }
         #endregion

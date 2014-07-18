@@ -11,7 +11,7 @@ using System.ComponentModel;
 using Microsoft.Phone.Tasks;
 using Microsoft.Phone.Info;
 using Centapp.CartoonCommon.Helpers;
-using Wp7Shared.Helpers;
+using Wp81Shared.Helpers;
 
 namespace Centapp.CartoonCommon.Controls
 {

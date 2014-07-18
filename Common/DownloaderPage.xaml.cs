@@ -53,10 +53,7 @@ namespace Centapp.CartoonCommon
 
     public partial class DownloaderPage : PhoneApplicationPage
     {
-        bool _incrementalBackup = true;
-
         private static ManualResetEvent _mre = new ManualResetEvent(false);
-
 
         ItemViewModel _curEpisode = null;
         //Stopwatch _sw = new Stopwatch();
@@ -83,7 +80,6 @@ namespace Centapp.CartoonCommon
         BackupOperationEn _backupOperation = BackupOperationEn.UrlChecks;
         private bool _cancellationPending = false;
 
-
         public DownloaderPage()
         {
             //TODO tombstoning
@@ -99,7 +95,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.Logger.Reset();
         }
 
-        private void Init()
+        private async void Init()
         {
             App.ViewModel.Logger.Log("[Init] -----------------------------------");
             _episodeCount = 0;
@@ -124,24 +120,40 @@ namespace Centapp.CartoonCommon
             //App.ViewModel.Logger.Log("[Init] _incrementalBackup = " + _incrementalBackup);
 
             List<int> episodesToSkip = new List<int>();
-            var storedFiles = _isoStore.GetFileNames("ep*.mp4");
-            if (!_incrementalBackup)
+            List<string> alreadyStoredFiles = null;
+
+            if (AppInfo.Instance.CurrentBackupSupport == BackupSupportType.SDCard)
             {
-                App.ViewModel.Logger.Log("[Init] removing all existing files . . .");
-                foreach (var item in storedFiles)
+                bool sdFolderInitResult = await GenericHelper.Instance.InitSDBackupFolder();
+                if (!sdFolderInitResult) {
+                    //sd card not found
+                    //TEST
+                    MessageBox.Show("$cannot find SD card!");
+                    NavigationService.GoBack();
+                }
+            }
+
+            //read already saved episodes
+            if (AppInfo.Instance.CurrentBackupSupport == BackupSupportType.SDCard)
+            {
+                var folderFiles = await AppInfo.Instance.SDBackupFolder.GetFilesAsync();
+                foreach (StorageFile ep in folderFiles.Where(ep => ep.Name.StartsWith("ep")))        
                 {
-                    _isoStore.DeleteFile(item);
+                    alreadyStoredFiles.Add(ep.Name);
                 }
             }
             else
             {
-                foreach (var item in storedFiles)
-                {
-                    int episodeId = int.Parse(item.Replace(".mp4", string.Empty).Replace("ep_", string.Empty).Trim());
-                    episodesToSkip.Add(episodeId);
-                }
-                App.ViewModel.Logger.Log("[Init] already existing episodies count: " + episodesToSkip.Count);
+                alreadyStoredFiles = new List<string>(_isoStore.GetFileNames("ep*.mp4"));
             }
+
+            foreach (var item in alreadyStoredFiles)
+            {
+                int episodeId = int.Parse(item.Replace(".mp4", string.Empty).Replace("ep_", string.Empty).Trim());
+                episodesToSkip.Add(episodeId);
+            }
+
+            App.ViewModel.Logger.Log("[Init] already existing episodies count: " + episodesToSkip.Count);
 
             _itemsToDownload.Clear();
             _itemsToCheck.Clear();
@@ -192,6 +204,8 @@ namespace Centapp.CartoonCommon
 
             App.ViewModel.DwnCurEpisode = _currentQueue.First();
         }
+
+      
 
         private void SetCaptions()
         {
@@ -312,21 +326,6 @@ namespace Centapp.CartoonCommon
                                 _curEpisode.ActualMP4Uri = uri;
                                 _client.OpenReadAsync(_curEpisode.ActualMP4Uri.Uri);
                             }
-
-                            //(uri, ex) =>
-                            //{
-                            //    if (ex == null && uri != null)
-                            //    {
-                            //        App.ViewModel.Logger.Log("[ProcessItem] URI before download OK!");
-                            //        _curEpisode.ActualMP4Uri = uri;
-                            //        _client.OpenReadAsync(_curEpisode.ActualMP4Uri.Uri);
-                            //    }
-                            //    else
-                            //    {
-                            //        throw new Exception(string.Format("[ep {0}] [ProcessItem] GetVideoUri error: {1}", new object[] { _curEpisode.Id, ex.Message }), ex);
-                            //    }
-                            //});
-
                             //ProcessItem() in questo caso è chiamata dalla callback in "client_OpenReadCompleted"
                             break;
 
@@ -347,6 +346,8 @@ namespace Centapp.CartoonCommon
                                     WriteableBitmap img = new WriteableBitmap((int)ImagePreview.Width, (int)ImagePreview.Height);
                                     img.Render(ImagePreview, null);
                                     img.Invalidate();
+
+                                    //TODO portare su SD?
                                     using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                                     {
                                         if (isoStore.FileExists(curThumbName))
@@ -380,7 +381,7 @@ namespace Centapp.CartoonCommon
                             StopPreviewAnimation();
                             App.ViewModel.DwnInProgress = false;
                             EnableLockScreen();
-                            GenericHelper.SetAppIsOffline(true);
+                            GenericHelper.Instance.SetAppIsOffline(true);
                             App.ViewModel.LoadData();
                             App.ViewModel.BackupStage = BackupStageEn.DwnCompletedWithSuccess;
                             Dispatcher.BeginInvoke(() =>
@@ -522,34 +523,28 @@ namespace Centapp.CartoonCommon
                 {
                     App.ViewModel.Logger.Log("[client_OpenReadCompleted] starting isostore save process of: " + curEpisodeFileName);
 
-                    if (AppInfo.Instance.UseSDCard)
+                    if (AppInfo.Instance.CurrentBackupSupport == BackupSupportType.SDCard)
                     {
+                        //SD CARD ----------------------------------------------------------------------------
                         var stream = e.Result;
-                        StorageFolder storageFolderRef = Windows.Storage.KnownFolders.RemovableDevices;
-                        StorageFolder backupStorageFolder = await storageFolderRef.CreateFolderAsync("PeppaBackup");
-                        //StorageFolder storageFolder = (await pictLibrary.GetFoldersAsync()).FirstOrDefault();
-
-                        if (backupStorageFolder != null)
+                        StorageFile sampleFile = await AppInfo.Instance.SDBackupFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
+                        IRandomAccessStream outStream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                        using (var outputStream = outStream.GetOutputStreamAt(0))
                         {
-                            StorageFile sampleFile = await backupStorageFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
-                            IRandomAccessStream outStream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
-                            using (var outputStream = outStream.GetOutputStreamAt(0))
+                            DataWriter dataWriter = new DataWriter(outputStream);
+                            byte[] buffer = new byte[1024];
+                            int bytesRead;
+                            while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
                             {
-                                DataWriter dataWriter = new DataWriter(outputStream);
-
-                                byte[] buffer = new byte[1024];
-                                int bytesRead;
-                                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                                {
-                                    dataWriter.WriteBytes(buffer);
-                                }
-                                await dataWriter.StoreAsync();
-                                await outputStream.FlushAsync();
+                                dataWriter.WriteBytes(buffer);
                             }
+                            await dataWriter.StoreAsync();
+                            await outputStream.FlushAsync();
                         }
                     }
                     else
                     {
+                        //ISOSTORE ----------------------------------------------------------------------------
                         using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(curEpisodeFileName, System.IO.FileMode.Create, _isoStore))
                         {
                             byte[] buffer = new byte[1024];
@@ -582,12 +577,7 @@ namespace Centapp.CartoonCommon
                     }
                     else
                     {
-                        //throw new Exception(string.Format("[ep {0}] isostore write error: {1} (retryCount={2})",
-                        //                                  new object[] { _curEpisode.Id, ex.Message, _currentEpisodeDownloadRetryNum }),
-                        //                                  ex);
-                        throw new Exception(string.Format("[ep {0}] isostore write error: {1}",
-                                                         new object[] { _curEpisode.Id, ex.Message }),
-                                                         ex);
+                        throw new Exception(string.Format("[ep {0}] isostore write error: {1}",  new object[] { _curEpisode.Id, ex.Message }),  ex);
 
                     }
                     //}

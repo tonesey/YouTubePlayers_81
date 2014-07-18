@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
@@ -13,6 +14,8 @@ using System.Collections.Generic;
 using System.Windows.Navigation;
 using System.Xml.Linq;
 using System.Globalization;
+using Windows.Storage;
+using System.Threading.Tasks;
 
 namespace Centapp.CartoonCommon.Helpers
 {
@@ -42,53 +45,66 @@ namespace Centapp.CartoonCommon.Helpers
         public const string UsageKeyName = "usage";
         public const string MaxNumberKeyName = "number";
 
-        #region settings values
-        public static List<int> FavoriteEpisodesIdsSettingValue { set; get; }
-        public static bool AppIsOfflineSettingValue { set; get; }
-        public static int OnlineUsagesSettingValue { set; get; }
-        public static BackupSupportType OfflineSupportTypeSettingValue { set; get; }
-        #endregion
+        private static GenericHelper _instance = null;
+        public static GenericHelper Instance
+        {
+            get
+            {
+                if (_instance == null)
+                {
+                    _instance = new GenericHelper();
+                }
+                return _instance;
+            }
+        }
 
-        public static void ReadAppSettings()
+        public async Task ReadAppSettings()
         {
             object favoriteEpisodes = Readkey(FavoriteEpisodesKey);
-            FavoriteEpisodesIdsSettingValue = favoriteEpisodes == null ? new List<int>() : (List<int>)favoriteEpisodes;
+            AppInfo.Instance.FavoriteEpisodesIdsSettingValue = favoriteEpisodes == null ? new List<int>() : (List<int>)favoriteEpisodes;
 
             object appIsOffline = Readkey(AppIsOfflineKey);
-            AppIsOfflineSettingValue = appIsOffline == null ? false : (bool)appIsOffline;
+            AppInfo.Instance.AppIsOfflineSettingValue = appIsOffline == null ? false : (bool)appIsOffline;
 
             object onlineUsagesCount = Readkey(OnlineUsagesKey);
-            OnlineUsagesSettingValue = (onlineUsagesCount == null || string.IsNullOrEmpty(onlineUsagesCount.ToString())) ? 0 : int.Parse(onlineUsagesCount.ToString());
+            AppInfo.Instance.OnlineUsagesSettingValue = (onlineUsagesCount == null || string.IsNullOrEmpty(onlineUsagesCount.ToString())) ? 0 : int.Parse(onlineUsagesCount.ToString());
 
             object offlineSupportType = Readkey(OfflineSupportTypeKey);
-            OfflineSupportTypeSettingValue = (BackupSupportType)offlineSupportType;
-        }
+            AppInfo.Instance.OfflineSupportTypeSettingValue = onlineUsagesCount == null ? BackupSupportType.IsolatedStorage : (BackupSupportType)offlineSupportType;
 
-        internal static void RemoveOfflineData()
-        {
-            if (OfflineSupportTypeSettingValue == BackupSupportType.IsolatedStorage)
+            if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
             {
-                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
-                {
-                   // isoStore.DeleteFile(AppInfo.OfflineIndexFileNameXml);
-                    foreach (var item in isoStore.GetFileNames("ep*.mp4"))
-                    {
-                        isoStore.DeleteFile(item);
-                    }
-                    foreach (var item in isoStore.GetFileNames("thumb*.*"))
-                    {
-                        isoStore.DeleteFile(item);
-                    }
+                bool sdInitOk = await InitSDBackupFolder();
+                if (sdInitOk == false) { 
+                    //TEST
+                    MessageBox.Show("$error while initing SD card, app will run in online mode");
+                    AppInfo.Instance.AppIsOfflineSettingValue = false;
+                    AppInfo.Instance.OfflineSupportTypeSettingValue = BackupSupportType.IsolatedStorage;
                 }
             }
-            else
-            {
-                //TODO 
-                throw new NotImplementedException("RemoveOfflineData from SD");
-            }
         }
 
-        public static void Writekey(string key, object value)
+       
+        internal void IncrementOnlineUsagesCount()
+        {
+            AppInfo.Instance.OnlineUsagesSettingValue++;
+            Writekey(OnlineUsagesKey, AppInfo.Instance.OnlineUsagesSettingValue);
+        }
+
+        internal void SetOfflineBackupType(BackupSupportType backupType)
+        {
+            AppInfo.Instance.OfflineSupportTypeSettingValue = backupType;
+            Writekey(OfflineSupportTypeKey, AppInfo.Instance.OfflineSupportTypeSettingValue);
+        }
+
+        internal void SetAppIsOffline(bool val)
+        {
+            AppInfo.Instance.AppIsOfflineSettingValue = val;
+            Writekey(AppIsOfflineKey, AppInfo.Instance.AppIsOfflineSettingValue);
+        }
+
+
+        public void Writekey(string key, object value)
         {
             if (IsolatedStorageSettings.ApplicationSettings.Contains(key))
             {
@@ -101,28 +117,82 @@ namespace Centapp.CartoonCommon.Helpers
             IsolatedStorageSettings.ApplicationSettings.Save();
         }
 
-        internal static void IncrementOnlineUsagesCount()
-        {
-            OnlineUsagesSettingValue++;
-            Writekey(OnlineUsagesKey, OnlineUsagesSettingValue);
-        }
-
-        internal static void SetOfflineBackupType(BackupSupportType backupType)
-        {
-            OfflineSupportTypeSettingValue = backupType;
-            Writekey(OfflineSupportTypeKey, OfflineSupportTypeSettingValue);
-        }
-
-        internal static void SetAppIsOffline(bool val)
-        {
-            AppIsOfflineSettingValue = val;
-            Writekey(AppIsOfflineKey, AppIsOfflineSettingValue);
-        }
-
-        public static object Readkey(string key)
+        public object Readkey(string key)
         {
             return IsolatedStorageSettings.ApplicationSettings.Contains(key) ? IsolatedStorageSettings.ApplicationSettings[key] : null;
         }
+
+        #region SD card
+        internal async Task RemoveOfflineData()
+        {
+            if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.IsolatedStorage)
+            {
+                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    // isoStore.DeleteFile(AppInfo.OfflineIndexFileNameXml);
+                    foreach (var item in isoStore.GetFileNames("ep*.mp4"))
+                    {
+                        isoStore.DeleteFile(item);
+                    }
+                    foreach (var item in isoStore.GetFileNames("thumb*.png"))
+                    {
+                        isoStore.DeleteFile(item);
+                    }
+                }
+            }
+            else
+            {
+                var folderFiles = await AppInfo.Instance.SDBackupFolder.GetFilesAsync();
+                foreach (StorageFile ep in folderFiles.Where(ep => ep.Name.StartsWith("ep")))
+                {
+                    await ep.DeleteAsync();
+                }
+            }
+        }
+
+        internal async Task<bool> IsSDCardAvailable()
+        {
+            try
+            {
+                StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
+                StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
+                return sdCard != null;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return false;
+        }
+
+        internal async Task<bool> InitSDBackupFolder()
+        {
+            try
+            {
+                AppInfo.Instance.SDBackupFolder = await InitSDBackupFolderImpl();
+            }
+            catch (Exception)
+            {
+                //sd not present
+                AppInfo.Instance.SDBackupFolder = null;
+                return false;
+            }
+            return true;
+        }
+
+        private async System.Threading.Tasks.Task<StorageFolder> InitSDBackupFolderImpl()
+        {
+            StorageFolder backupFolder = null;
+            StorageFolder rootFolder = (await Windows.Storage.KnownFolders.RemovableDevices.GetFoldersAsync()).FirstOrDefault();
+            backupFolder = await rootFolder.GetFolderAsync(AppInfo.BackupFolderOnSDCard);
+            if (backupFolder == null)
+            {
+                backupFolder = (await rootFolder.CreateFolderAsync(AppInfo.BackupFolderOnSDCard));
+            }
+            return backupFolder;
+        }
+
+        #endregion
 
         #region misc
         internal static string GetOfflineFileName(string id)
