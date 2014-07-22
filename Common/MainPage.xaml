@@ -21,9 +21,11 @@
     toolkit:TiltEffect.IsTiltEnabled="True"
     shell:SystemTray.IsVisible="False">
 
+    <!--
     <shell:SystemTray.ProgressIndicator>
-        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="False"/>
+        <shell:ProgressIndicator IsIndeterminate="True" IsVisible="True"/>
     </shell:SystemTray.ProgressIndicator>
+    -->
 
     <phone:PhoneApplicationPage.Resources>
         <DataTemplate x:Key="DefaultItemTemplate">
@@ -111,9 +113,10 @@
         </Grid.RowDefinitions>
 
         <toolkit:PerformanceProgressBar
-                            Grid.Row="0"
+                            Grid.Row="1"
                             HorizontalAlignment="Stretch"
                             Margin="0"
+                            Height="20"
                             IsIndeterminate="True"
                             ActualIsIndeterminate="{Binding IsDataLoading}"
                             Visibility="{Binding IsDataLoading, Converter={StaticResource visibilityConverter}}"/>
@@ -145,7 +148,7 @@
                 </controls:PanoramaItem.Header>
                 <StackPanel Orientation="Vertical">
                     <TextBlock Name="firstListTxtNoInternet" Visibility="Visible" FontSize="24" Text="$Internet non disponibile!"></TextBlock>
-                    <ListBox  Name="firstList" Height="500" Margin="0,0,-2,0" 
+                    <ListBox  Name="firstList"  Height="500" Margin="0,0,-12,0"
                               ItemsSource="{Binding Items_Chunk1}" 
                               ItemTemplate="{StaticResource DefaultItemTemplate}"
                              />

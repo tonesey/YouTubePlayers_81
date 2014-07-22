@@ -202,6 +202,7 @@ namespace Centapp.CartoonCommon
         // Load data for the ViewModel Items
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            UpdateAppInfos();
         }
 
         private void UpdateAppInfos()
@@ -964,7 +965,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
             PanoramaMainControl.DefaultItem = PanoramaMainControl.Items[0];
 
-            UpdateAppInfos();
+            //UpdateAppInfos();
             backupEpisodesButton.Visibility = AppInfo.Instance.DownloadIsAllowed ? Visibility.Visible : Visibility.Collapsed;
         }
 

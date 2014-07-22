@@ -112,7 +112,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.DwnInProgress = true;
 
 #if DEBUG
-            var episodes = App.ViewModel.Items.Take(1).ToList();
+            var episodes = App.ViewModel.Items.Take(3).ToList();
 #else
             var episodes = App.ViewModel.Items;
 #endif
