@@ -14,11 +14,7 @@ namespace Centapp.CartoonCommon
         public const string DataBackupFileName = "backup.xml";
         public const string BackupFolderOnSDCard = "PeppaPigBackup";
 
-
         private static AppInfo _instance = null;
-        
-        
-
         public static AppInfo Instance
         {
             get

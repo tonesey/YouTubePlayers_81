@@ -129,15 +129,14 @@ namespace Centapp.CartoonCommon.Helpers
             {
                 using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                 {
-                    // isoStore.DeleteFile(AppInfo.OfflineIndexFileNameXml);
                     foreach (var item in isoStore.GetFileNames("ep*.mp4"))
                     {
                         isoStore.DeleteFile(item);
                     }
-                    foreach (var item in isoStore.GetFileNames("thumb*.png"))
-                    {
-                        isoStore.DeleteFile(item);
-                    }
+                    //foreach (var item in isoStore.GetFileNames("thumb*.png"))
+                    //{
+                    //    isoStore.DeleteFile(item);
+                    //}
                 }
             }
             else
@@ -171,7 +170,7 @@ namespace Centapp.CartoonCommon.Helpers
             {
                 AppInfo.Instance.SDBackupFolder = await InitSDBackupFolderImpl();
             }
-            catch (Exception)
+            catch (Exception ex)
             {
                 //sd not present
                 AppInfo.Instance.SDBackupFolder = null;
@@ -180,16 +179,30 @@ namespace Centapp.CartoonCommon.Helpers
             return true;
         }
 
-        private async System.Threading.Tasks.Task<StorageFolder> InitSDBackupFolderImpl()
+        private async Task<StorageFolder> InitSDBackupFolderImpl()
         {
-            StorageFolder backupFolder = null;
-            StorageFolder rootFolder = (await Windows.Storage.KnownFolders.RemovableDevices.GetFoldersAsync()).FirstOrDefault();
-            backupFolder = await rootFolder.GetFolderAsync(AppInfo.BackupFolderOnSDCard);
-            if (backupFolder == null)
+            try
             {
-                backupFolder = (await rootFolder.CreateFolderAsync(AppInfo.BackupFolderOnSDCard));
+                StorageFolder backupFolder = null;
+                StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
+                StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
+                try
+                {
+                    backupFolder = await sdCard.GetFolderAsync(AppInfo.BackupFolderOnSDCard);
+                }
+                catch (Exception)
+                {
+                }
+                if (backupFolder == null)
+                {
+                    backupFolder = (await sdCard.CreateFolderAsync(AppInfo.BackupFolderOnSDCard));
+                }
+                return backupFolder;
             }
-            return backupFolder;
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
 
         #endregion

@@ -776,10 +776,13 @@ namespace Centapp.CartoonCommon
 
             //tests if SDcard is available
             bool isSDCardAvailable = await GenericHelper.Instance.IsSDCardAvailable();
-            messageBoxResult = MessageBox.Show("$Do you want to store episodes into your SD card?", AppResources.Warning, MessageBoxButton.OKCancel);
-            if (messageBoxResult == MessageBoxResult.OK)
+            if (isSDCardAvailable)
             {
-                backupSupportType = BackupSupportType.SDCard;
+                messageBoxResult = MessageBox.Show("$Do you want to store episodes into your SD card?", AppResources.Warning, MessageBoxButton.OKCancel);
+                if (messageBoxResult == MessageBoxResult.OK)
+                {
+                    backupSupportType = BackupSupportType.SDCard;
+                }
             }
 
             MediaInfo mInfo = await CheckAvailableSpace(backupSupportType);
@@ -931,7 +934,9 @@ namespace Centapp.CartoonCommon
             }
             else
             {
-                curAvail = (Int64)await GetFreeSpace(KnownFolders.RemovableDevices);
+                await GenericHelper.Instance.InitSDBackupFolder();
+                curAvail = (Int64)await GetFreeSpace(AppInfo.Instance.SDBackupFolder);
+                //curAvail = (Int64)await GetFreeSpace(KnownFolders.RemovableDevices);
             }
 
             mInfo.AvailableGigaBytes = Math.Round((decimal)((double)curAvail / 1024d / 1024d / 1024d), 1);

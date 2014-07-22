@@ -30,6 +30,7 @@ using Microsoft.Phone.Net.NetworkInformation;
 using Centapp.CartoonCommon.Utility;
 using Windows.Storage;
 using Windows.Storage.Streams;
+using System.Threading.Tasks;
 
 namespace Centapp.CartoonCommon
 {
@@ -95,7 +96,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.Logger.Reset();
         }
 
-        private async void Init()
+        private async Task Init()
         {
             App.ViewModel.Logger.Log("[Init] -----------------------------------");
             _episodeCount = 0;
@@ -120,7 +121,7 @@ namespace Centapp.CartoonCommon
             //App.ViewModel.Logger.Log("[Init] _incrementalBackup = " + _incrementalBackup);
 
             List<int> episodesToSkip = new List<int>();
-            List<string> alreadyStoredFiles = null;
+            List<string> alreadyStoredFiles = new List<string>();
 
             if (AppInfo.Instance.CurrentBackupSupport == BackupSupportType.SDCard)
             {
@@ -621,7 +622,7 @@ namespace Centapp.CartoonCommon
             email.Show();
         }
 
-        private void ButtonStartBackupEpisodes_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private async void ButtonStartBackupEpisodes_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
             //App.ViewModel.Logger.Log("[ButtonStartBackupEpisodes_Tap] incremental backup = " + _incrementalBackup);
 
@@ -632,7 +633,7 @@ namespace Centapp.CartoonCommon
             }
 
             DisableLockScreen();
-            Init();
+            await Init();
             StopPreviewAnimation();
             App.ViewModel.Logger.Log("[ButtonStartBackupEpisodes_Tap] starting queue analysis . . .");
             ProcessItem();

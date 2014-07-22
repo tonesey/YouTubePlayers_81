@@ -34,14 +34,11 @@ namespace PanoramaApp1
             StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
             // Get the first child folder, which represents the SD card.
             StorageFolder firstFolder = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
-
             StorageFolder sdCard = null;
-
-            sdCard = await firstFolder.GetFolderAsync("MyBackup");
-
+            sdCard = await firstFolder.GetFolderAsync("MyBackup111");
             if (sdCard == null)
             {
-                sdCard = (await firstFolder.CreateFolderAsync("MyBackup"));
+                sdCard = (await firstFolder.CreateFolderAsync("MyBackup111"));
             }
             
             if (sdCard != null)
@@ -49,7 +46,6 @@ namespace PanoramaApp1
                 //An SD card is present and the sdCard variable now contains a reference to it.
 
                 //var sdFiles = (await sdCard.GetFilesAsync()).ToList();
-
 
                 //remove
                 var testFile = (await sdCard.GetFileAsync("sample.txt"));

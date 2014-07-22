@@ -17,7 +17,6 @@ namespace Centapp.CartoonCommon.Converters
             if (value == null) {
                 return null;
             }
-            //return new BitmapImage(new Uri(string.Format("/Resources/thumb/{0}.png", (int)value), UriKind.Relative));
             return YouTube.GetThumbnailUri(GenericHelper.GetYoutubeID((value as ItemViewModel).Url), YouTubeThumbnailSize.Small);
         }
 
