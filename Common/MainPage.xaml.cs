@@ -182,6 +182,25 @@ namespace Centapp.CartoonCommon
 
         void PanoramaMainControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (otherAppsPanoramaItem.Visibility == Visibility.Collapsed)
+            {
+                return;
+            }
+
+            try
+            {
+                if (PanoramaMainControl.SelectedItem == otherAppsPanoramaItem)
+                {
+                    otherApps.UnFreezeAll();
+                }
+                else
+                {
+                    otherApps.FreezeAll();
+                }
+            }
+            catch (Exception)
+            {
+            }
         }
 
         private void SetCaptions()

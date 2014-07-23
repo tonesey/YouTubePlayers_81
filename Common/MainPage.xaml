@@ -241,7 +241,8 @@
                              />
                         <Border BorderThickness="1" 
                             Name="noFavoritesBorder"
-                            Margin="0,5"
+                            Padding="20"
+                            Margin="10"
                             CornerRadius="20"
                             Visibility="{Binding FavoriteEpisodes, Converter={StaticResource favVisibilityConverterInverted}}">
                             <Border.Background>
@@ -254,8 +255,8 @@
                                        FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                        TextWrapping="Wrap" 
                                        HorizontalAlignment="Center"     
-                                       FontSize="{StaticResource PhoneFontSizeLarge}" 
-                                       Text="[no sentences]" Height="430" Width="402"/>
+                                       FontSize="{StaticResource PhoneFontSizeMediumLarge}" 
+                                       Text="[no sentences]"/>
                         </Border>
                     </StackPanel>
                 </StackPanel>
