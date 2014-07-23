@@ -27,17 +27,18 @@
         <Converters:EpisodesToPanItemContentConverter x:Key="episodesToPanItemContentConverter" />
 
 
-        <Style x:Key="PanormaHeaderImageStyle" TargetType="Image">
+        <Style x:Key="PanoramaHeaderImageStyle" TargetType="Image">
             <Setter Property="Width" Value="60"/>
             <Setter Property="Height" Value="50"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
 
-        <Style x:Key="PanormaHeaderTextStyle" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="50"/>
+        <Style x:Key="PanoramaHeaderTextStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="40"/>
             <Setter Property="Margin" Value="20,0,0,0"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="TextAlignment" Value="Left"></Setter>
+            <Setter Property="FontFamily" Value=".\Fonts\Peppa Pig.TTF#Peppa Pig"></Setter>
         </Style>
 
         <!--FontSize="50" Margin="20,0,0,0" VerticalAlignment="Center"-->

@@ -95,7 +95,8 @@ namespace Centapp.CartoonCommon
             cc = Thread.CurrentThread.CurrentCulture;
             cuic = Thread.CurrentThread.CurrentUICulture;
 
-            if (cc.TwoLetterISOLanguageName == "it") {
+            if (cc.TwoLetterISOLanguageName == "it")
+            {
                 Thread.CurrentThread.CurrentCulture = new CultureInfo("it");
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("it");
             }
@@ -364,31 +365,25 @@ namespace Centapp.CartoonCommon
 
                     if (AppInfo.Instance.IsAdvertisingEnabled)
                     {
-                        //TODO 81
-                        //#region advertising ON
-                        //YouTube.GetVideoUriAsync(id,  MyToolkit.Multimedia.YouTubeQuality.Quality480P,
-                        //                    (uri, ex) =>
-                        //                    {
-                        //                        //SystemTray.ProgressIndicator.IsVisible = true;
-                        //                        if (ex == null && uri != null)
-                        //                        {
-                        //                            App.ViewModel.CurrentYoutubeMP4Uri = uri.Uri;
-                        //                            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService, Dispatcher, "/PlayerPage.xaml");
-                        //                        }
-                        //                        else
-                        //                        {
-                        //                            switch (MessageBox.Show(AppResources.brokenLinkQuestion,
-                        //                                                    AppResources.ExceptionMessageTitle,
-                        //                                                    MessageBoxButton.OKCancel))
-                        //                            {
+                        #region advertising ON
+                        var uri = await YouTube.GetVideoUriAsync(id, MyToolkit.Multimedia.YouTubeQuality.Quality480P);
+                        if (uri != null)
+                        {
+                            App.ViewModel.CurrentYoutubeMP4Uri = uri.Uri;
+                            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService, Dispatcher, "/PlayerPage.xaml");
+                        }
+                        else
+                        {
+                            switch (MessageBox.Show(AppResources.brokenLinkQuestion, AppResources.ExceptionMessageTitle, MessageBoxButton.OKCancel))
+                            {
 
-                        //                                case MessageBoxResult.OK:
-                        //                                    ReportBrokenLink(ex.Message);
-                        //                                    break;
-                        //                            }
-                        //                        }
-                        //                    });
-                        //#endregion
+                                case MessageBoxResult.OK:
+                                    ReportBrokenLink();
+                                    break;
+                            }
+                        }
+
+                        #endregion
                     }
                     else
                     {
@@ -609,10 +604,10 @@ namespace Centapp.CartoonCommon
 
         void menuItemBrokenlink_Click(object sender, RoutedEventArgs e)
         {
-            ReportBrokenLink("");
+            ReportBrokenLink();
         }
 
-        private void ReportBrokenLink(string internalError)
+        private void ReportBrokenLink(string internalError = "")
         {
             try
             {
@@ -823,7 +818,7 @@ namespace Centapp.CartoonCommon
                                                                                 },
                                                                                 AppResources.EpisodesDownloadTitle,
                                                                                 AppResources.BackupMediatypeRequest);
-                
+
                 //the user pressed the hardware back button.
                 if (args.ClickedButton == null)
                 {
@@ -835,7 +830,8 @@ namespace Centapp.CartoonCommon
                 {
                     backupSupportType = BackupSupportType.IsolatedStorage;
 
-                } else if (option.Title == ItemSDCardTitle)
+                }
+                else if (option.Title == ItemSDCardTitle)
                 {
                     backupSupportType = BackupSupportType.SDCard;
                 }

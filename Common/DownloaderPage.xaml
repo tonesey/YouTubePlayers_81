@@ -15,7 +15,7 @@
     xmlns:telerikCore="clr-namespace:Telerik.Windows.Controls;assembly=Telerik.Windows.Core"
     d:DataContext="{d:DesignData SampleData/MainViewModelSampleData.xaml}"
     BackKeyPress="PhoneApplicationPage_BackKeyPress"
-    shell:SystemTray.IsVisible="True">
+    shell:SystemTray.IsVisible="False">
 
     <!--LayoutRoot is the root grid where all page content is placed-->
     <Grid x:Name="LayoutRoot" Background="Transparent">
@@ -55,6 +55,7 @@
                                TextWrapping="Wrap" 
                                HorizontalAlignment="Center"     
                                FontSize="28" 
+                               FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                Text="{Binding BackupStage, 
                                       Converter={StaticResource backupStageToMessageConverter}}" 
                                Width="432"></TextBlock>
@@ -77,6 +78,7 @@
                                     </Grid.ColumnDefinitions>
                                     <Image Grid.Column="0" Source="/Resources/buttons/backup.png"></Image>
                                     <TextBlock x:Name="ButtonStartBackupEpisodesText" 
+                                                FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,-1,0,-2" 
                                                 VerticalAlignment="Center" HorizontalAlignment="Left" Width="304">$start backup!</TextBlock>
                                 </Grid>
@@ -96,6 +98,7 @@
                             <Button.Content>
                                 <Grid HorizontalAlignment="Stretch">
                                     <TextBlock x:Name="ButtonEndText" 
+                                                FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
                                                 HorizontalAlignment="Center"
                                                 VerticalAlignment="Center">
@@ -114,8 +117,8 @@
                 </Border>
                 <StackPanel  Grid.Row="1" Visibility="{Binding DwnInProgress, Converter={StaticResource visibilityConverter}}">
                     <StackPanel Orientation="Horizontal" Margin="0,20">
-                        <TextBlock x:Name="TextCurEpisodeTitleHeader" Text="$Current episode:" ></TextBlock>
-                        <TextBlock x:Name="TextCurEpisodeTitleValue"  Margin="20,0,0,0" Text="{Binding DwnCurEpisodeTitle}" TextAlignment="Center" FontStyle="Italic"/>
+                        <TextBlock x:Name="TextCurEpisodeTitleHeader" FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" Text="$Current episode:" ></TextBlock>
+                        <TextBlock x:Name="TextCurEpisodeTitleValue" FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" Margin="20,0,0,0" Text="{Binding DwnCurEpisodeTitle}" TextAlignment="Center" FontStyle="Italic"/>
                     </StackPanel>
                     <toolkit:PerformanceProgressBar
                                 Visibility="{Binding BackupStage, 
@@ -132,11 +135,7 @@
                                  Margin="0,-20,0,0" 
                                  Value="{Binding DwnCurEpisodePercentage}" Height="25">
                     </ProgressBar>
-                    <!---->
-                    <!--<TextBlock Text="$Current episode downloaded data" Margin="0,20"></TextBlock>
-                    <TextBlock x:Name="TextCurEpisodeAmount" Text="{Binding DwnCurEpisodeAmount}"/>-->
-                    <!--<TextBlock Text="$Current episode percentage"  Margin="0,20"></TextBlock>-->
-                    <TextBlock  x:Name="TextOverallProgressHeader" Text="$Overall progress:" Margin="0,20"></TextBlock>
+                    <TextBlock  x:Name="TextOverallProgressHeader" FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" Text="$Overall progress:" Margin="0,20"></TextBlock>
                     <ProgressBar x:Name="ProgOverall" Margin="0,-20,0,0" IsIndeterminate="False" Maximum="100"  Value="{Binding DwnOverallPercentage}" Height="25"></ProgressBar>
                 </StackPanel>
             </Grid>

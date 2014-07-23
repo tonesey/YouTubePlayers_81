@@ -29,6 +29,8 @@
                        TextWrapping="Wrap" 
                        Text="$Sorry, but you can watch only two episodes daily and set only one favorite episode into trial version..." 
                        Margin="0,25,0,0" 
+                       FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
+                       Foreground="Red"
                        TextAlignment="Left"
                        VerticalAlignment="Stretch"
                        FontSize="{StaticResource PhoneFontSizeMediumLarge}"
