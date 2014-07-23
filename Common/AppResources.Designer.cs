@@ -97,6 +97,15 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Where do you want to save your offline episodes?.
+        /// </summary>
+        internal static string BackupMediatypeRequest {
+            get {
+                return ResourceManager.GetString("BackupMediatypeRequest", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to :( Sorry, I can&apos;t find this video... Do you want to send an email to developers?.
         /// </summary>
         internal static string brokenLinkQuestion {
@@ -167,6 +176,15 @@ namespace Centapp.CartoonCommon {
         internal static string buyPage_noThanks {
             get {
                 return ResourceManager.GetString("buyPage_noThanks", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry but I can&apos;t find SD card into your phone, insert card or retry download selecting another option.
+        /// </summary>
+        internal static string CannotFindSDCard {
+            get {
+                return ResourceManager.GetString("CannotFindSDCard", resourceCulture);
             }
         }
         
@@ -292,6 +310,15 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Episodes backup.
+        /// </summary>
+        internal static string EpisodesDownloadTitle {
+            get {
+                return ResourceManager.GetString("EpisodesDownloadTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Error during Windows Phone Store connection! Please try again later or buy app from Store web page.
         /// </summary>
         internal static string error_buy {
@@ -386,6 +413,60 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Go back to episodes list.
+        /// </summary>
+        internal static string ItemCancelDesc {
+            get {
+                return ResourceManager.GetString("ItemCancelDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        internal static string ItemCancelTitle {
+            get {
+                return ResourceManager.GetString("ItemCancelTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episodes will be saved into phone&apos;s internal memory.
+        /// </summary>
+        internal static string ItemPhoneMemoryDesc {
+            get {
+                return ResourceManager.GetString("ItemPhoneMemoryDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Phone&apos;s internal memory.
+        /// </summary>
+        internal static string ItemPhoneMemoryTitle {
+            get {
+                return ResourceManager.GetString("ItemPhoneMemoryTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Episodes will be saved into SD memory expansion card.
+        /// </summary>
+        internal static string ItemSDCardDesc {
+            get {
+                return ResourceManager.GetString("ItemSDCardDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to SD card.
+        /// </summary>
+        internal static string ItemSDCardTitle {
+            get {
+                return ResourceManager.GetString("ItemSDCardTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You will need to repeat entire backup procedure, are you sure?.
         /// </summary>
         internal static string MessageAbortDownload {
@@ -418,6 +499,15 @@ namespace Centapp.CartoonCommon {
         internal static string notEnoughSpace {
             get {
                 return ResourceManager.GetString("notEnoughSpace", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sorry but SD card ha not available free space (required: {0}, available {1}).\nDo you want to store episode into your phone memory?.
+        /// </summary>
+        internal static string NotEnoughSpaceOnSDCard {
+            get {
+                return ResourceManager.GetString("NotEnoughSpaceOnSDCard", resourceCulture);
             }
         }
         
@@ -523,6 +613,15 @@ namespace Centapp.CartoonCommon {
         internal static string reportError {
             get {
                 return ResourceManager.GetString("reportError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find SD card: app will run in &quot;online mode&quot;.
+        /// </summary>
+        internal static string SDCardErrorInitGoOnline {
+            get {
+                return ResourceManager.GetString("SDCardErrorInitGoOnline", resourceCulture);
             }
         }
         

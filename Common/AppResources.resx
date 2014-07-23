@@ -348,4 +348,37 @@ Please try again later... if problem persists please contact support</value>
     <value>Sorry but current episodes offline backup is not more valid: this version changed episodes catalogue and a new backup is neeeded!... a lot of new episodes were added!
 Do you want to backup right now?</value>
   </data>
+  <data name="CannotFindSDCard" xml:space="preserve">
+    <value>Sorry but I can't find SD card into your phone, insert card or retry download selecting another option</value>
+  </data>
+  <data name="BackupMediatypeRequest" xml:space="preserve">
+    <value>Where do you want to save your offline episodes?</value>
+  </data>
+  <data name="EpisodesDownloadTitle" xml:space="preserve">
+    <value>Episodes backup</value>
+  </data>
+  <data name="ItemCancelDesc" xml:space="preserve">
+    <value>Go back to episodes list</value>
+  </data>
+  <data name="ItemCancelTitle" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="ItemPhoneMemoryDesc" xml:space="preserve">
+    <value>Episodes will be saved into phone's internal memory</value>
+  </data>
+  <data name="ItemPhoneMemoryTitle" xml:space="preserve">
+    <value>Phone's internal memory</value>
+  </data>
+  <data name="ItemSDCardDesc" xml:space="preserve">
+    <value>Episodes will be saved into SD memory expansion card</value>
+  </data>
+  <data name="ItemSDCardTitle" xml:space="preserve">
+    <value>SD card</value>
+  </data>
+  <data name="SDCardErrorInitGoOnline" xml:space="preserve">
+    <value>Cannot find SD card: app will run in "online mode"</value>
+  </data>
+  <data name="NotEnoughSpaceOnSDCard" xml:space="preserve">
+    <value>Sorry but SD card ha not available free space (required: {0}, available {1}).\nDo you want to store episode into your phone memory?</value>
+  </data>
 </root>

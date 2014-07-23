@@ -372,7 +372,6 @@ namespace Centapp.CartoonCommon.ViewModels
                     {
                         var data = reader.ReadToEnd();
                         SaveIndexToIsostoreJSON(data);
-                        //TODO gestire status
                         BuildItemsFromJson(data, false);
                     }
                 }

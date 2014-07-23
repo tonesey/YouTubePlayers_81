@@ -338,4 +338,37 @@ Perchè non ci dai 5 stelle sullo store? :)</value>
   <data name="OfflineRevertWarning" xml:space="preserve">
     <value>Gli episodi correntemente salvati non sono più validi: questa versione ha modificato la lista degli episodi disponibili ed è necessario rieseguire l'operazione di backup... Molti episodi sono stati aggiunti! Vuoi procedere ora con il backup?</value>
   </data>
+  <data name="CannotFindSDCard" xml:space="preserve">
+    <value>Mi dispiace ma non trovo la SD card nel telefono: inseriscila e ritenta il download oppure ritenta il download selezionando un'altra modalità di memorizzazione </value>
+  </data>
+  <data name="SDCardErrorInitGoOnline" xml:space="preserve">
+    <value>Scheda di memoria SD non trovata: l'app funzionerà solo tramite connessione internet</value>
+  </data>
+  <data name="BackupMediatypeRequest" xml:space="preserve">
+    <value>Dove vuoi salvare gli episodi scaricati?</value>
+  </data>
+  <data name="EpisodesDownloadTitle" xml:space="preserve">
+    <value>Salvataggio episodi</value>
+  </data>
+  <data name="ItemCancelDesc" xml:space="preserve">
+    <value>Annulla l'operazione e torna all'elenco episodi</value>
+  </data>
+  <data name="ItemCancelTitle" xml:space="preserve">
+    <value>Annulla</value>
+  </data>
+  <data name="ItemPhoneMemoryDesc" xml:space="preserve">
+    <value>Gli episodi saranno salvati nella memoria interna del telefono</value>
+  </data>
+  <data name="ItemPhoneMemoryTitle" xml:space="preserve">
+    <value>Memoria del telefono</value>
+  </data>
+  <data name="ItemSDCardDesc" xml:space="preserve">
+    <value>Gli episodi verranno salvati sulla scheda di memoria aggiuntiva SD</value>
+  </data>
+  <data name="ItemSDCardTitle" xml:space="preserve">
+    <value>SD card</value>
+  </data>
+  <data name="NotEnoughSpaceOnSDCard" xml:space="preserve">
+    <value>Mi dispiace ma non c'è abbastanza spazio sulla SD card per memorizzare gli episodi (richiesti: {0}, disponibili: {1}).\nVuoi salvare gli episodi nella memoria interna del telefono?</value>
+  </data>
 </root>

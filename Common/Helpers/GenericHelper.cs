@@ -70,37 +70,49 @@ namespace Centapp.CartoonCommon.Helpers
             AppInfo.Instance.OnlineUsagesSettingValue = (onlineUsagesCount == null || string.IsNullOrEmpty(onlineUsagesCount.ToString())) ? 0 : int.Parse(onlineUsagesCount.ToString());
 
             object offlineSupportType = Readkey(OfflineSupportTypeKey);
-            AppInfo.Instance.OfflineSupportTypeSettingValue = onlineUsagesCount == null ? BackupSupportType.IsolatedStorage : (BackupSupportType)offlineSupportType;
+            AppInfo.Instance.OfflineSupportTypeSettingValue = offlineSupportType == null ? BackupSupportType.IsolatedStorage : (BackupSupportType)offlineSupportType;
 
             if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
             {
                 bool sdInitOk = await InitSDBackupFolder();
-                if (sdInitOk == false) { 
-                    //TEST
-                    MessageBox.Show("$error while initing SD card, app will run in online mode");
+                if (!sdInitOk)
+                {
+                    //MessageBox.Show("$error while initing SD card, app will run in online mode");
+                    MessageBox.Show(AppResources.SDCardErrorInitGoOnline);
+                    //non viene scritto il setting, potrebbe essere una mancanza temporanea di SD, agli avvii successivi si ritenta di lavorare offline su SD
+                    //SetAppIsOffline(false); 
                     AppInfo.Instance.AppIsOfflineSettingValue = false;
-                    AppInfo.Instance.OfflineSupportTypeSettingValue = BackupSupportType.IsolatedStorage;
+                    AppInfo.Instance.OfflineSupportTypeSettingValue = BackupSupportType.Undefined;
                 }
             }
         }
 
-       
         internal void IncrementOnlineUsagesCount()
         {
             AppInfo.Instance.OnlineUsagesSettingValue++;
             Writekey(OnlineUsagesKey, AppInfo.Instance.OnlineUsagesSettingValue);
         }
 
-        internal void SetOfflineBackupType(BackupSupportType backupType)
-        {
-            AppInfo.Instance.OfflineSupportTypeSettingValue = backupType;
-            Writekey(OfflineSupportTypeKey, AppInfo.Instance.OfflineSupportTypeSettingValue);
-        }
+        //internal void SetOfflineBackupType(BackupSupportType backupType)
+        //{
+        //    AppInfo.Instance.OfflineSupportTypeSettingValue = backupType;
+        //    Writekey(OfflineSupportTypeKey, AppInfo.Instance.OfflineSupportTypeSettingValue);
+        //}
 
-        internal void SetAppIsOffline(bool val)
+        internal void SetAppIsOffline(bool isOffline, BackupSupportType backupType = BackupSupportType.Undefined)
         {
-            AppInfo.Instance.AppIsOfflineSettingValue = val;
+            AppInfo.Instance.AppIsOfflineSettingValue = isOffline;
             Writekey(AppIsOfflineKey, AppInfo.Instance.AppIsOfflineSettingValue);
+
+            if (isOffline)
+            {
+                AppInfo.Instance.OfflineSupportTypeSettingValue = backupType;
+                Writekey(OfflineSupportTypeKey, backupType);
+            }
+            else
+            {
+                Writekey(OfflineSupportTypeKey, BackupSupportType.Undefined);
+            }
         }
 
 

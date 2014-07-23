@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Deployment xmlns="http://schemas.microsoft.com/windowsphone/2014/deployment" AppPlatformVersion="8.1">
-  <DefaultLanguage xmlns="" code="it-IT" />
+  <DefaultLanguage xmlns="" code="it" />
   <Languages xmlns="">
     <Language code="it" />
   </Languages>

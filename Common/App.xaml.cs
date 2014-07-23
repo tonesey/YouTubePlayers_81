@@ -101,11 +101,6 @@ namespace Centapp.CartoonCommon
         }
 
 
-        //private void ReportLittleWatsonException(Exception e, string source)
-        //{
-
-        //}
-
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
@@ -119,14 +114,12 @@ namespace Centapp.CartoonCommon
         {
             ParseAppInfo();
             CheckTrialState();
+
+            //GenericHelper.Instance.SetAppIsOffline(true, BackupSupportType.SDCard);
             GenericHelper.Instance.ReadAppSettings();
-
-          
-
             if (!AppInfo.Instance.AppIsOfflineSettingValue && !NetworkInterface.GetIsNetworkAvailable())
             {
                 MessageBox.Show(AppResources.noNetworkAvailable);
-                return;
             }
             App.ViewModel.LoadData();
         }
@@ -152,7 +145,6 @@ namespace Centapp.CartoonCommon
             {
                 episodesGroupedBySeasons = doc.Root.Attribute("episodesGroupedBySeason").Value == "true";
             }
-
 
             bool infoPageIsPivot = false;
             if (doc.Root.Element("infoSection") != null && doc.Root.Element("infoSection").Attribute("usePivot") != null)

@@ -128,8 +128,7 @@ namespace Centapp.CartoonCommon
                 bool sdFolderInitResult = await GenericHelper.Instance.InitSDBackupFolder();
                 if (!sdFolderInitResult) {
                     //sd card not found
-                    //TEST
-                    MessageBox.Show("$cannot find SD card!");
+                    MessageBox.Show(AppResources.CannotFindSDCard);
                     NavigationService.GoBack();
                 }
             }
@@ -382,7 +381,9 @@ namespace Centapp.CartoonCommon
                             StopPreviewAnimation();
                             App.ViewModel.DwnInProgress = false;
                             EnableLockScreen();
-                            GenericHelper.Instance.SetAppIsOffline(true);
+                            //GenericHelper.Instance.SetAppIsOffline(true);
+                            //GenericHelper.Instance.SetOfflineBackupType(AppInfo.Instance.CurrentBackupSupport);
+                            GenericHelper.Instance.SetAppIsOffline(true, AppInfo.Instance.CurrentBackupSupport);
                             App.ViewModel.LoadData();
                             App.ViewModel.BackupStage = BackupStageEn.DwnCompletedWithSuccess;
                             Dispatcher.BeginInvoke(() =>
@@ -528,8 +529,8 @@ namespace Centapp.CartoonCommon
                     {
                         //SD CARD ----------------------------------------------------------------------------
                         var stream = e.Result;
-                        StorageFile sampleFile = await AppInfo.Instance.SDBackupFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
-                        IRandomAccessStream outStream = await sampleFile.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
+                        StorageFile downloadedEpisode = await AppInfo.Instance.SDBackupFolder.CreateFileAsync(curEpisodeFileName, CreationCollisionOption.ReplaceExisting);
+                        IRandomAccessStream outStream = await downloadedEpisode.OpenAsync(Windows.Storage.FileAccessMode.ReadWrite);
                         using (var outputStream = outStream.GetOutputStreamAt(0))
                         {
                             DataWriter dataWriter = new DataWriter(outputStream);

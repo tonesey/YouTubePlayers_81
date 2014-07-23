@@ -42,6 +42,8 @@ using Windows.Storage;
 using System.Threading.Tasks;
 using Wp81Shared.Helpers;
 using Wp81Shared.Exceptions;
+using Telerik.Windows.Controls;
+using Centapp.CartoonCommon.Controls;
 
 
 namespace Centapp.CartoonCommon
@@ -89,9 +91,15 @@ namespace Centapp.CartoonCommon
             InitializeComponent();
 
             //var test = Wp81Shared.Helpers.AppInfosHelper.GetId();
-            //CultureInfo cc, cuic;
-            //cc = Thread.CurrentThread.CurrentCulture;
-            //cuic = Thread.CurrentThread.CurrentUICulture;
+            CultureInfo cc, cuic;
+            cc = Thread.CurrentThread.CurrentCulture;
+            cuic = Thread.CurrentThread.CurrentUICulture;
+
+            if (cc.TwoLetterISOLanguageName == "it") {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo("it");
+                Thread.CurrentThread.CurrentUICulture = new CultureInfo("it");
+            }
+
 
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
@@ -118,7 +126,7 @@ namespace Centapp.CartoonCommon
 
             PanoramaMainControl.SelectionChanged += new EventHandler<SelectionChangedEventArgs>(PanoramaMainControl_SelectionChanged);
 
-            //CheckOtherAppsPanoramaItem();
+            CheckOtherAppsPanoramaItem();
 
             App.ViewModel.Logger.Reset();
 
@@ -189,7 +197,7 @@ namespace Centapp.CartoonCommon
             //otherAppsButtonText.Text = AppResources.otherAppsButton;
             infoButtonText.Text = AppResources.infoButtonText;
             backupEpisodesText.Text = AppResources.backupEpisodesText;
-            //otherAppsPanoramaHeader.Text = AppResources.otherAppsButton;
+            otherAppsPanoramaHeader.Text = AppResources.otherAppsButton;
 
             firstListTxtNoInternet.Text = AppResources.noNetworkAvailable;
             secondListTxtNoInternet.Text = AppResources.noNetworkAvailable;
@@ -234,9 +242,6 @@ namespace Centapp.CartoonCommon
 
             try
             {
-
-                //AppInfo.Instance.AppIsOfflineSettingValue = false;
-
                 if (AppInfo.Instance.AppIsOfflineSettingValue)
                 {
                     #region OFFLINE
@@ -265,7 +270,45 @@ namespace Centapp.CartoonCommon
                         else
                         {
                             #region advertising OFF
-                            var episodeUri = new Uri(selectedItem.OfflineFileName, UriKind.RelativeOrAbsolute);
+                            Uri episodeUri = null;
+
+                            if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
+                            {
+                                //episodeUri = new Uri(episodeFile.Path, UriKind.Absolute);
+                                //episodeUri = new Uri(@"D:\PeppaPigBackup\ep_1.mp4", UriKind.Absolute);
+                                //await episodeFile.CopyAndReplaceAsync()
+
+                                const string currendEpisodeFileName = "currendEpisode.mp4";
+
+                                //copy file from SDCard to IsoStore
+                                var sdStoredEpisodeFile = await AppInfo.Instance.SDBackupFolder.GetFileAsync(selectedItem.OfflineFileName);
+                                var sdFileStream = await sdStoredEpisodeFile.OpenStreamForReadAsync();
+
+                                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
+                                {
+                                    if (isoStore.FileExists(currendEpisodeFileName))
+                                    {
+                                        isoStore.DeleteFile(currendEpisodeFileName);
+                                    }
+
+                                    using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(currendEpisodeFileName, System.IO.FileMode.Create, isoStore))
+                                    {
+                                        byte[] buffer = new byte[1024];
+                                        int bytesRead;
+                                        while ((bytesRead = sdFileStream.Read(buffer, 0, buffer.Length)) > 0)
+                                        {
+                                            stream.Write(buffer, 0, bytesRead);
+                                        }
+                                        stream.Flush();
+                                    }
+                                }
+                                episodeUri = new Uri(currendEpisodeFileName, UriKind.RelativeOrAbsolute);
+                            }
+                            else
+                            {
+                                episodeUri = new Uri(selectedItem.OfflineFileName, UriKind.RelativeOrAbsolute);
+                            }
+
                             var launcher = new MediaPlayerLauncher
                                       {
                                           Controls = MediaPlaybackControls.All,
@@ -309,7 +352,7 @@ namespace Centapp.CartoonCommon
                             switch (MessageBox.Show(AppResources.DownloadEpisodesQuestion, "", MessageBoxButton.OKCancel))
                             {
                                 case MessageBoxResult.OK:
-                                    //GotoDownloaderPage();
+
                                     await ExecBackup();
                                     return;
                             }
@@ -418,35 +461,32 @@ namespace Centapp.CartoonCommon
             base.OnNavigatedTo(e);
         }
 
-        //TODO 81
-        //private void CheckOtherAppsPanoramaItem()
-        //{
-        //    string currentCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
+        private void CheckOtherAppsPanoramaItem()
+        {
+            string currentCulture = Thread.CurrentThread.CurrentCulture.TwoLetterISOLanguageName;
+            otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Collapsed;
+            if (!AppInfo.Instance.ShowOtherApps)
+            {
+                otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Collapsed;
+            }
+            else
+            {
+                otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Visible;
+                otherApps.SetCurrentAppGuid(Wp81Shared.Helpers.AppInfosHelper.GetId());
+                otherApps.SetRequiredGenre(Wp81Shared.UserControls.Genre.KidsAndFamily);
+            }
 
-        //    otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Collapsed;
-
-        //    if (!AppInfo.Instance.ShowOtherApps)
-        //    {
-        //        otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Collapsed;
-        //    }
-        //    else
-        //    {
-        //        otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Visible;
-        //        otherApps.SetCurrentAppGuid(Wp81Shared.Helpers.AppInfosHelper.GetId());
-        //        //otherApps.SetRequiredGenre(Wp7Shared.UserControls.Genre.KidsAndFamily);
-        //    }
-
-        //    if (currentCulture.Equals("it") || currentCulture.Equals("en"))
-        //    {
-        //        otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Visible;
-        //        otherApps.SetCurrentAppGuid(Wp81Shared.Helpers.AppInfosHelper.GetId());
-        //        otherApps.SetRequiredGenre(Wp7Shared.UserControls.Genre.KidsAndFamily);
-        //    }
-        //    else
-        //    {
-        //        otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Collapsed;
-        //    }
-        //}
+            if (currentCulture.Equals("it") || currentCulture.Equals("en"))
+            {
+                otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Visible;
+                otherApps.SetCurrentAppGuid(Wp81Shared.Helpers.AppInfosHelper.GetId());
+                otherApps.SetRequiredGenre(Wp81Shared.UserControls.Genre.KidsAndFamily);
+            }
+            else
+            {
+                otherAppsPanoramaItem.Visibility = System.Windows.Visibility.Collapsed;
+            }
+        }
 
         private void ToggleNoInternetWarningTxt(bool visible)
         {
@@ -754,12 +794,57 @@ namespace Centapp.CartoonCommon
 
         private async void backupEpisodesButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
-            ExecBackup();
+            await ExecBackup();
         }
 
         private async Task ExecBackup()
         {
             MessageBoxResult messageBoxResult;
+
+            //default
+            BackupSupportType backupSupportType = BackupSupportType.IsolatedStorage;
+
+            //tests if SDcard is available
+            bool isSDCardAvailable = await GenericHelper.Instance.IsSDCardAvailable();
+            if (isSDCardAvailable)
+            {
+                string ItemPhoneMemoryTitle = AppResources.ItemPhoneMemoryTitle;
+                string ItemPhoneMemoryDesc = AppResources.ItemPhoneMemoryDesc;
+                string ItemSDCardTitle = AppResources.ItemSDCardTitle;
+                string ItemSDCardDesc = AppResources.ItemSDCardDesc;
+                string ItemCancelTitle = AppResources.ItemCancelTitle;
+                string ItemCancelDesc = AppResources.ItemCancelDesc;
+
+                MessageBoxClosedEventArgs args = await RadMessageBox.ShowAsync(new CustomHeaderedContentControl[] 
+                                                                                { 
+                                                                                    new CustomHeaderedContentControl() { Title = ItemPhoneMemoryTitle, Message = ItemPhoneMemoryDesc },
+                                                                                    new CustomHeaderedContentControl() { Title = ItemSDCardTitle, Message = ItemSDCardDesc },
+                                                                                    new CustomHeaderedContentControl() { Title = ItemCancelTitle, Message = ItemCancelDesc }
+                                                                                },
+                                                                                AppResources.EpisodesDownloadTitle,
+                                                                                AppResources.BackupMediatypeRequest);
+                
+                //the user pressed the hardware back button.
+                if (args.ClickedButton == null)
+                {
+                    return;
+                }
+
+                CustomHeaderedContentControl option = (CustomHeaderedContentControl)args.ClickedButton.Content;
+                if (option.Title == ItemPhoneMemoryTitle)
+                {
+                    backupSupportType = BackupSupportType.IsolatedStorage;
+
+                } else if (option.Title == ItemSDCardTitle)
+                {
+                    backupSupportType = BackupSupportType.SDCard;
+                }
+                else if (option.Title == ItemCancelTitle)
+                {
+                    // Return to editing the message.
+                    return;
+                }
+            }
 
             if (AppInfo.Instance.AppIsOfflineSettingValue)
             {
@@ -772,20 +857,6 @@ namespace Centapp.CartoonCommon
                 await GenericHelper.Instance.RemoveOfflineData();
             }
 
-            //default
-            BackupSupportType backupSupportType = BackupSupportType.IsolatedStorage;
-
-            //tests if SDcard is available
-            bool isSDCardAvailable = await GenericHelper.Instance.IsSDCardAvailable();
-            if (isSDCardAvailable)
-            {
-                messageBoxResult = MessageBox.Show("$Do you want to store episodes into your SD card?", AppResources.Warning, MessageBoxButton.OKCancel);
-                if (messageBoxResult == MessageBoxResult.OK)
-                {
-                    backupSupportType = BackupSupportType.SDCard;
-                }
-            }
-
             MediaInfo mInfo = await CheckAvailableSpace(backupSupportType);
 
             if (!mInfo.IsBackupAvailable)
@@ -793,7 +864,9 @@ namespace Centapp.CartoonCommon
                 if (backupSupportType == BackupSupportType.SDCard)
                 {
                     //allow user to switch to isostore save option
-                    messageBoxResult = MessageBox.Show(string.Format("$Sorry but SD card ha noto available free space (required: {0}, available {1}).\nDo you want to store episode into your phone memory?", mInfo.RequiredGigaBytes, mInfo.AvailableGigaBytes),
+                    //messageBoxResult = MessageBox.Show(string.Format("$Sorry but SD card ha not available free space (required: {0}, available {1}).\nDo you want to store episode into your phone memory?", mInfo.RequiredGigaBytes, mInfo.AvailableGigaBytes),
+
+                    messageBoxResult = MessageBox.Show(string.Format(AppResources.NotEnoughSpaceOnSDCard, mInfo.RequiredGigaBytes, mInfo.AvailableGigaBytes),
                                                         AppResources.Warning,
                                                         MessageBoxButton.OKCancel);
                     if (messageBoxResult == MessageBoxResult.OK)
@@ -881,7 +954,7 @@ namespace Centapp.CartoonCommon
             GotoDownloaderPage();
         }
 
-     
+
 
         private bool CheckConnection()
         {
