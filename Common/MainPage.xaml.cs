@@ -44,6 +44,7 @@ using Wp81Shared.Helpers;
 using Wp81Shared.Exceptions;
 using Telerik.Windows.Controls;
 using Centapp.CartoonCommon.Controls;
+using Windows.System;
 
 
 namespace Centapp.CartoonCommon
@@ -253,6 +254,8 @@ namespace Centapp.CartoonCommon
                 return;
             }
 
+            App.ViewModel.IsDataLoading = true;
+
             var selectedItem = (ItemViewModel)((sender as ListBox).SelectedItem);
 
             //per vedere con webbrowser
@@ -278,7 +281,6 @@ namespace Centapp.CartoonCommon
                             //App.ViewModel.CurrentYoutubeMP4Uri = new Uri(selectedItem.OfflineFileName, UriKind.RelativeOrAbsolute);
                             //App.ViewModel.CurrentYoutubeMP4Uri = new Uri("isostore:/Local/" + selectedItem.OfflineFileName, UriKind.RelativeOrAbsolute);
                             //App.ViewModel.CurrentYoutubeMP4Uri = new Uri("isostore:/local/" + selectedItem.OfflineFileName, UriKind.Absolute);
-                            App.ViewModel.IsDataLoading = true;
                             //OK
                             //Uri test1 = new Uri(@"C:\Data\Users\DefApps\AppData\{2D034F2D-836B-466C-9CA2-A7BB6B24E3F8}\Local\ep_1.mp4", UriKind.Absolute);
                             Uri episodeUri = new Uri(@"C:\Data\Users\DefApps\AppData\{" + Wp81Shared.Helpers.AppInfosHelper.GetId() + @"}\Local\" + selectedItem.OfflineFileName,
@@ -294,12 +296,7 @@ namespace Centapp.CartoonCommon
 
                             if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
                             {
-                                //episodeUri = new Uri(episodeFile.Path, UriKind.Absolute);
-                                //episodeUri = new Uri(@"D:\PeppaPigBackup\ep_1.mp4", UriKind.Absolute);
-                                //await episodeFile.CopyAndReplaceAsync()
-
                                 const string currendEpisodeFileName = "currendEpisode.mp4";
-
                                 //copy file from SDCard to IsoStore
                                 var sdStoredEpisodeFile = await AppInfo.Instance.SDBackupFolder.GetFileAsync(selectedItem.OfflineFileName);
                                 var sdFileStream = await sdStoredEpisodeFile.OpenStreamForReadAsync();
@@ -336,6 +333,12 @@ namespace Centapp.CartoonCommon
                                           Media = episodeUri
                                       };
                             launcher.Show();
+
+                            //for universal apps
+                            //var options = new LauncherOptions();
+                            //options.ContentType = "movie/mp4";
+                            //await Launcher.LaunchUriAsync(episodeUri, options); 
+
                             #endregion
                         }
                     }
@@ -343,6 +346,7 @@ namespace Centapp.CartoonCommon
                     {
                         MessageBox.Show(AppResources.possibleWrongBackup);
                     }
+
                     #endregion
                 }
                 else
@@ -380,7 +384,7 @@ namespace Centapp.CartoonCommon
                     }
 
                     string id = GenericHelper.GetYoutubeID(selectedItem.Url);
-                    App.ViewModel.IsDataLoading = true;
+
 
                     if (AppInfo.Instance.IsAdvertisingEnabled)
                     {
@@ -407,22 +411,33 @@ namespace Centapp.CartoonCommon
                     else
                     {
                         #region advertising OFF
-                        YouTube.Play(id, true, YouTubeQuality.Quality480P, x =>
-                        {
-                            if (x != null)
-                            {
-                                switch (MessageBox.Show(AppResources.brokenLinkQuestion,
-                                                        AppResources.ExceptionMessageTitle,
-                                                        MessageBoxButton.OKCancel))
-                                {
+                        //YouTube.Play(id, true, YouTubeQuality.Quality480P, x =>
+                        //{
+                        //    if (x != null)
+                        //    {
+                        //        switch (MessageBox.Show(AppResources.brokenLinkQuestion,
+                        //                                AppResources.ExceptionMessageTitle,
+                        //                                MessageBoxButton.OKCancel))
+                        //        {
+                        //            case MessageBoxResult.OK:
+                        //                ReportBrokenLink(x.Message);
+                        //                break;
+                        //        }
+                        //    }
+                        //    App.ViewModel.IsDataLoading = false;
+                        //});
 
-                                    case MessageBoxResult.OK:
-                                        ReportBrokenLink(x.Message);
-                                        break;
-                                }
-                            }
-                            App.ViewModel.IsDataLoading = false;
-                        });
+                        try
+                        {
+                            await YouTube.PlayWithPageDeactivationAsync(id, true, YouTubeQuality.Quality480P);
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show(ex.Message);
+                        }
+
+
+
                         #endregion
                     }
                     #endregion
@@ -430,7 +445,10 @@ namespace Centapp.CartoonCommon
             }
             catch (InvalidOperationException ignored)
             {
-
+            }
+            finally
+            {
+                App.ViewModel.IsDataLoading = false;
             }
         }
 
@@ -466,6 +484,8 @@ namespace Centapp.CartoonCommon
             try
             {
                 YouTube.CancelPlay(); // used to reenable page
+                //SystemTray.ProgressIndicator.IsVisible = false; 
+                //App.ViewModel.IsDataLoading = false;
             }
             catch (Exception)
             {
@@ -723,7 +743,6 @@ namespace Centapp.CartoonCommon
         }
         #endregion
 
-
         #region "app" panorama item
         private void rateAppButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
         {
@@ -932,38 +951,6 @@ namespace Centapp.CartoonCommon
                 return;
             }
 
-            //if (AppInfo.Instance.AppIsOfflineSettingValue)
-            //{
-            //    messageBoxResult = MessageBox.Show(AppResources.MessageAlreadyOffline, AppResources.Warning, MessageBoxButton.OKCancel);
-            //    if (messageBoxResult != MessageBoxResult.OK)
-            //    {
-            //        return;
-            //    }
-            //    GenericHelper.SetAppIsOffline(false);
-            //     using (IsolatedStorageFile isostore = IsolatedStorageFile.GetUserStoreForApplication())
-            //    {
-            //        var storedFiles = isostore.GetFileNames("ep*.mp4");
-            //        foreach (var item in storedFiles)
-            //        {
-            //            isostore.DeleteFile(item);
-            //        }
-            //    }
-            //    App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
-            //    App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
-            //    App.ViewModel.LoadData();
-            //}
-            //else
-            //{
-            //    if (App.ViewModel.Items == null || App.ViewModel.Items.Count == 0)
-            //    {
-            //        //caso raro, si fa ripartire l'utente da zero
-            //        MessageBox.Show(AppResources.ServerTemporaryUnavailable);
-            //        throw new ForcedExitException("start backup error : " + AppResources.ServerTemporaryUnavailable);
-            //    }
-            //    GotoDownloaderPage();
-            //}
-
-
             AppInfo.Instance.CurrentBackupSupport = backupSupportType;
 
             GotoDownloaderPage();
@@ -1061,22 +1048,6 @@ namespace Centapp.CartoonCommon
         {
             App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompletedDownload);
             GotoDownloaderPage();
-
-            //StorageFolder folder = KnownFolders.PicturesLibrary;
-            //StorageFile sampleFile = await folder.CreateFileAsync("sample.txt", CreationCollisionOption.ReplaceExisting);
-
-            //// Get the logical root folder for all external storage devices.
-            //StorageFolder externalDevices = Windows.Storage.KnownFolders.RemovableDevices;
-            //StorageFolder sdCard = (await externalDevices.GetFoldersAsync()).FirstOrDefault();
-            //if (sdCard != null)
-            //{
-            //    // An SD card is present and the sdCard variable now contains a reference to it.
-            //}
-            //else
-            //{
-            //    // No SD card is present.
-            //}
-
         }
 
         private void GotoDownloaderPage()

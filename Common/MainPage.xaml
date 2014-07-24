@@ -444,7 +444,7 @@
                                             Foreground="Red"
                                             FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                             FontSize="50"
-                                            AnimationStyle="AnimationStyle3"/>
+                                            AnimationStyle="AnimationStyle1"/>
 
         <!-- Feedback overlay -->
         <ctrl:FeedbackOverlay Grid.RowSpan="2" EnableAnimation="True" />
