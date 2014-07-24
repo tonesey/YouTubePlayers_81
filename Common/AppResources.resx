@@ -384,4 +384,7 @@ Do you want to backup right now?</value>
   <data name="noNetworkAvailableAppRestartRequired" xml:space="preserve">
     <value>Internet connection not available: please turn it on and restart app :)</value>
   </data>
+  <data name="sendToMovieMaker" xml:space="preserve">
+    <value>send to Movie Maker</value>
+  </data>
 </root>

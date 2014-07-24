@@ -124,7 +124,7 @@ namespace Centapp.CartoonCommon
             _appVer = GenericHelper.GetAppversion();
 
             SetCaptions();
-            AddContextMenus();
+            //AddContextMenus();
 
             PanoramaMainControl.SelectionChanged += new EventHandler<SelectionChangedEventArgs>(PanoramaMainControl_SelectionChanged);
 
@@ -232,6 +232,7 @@ namespace Centapp.CartoonCommon
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             UpdateAppInfos();
+            AddContextMenus();
         }
 
         private void UpdateAppInfos()
@@ -293,33 +294,14 @@ namespace Centapp.CartoonCommon
                         {
                             #region advertising OFF
                             Uri episodeUri = null;
-
+                            
                             if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
                             {
-                                const string currendEpisodeFileName = "currendEpisode.mp4";
-                                //copy file from SDCard to IsoStore
-                                var sdStoredEpisodeFile = await AppInfo.Instance.SDBackupFolder.GetFileAsync(selectedItem.OfflineFileName);
-                                var sdFileStream = await sdStoredEpisodeFile.OpenStreamForReadAsync();
-
-                                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
-                                {
-                                    if (isoStore.FileExists(currendEpisodeFileName))
-                                    {
-                                        isoStore.DeleteFile(currendEpisodeFileName);
-                                    }
-
-                                    using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(currendEpisodeFileName, System.IO.FileMode.Create, isoStore))
-                                    {
-                                        byte[] buffer = new byte[1024];
-                                        int bytesRead;
-                                        while ((bytesRead = sdFileStream.Read(buffer, 0, buffer.Length)) > 0)
-                                        {
-                                            stream.Write(buffer, 0, bytesRead);
-                                        }
-                                        stream.Flush();
-                                    }
-                                }
-                                episodeUri = new Uri(currendEpisodeFileName, UriKind.RelativeOrAbsolute);
+                                App.ViewModel.IsDataLoading = true;
+                                const string currendIsostoreEpisodeFileName = "currendEpisode.mp4";
+                                await CopySDStoredEpisodeToIsostore(selectedItem.OfflineFileName, currendIsostoreEpisodeFileName);
+                                episodeUri = new Uri(currendIsostoreEpisodeFileName, UriKind.RelativeOrAbsolute);
+                                App.ViewModel.IsDataLoading = false;
                             }
                             else
                             {
@@ -452,6 +434,33 @@ namespace Centapp.CartoonCommon
             }
         }
 
+
+        //copy file from SDCard to IsoStore
+        private async Task CopySDStoredEpisodeToIsostore(string sdStoredSourceFilename, string isostoreTargetFilename)
+        {
+            var sdStoredEpisodeFile = await AppInfo.Instance.SDBackupFolder.GetFileAsync(sdStoredSourceFilename);
+            var sdFileStream = await sdStoredEpisodeFile.OpenStreamForReadAsync();
+
+            using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                if (isoStore.FileExists(isostoreTargetFilename))
+                {
+                    isoStore.DeleteFile(isostoreTargetFilename);
+                }
+
+                using (IsolatedStorageFileStream stream = new IsolatedStorageFileStream(isostoreTargetFilename, System.IO.FileMode.Create, isoStore))
+                {
+                    byte[] buffer = new byte[1024];
+                    int bytesRead;
+                    while ((bytesRead = sdFileStream.Read(buffer, 0, buffer.Length)) > 0)
+                    {
+                        stream.Write(buffer, 0, bytesRead);
+                    }
+                    stream.Flush();
+                }
+            }
+        }
+
         void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
         }
@@ -557,8 +566,16 @@ namespace Centapp.CartoonCommon
             string removeFromFavText = AppResources.removeFromFavText;
             string shareText = AppResources.shareText;
             string reportErrorText = AppResources.reportError;
+            string sendToMMtext = AppResources.sendToMovieMaker;
 
             //lista1
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemSendToMM1 = new MenuItem { Header = sendToMMtext };
+                contextMenu1.Items.Add(menuItemSendToMM1);
+                menuItemSendToMM1.Click += menuItemSendToMM_Click;
+            }
+
             MenuItem menuItemAdd1 = new MenuItem { Header = addToFavText };
             contextMenu1.Items.Add(menuItemAdd1);
             menuItemAdd1.Click += new RoutedEventHandler(menuItemAdd_Click);
@@ -573,19 +590,28 @@ namespace Centapp.CartoonCommon
             MenuItem menuItemBrokenlink1 = new MenuItem { Header = reportErrorText };
             contextMenu1.Items.Add(menuItemBrokenlink1);
             menuItemBrokenlink1.Click += new RoutedEventHandler(menuItemBrokenlink_Click);
-
+          
             ContextMenuService.SetContextMenu(firstList, contextMenu1);
 
             //lista 2
             ContextMenu contextMenu2 = new ContextMenu();
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemSendToMM2 = new MenuItem { Header = sendToMMtext };
+                contextMenu2.Items.Add(menuItemSendToMM2);
+                menuItemSendToMM2.Click += menuItemSendToMM_Click;
+            }
 
             MenuItem menuItemAdd2 = new MenuItem { Header = addToFavText };
             contextMenu2.Items.Add(menuItemAdd2);
             menuItemAdd2.Click += new RoutedEventHandler(menuItemAdd_Click);
 
-            MenuItem menuItemShare2 = new MenuItem { Header = shareText };
-            contextMenu2.Items.Add(menuItemShare2);
-            menuItemShare2.Click += new RoutedEventHandler(menuItemShare_Click);
+            if (!AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemShare2 = new MenuItem { Header = shareText };
+                contextMenu2.Items.Add(menuItemShare2);
+                menuItemShare2.Click += new RoutedEventHandler(menuItemShare_Click);
+            }
 
             MenuItem menuItemBrokenlink2 = new MenuItem { Header = reportErrorText };
             contextMenu2.Items.Add(menuItemBrokenlink2);
@@ -595,36 +621,57 @@ namespace Centapp.CartoonCommon
 
             //lista 3
             ContextMenu contextMenu3 = new ContextMenu();
-            MenuItem menuItemAdd3 = new MenuItem { Header = addToFavText };
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemSendToMM3 = new MenuItem { Header = sendToMMtext };
+                contextMenu3.Items.Add(menuItemSendToMM3);
+                menuItemSendToMM3.Click += menuItemSendToMM_Click;
+            }
 
+            MenuItem menuItemAdd3 = new MenuItem { Header = addToFavText };
             contextMenu3.Items.Add(menuItemAdd3);
             menuItemAdd3.Click += new RoutedEventHandler(menuItemAdd_Click);
-            ContextMenuService.SetContextMenu(thirdList, contextMenu3);
-
-            MenuItem menuItemShare3 = new MenuItem { Header = shareText };
-            contextMenu3.Items.Add(menuItemShare3);
-            menuItemShare3.Click += new RoutedEventHandler(menuItemShare_Click);
+            
+            if (!AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemShare3 = new MenuItem { Header = shareText };
+                contextMenu3.Items.Add(menuItemShare3);
+                menuItemShare3.Click += new RoutedEventHandler(menuItemShare_Click);
+            }
 
             MenuItem menuItemBrokenlink3 = new MenuItem { Header = reportErrorText };
             contextMenu3.Items.Add(menuItemBrokenlink3);
             menuItemBrokenlink3.Click += new RoutedEventHandler(menuItemBrokenlink_Click);
 
+            ContextMenuService.SetContextMenu(thirdList, contextMenu3);
+
             //lista 4
             ContextMenu contextMenu4 = new ContextMenu();
-            MenuItem menuItemAdd4 = new MenuItem { Header = addToFavText };
 
+            if (AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemSendToMM4 = new MenuItem { Header = sendToMMtext };
+                contextMenu4.Items.Add(menuItemSendToMM4);
+                menuItemSendToMM4.Click += menuItemSendToMM_Click;
+            }
+
+            MenuItem menuItemAdd4 = new MenuItem { Header = addToFavText };
             contextMenu4.Items.Add(menuItemAdd4);
             menuItemAdd4.Click += new RoutedEventHandler(menuItemAdd_Click);
-            ContextMenuService.SetContextMenu(fourthList, contextMenu4);
+            
 
-            MenuItem menuItemShare4 = new MenuItem { Header = shareText };
-            contextMenu4.Items.Add(menuItemShare4);
-            menuItemShare4.Click += new RoutedEventHandler(menuItemShare_Click);
+            if (!AppInfo.Instance.AppIsOfflineSettingValue)
+            {
+                MenuItem menuItemShare4 = new MenuItem { Header = shareText };
+                contextMenu4.Items.Add(menuItemShare4);
+                menuItemShare4.Click += new RoutedEventHandler(menuItemShare_Click);
+            }
 
             MenuItem menuItemBrokenlink4 = new MenuItem { Header = reportErrorText };
             contextMenu4.Items.Add(menuItemBrokenlink4);
             menuItemBrokenlink4.Click += new RoutedEventHandler(menuItemBrokenlink_Click);
-
+       
+            ContextMenuService.SetContextMenu(fourthList, contextMenu4);
 
             //lista preferite
             ContextMenu contextMenuFavorites = new ContextMenu();
@@ -639,6 +686,32 @@ namespace Centapp.CartoonCommon
 
             ContextMenuService.SetContextMenu(favoritesList, contextMenuFavorites);
 
+        }
+
+        async void menuItemSendToMM_Click(object sender, RoutedEventArgs e)
+        {
+            string mmEpisodeFileName = "episode.mp4mm";
+            var curEpisodeFilename = (_currentContextItem as ItemViewModel).OfflineFileName;
+
+            if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
+            {
+                await CopySDStoredEpisodeToIsostore(curEpisodeFilename, mmEpisodeFileName);
+            }
+            else
+            {
+                using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
+                {
+                    if (isoStore.FileExists(mmEpisodeFileName))
+                    {
+                        isoStore.DeleteFile(mmEpisodeFileName);
+                    }
+                    isoStore.CopyFile(curEpisodeFilename, mmEpisodeFileName);
+                }
+            }
+
+            StorageFolder local = Windows.Storage.ApplicationData.Current.LocalFolder;
+            StorageFile bqfile = await local.GetFileAsync(mmEpisodeFileName);
+            Windows.System.Launcher.LaunchFileAsync(bqfile);
         }
 
         void menuItemBrokenlink_Click(object sender, RoutedEventArgs e)

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest" xmlns:m3="http://schemas.microsoft.com/appx/2014/manifest" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest">
-  <Identity Name="582centapp.PeppaPig" Publisher="CN=F6A76E49-0C8F-4FBB-9945-46500E56964B" Version="2.0.0.0" />
+  <Identity Name="582centapp.PeppaPig" Publisher="CN=F6A76E49-0C8F-4FBB-9945-46500E56964B" Version="2.0.1.0" />
   <mp:PhoneIdentity PhoneProductId="2d034f2d-836b-466c-9ca2-a7bb6b24e3f8" PhonePublisherId="68dec18f-239f-4612-a7be-70327947b555" />
   <Properties>
     <DisplayName>Peppa Pig</DisplayName>

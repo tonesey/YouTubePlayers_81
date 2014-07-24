@@ -644,6 +644,15 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to send to Movie Maker.
+        /// </summary>
+        internal static string sendToMovieMaker {
+            get {
+                return ResourceManager.GetString("sendToMovieMaker", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Server temporary unavailable :( 
         ///Please try again later... if problem persists please contact support.
         /// </summary>

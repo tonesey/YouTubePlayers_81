@@ -374,4 +374,7 @@ Perchè non ci dai 5 stelle sullo store? :)</value>
   <data name="noNetworkAvailableAppRestartRequired" xml:space="preserve">
     <value>Connessione internet assente: attiva la connessione dalle impostazioni del telefono e riavvia l'app :)</value>
   </data>
+  <data name="sendToMovieMaker" xml:space="preserve">
+    <value>invia a Movie Maker</value>
+  </data>
 </root>
