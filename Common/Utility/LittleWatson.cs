@@ -55,15 +55,18 @@ namespace Centapp.CartoonCommon.Utility
 
                 if (contents != null)
                 {
-                    if (MessageBox.Show(message, title, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    Deployment.Current.Dispatcher.BeginInvoke(() =>
                     {
-                        EmailComposeTask email = new EmailComposeTask();
-                        email.To = "centapp@hotmail.com";
-                        email.Subject = string.Format("{0} auto-generated problem report", AppInfo.Instance.AppName.ToUpper());
-                        email.Body = contents;
-                        SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication());
-                        email.Show();
-                    }
+                        if (MessageBox.Show(message, title, MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                        {
+                            EmailComposeTask email = new EmailComposeTask();
+                            email.To = "centapp@hotmail.com";
+                            email.Subject = string.Format("{0} {1} auto-generated problem report", AppInfo.Instance.AppName.ToUpper(), GenericHelper.GetAppversion());
+                            email.Body = contents;
+                            SafeDeleteFile(IsolatedStorageFile.GetUserStoreForApplication());
+                            email.Show();
+                        }
+                    });
                 }
             }
             catch

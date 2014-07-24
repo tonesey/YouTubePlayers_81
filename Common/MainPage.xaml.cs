@@ -152,7 +152,7 @@ namespace Centapp.CartoonCommon
                 MessageBox.Show(msg);
                 if (isFatalError)
                 {
-                    throw new ForcedExitException("service error: " + msg);
+                    Application.Current.Terminate();
                 }
             });
         }

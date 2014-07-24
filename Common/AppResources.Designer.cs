@@ -494,6 +494,15 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Internet connection not available: please turn it on and restart app :).
+        /// </summary>
+        internal static string noNetworkAvailableAppRestartRequired {
+            get {
+                return ResourceManager.GetString("noNetworkAvailableAppRestartRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to :( not enough space on device to save episodes... Required space: {0} Gb.
         /// </summary>
         internal static string notEnoughSpace {

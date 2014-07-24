@@ -371,4 +371,7 @@ Perchè non ci dai 5 stelle sullo store? :)</value>
   <data name="NotEnoughSpaceOnSDCard" xml:space="preserve">
     <value>Mi dispiace ma non c'è abbastanza spazio sulla SD card per memorizzare gli episodi (richiesti: {0}, disponibili: {1}).\nVuoi salvare gli episodi nella memoria interna del telefono?</value>
   </data>
+  <data name="noNetworkAvailableAppRestartRequired" xml:space="preserve">
+    <value>Connessione internet assente: attiva la connessione dalle impostazioni del telefono e riavvia l'app :)</value>
+  </data>
 </root>

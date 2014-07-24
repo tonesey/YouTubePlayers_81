@@ -31,6 +31,7 @@ using System.Resources;
 using Microsoft.Phone.Info;
 using Wp81Shared.Exceptions;
 using Wp81Shared.Helpers;
+using System.Windows.Threading;
 
 namespace Centapp.CartoonCommon
 {
@@ -119,7 +120,11 @@ namespace Centapp.CartoonCommon
             GenericHelper.Instance.ReadAppSettings();
             if (!AppInfo.Instance.AppIsOfflineSettingValue && !NetworkInterface.GetIsNetworkAvailable())
             {
-                MessageBox.Show(AppResources.noNetworkAvailable);
+                Deployment.Current.Dispatcher.BeginInvoke(() =>
+                {
+                    MessageBox.Show(AppResources.noNetworkAvailableAppRestartRequired);
+                    Application.Current.Terminate();
+                });
             }
             App.ViewModel.LoadData();
         }

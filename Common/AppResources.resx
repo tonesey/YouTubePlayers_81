@@ -381,4 +381,7 @@ Do you want to backup right now?</value>
   <data name="NotEnoughSpaceOnSDCard" xml:space="preserve">
     <value>Sorry but SD card ha not available free space (required: {0}, available {1}).\nDo you want to store episode into your phone memory?</value>
   </data>
+  <data name="noNetworkAvailableAppRestartRequired" xml:space="preserve">
+    <value>Internet connection not available: please turn it on and restart app :)</value>
+  </data>
 </root>
