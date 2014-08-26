@@ -276,6 +276,10 @@
       <Link>ReminderPopup.xaml.cs</Link>
       <DependentUpon>ReminderPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\Common\SearchEpisodes.xaml.cs">
+      <Link>SearchEpisodes.xaml.cs</Link>
+      <DependentUpon>SearchEpisodes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="..\Common\Utility\LittleWatson.cs">
       <Link>Utility\LittleWatson.cs</Link>
     </Compile>
@@ -359,6 +363,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="..\Common\SearchEpisodes.xaml">
+      <Link>SearchEpisodes.xaml</Link>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -381,6 +390,12 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="..\Common\Assets\AppBar\Search-Find.png">
+      <Link>Assets\AppBar\Search-Find.png</Link>
+    </Content>
+    <Content Include="..\Common\Assets\AppBar\Voice-Search.png">
+      <Link>Assets\AppBar\Voice-Search.png</Link>
+    </Content>
     <Content Include="..\Common\Resources\buttons\backup.png">
       <Link>Resources\buttons\backup.png</Link>
     </Content>
@@ -418,7 +433,11 @@
     <Resource Include="..\Common\Resources\icons\other.png">
       <Link>Resources\icons\other.png</Link>
     </Resource>
+    <Resource Include="Assets\Backgrounds\Search.png" />
+    <Resource Include="Assets\Backgrounds\Search_tr.png" />
     <Content Include="Assets\BadgeLogo.png" />
+    <Content Include="Assets\Icons\Clear.png" />
+    <Content Include="Assets\Icons\Clear1.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\SquareTile150x150.png" />
@@ -434,6 +453,8 @@
     <Content Include="Mkt\screen0_it-IT.png" />
     <Content Include="README_FIRST.txt" />
     <Content Include="Resources\BuyApp.jpg" />
+    <EmbeddedResource Include="Speech\GrammarsTemplate.xml" />
+    <Content Include="Speech\Grammars\Grammar.it-IT.xml" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
@@ -471,6 +492,7 @@
       <Name>Wp81Shared</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

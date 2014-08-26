@@ -19,6 +19,9 @@ namespace Centapp.CartoonCommon.Converters
 #if DEBUGOFFLINE
             return null;
 #endif 
+
+            if (value == null) return null;
+
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 //return new BitmapImage(new Uri(string.Format("/Resources/thumb/{0}.png", (int)value), UriKind.Relative));

@@ -70,6 +70,24 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to write.
+        /// </summary>
+        internal static string AppBarSearchByText {
+            get {
+                return ResourceManager.GetString("AppBarSearchByText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to speak.
+        /// </summary>
+        internal static string AppBarSearchByVoice {
+            get {
+                return ResourceManager.GetString("AppBarSearchByVoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to app.
         /// </summary>
         internal static string appHeader {
@@ -604,6 +622,24 @@ namespace Centapp.CartoonCommon {
         internal static string RatingYes {
             get {
                 return ResourceManager.GetString("RatingYes", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to prova a dire &quot;Pozzanghere di fango&quot; o &quot;Nascondino&quot;....
+        /// </summary>
+        internal static string recoUISample {
+            get {
+                return ResourceManager.GetString("recoUISample", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to tell me what episode you want :).
+        /// </summary>
+        internal static string recoUIText {
+            get {
+                return ResourceManager.GetString("recoUIText", resourceCulture);
             }
         }
         

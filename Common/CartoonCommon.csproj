@@ -223,6 +223,9 @@
     <Compile Include="ReminderPopup.xaml.cs">
       <DependentUpon>ReminderPopup.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SearchEpisodes.xaml.cs">
+      <DependentUpon>SearchEpisodes.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utility\LittleWatson.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\MissingConnectionException.cs" />
@@ -293,6 +296,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="SearchEpisodes.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="AppResources.es.resx">
@@ -338,8 +345,18 @@
     <Resource Include="Resources\icons\list.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Assets\Backgrounds\Search.png" />
+    <Resource Include="Assets\Backgrounds\Search_tr.png" />
+    <Content Include="Assets\AppBar\Search-Find.png" />
+    <Content Include="Assets\AppBar\Voice-Search.png" />
+    <Content Include="Assets\Icons\Clear.png" />
+    <Content Include="Assets\Icons\Clear1.png" />
     <Content Include="banner_hunter.png" />
     <Content Include="README_FIRST.txt" />
+    <Content Include="Assets\AppBar\mic.png" />
+    <Content Include="Assets\AppBar\mic48.png" />
+    <Content Include="Assets\AppBar\search.png" />
+    <Content Include="Assets\AppBar\search24.png" />
     <Content Include="todo.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />

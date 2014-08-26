@@ -377,4 +377,16 @@ Perchè non ci dai 5 stelle sullo store? :)</value>
   <data name="sendToMovieMaker" xml:space="preserve">
     <value>invia a Movie Maker</value>
   </data>
+  <data name="recoUIText" xml:space="preserve">
+    <value>che episodio vuoi?</value>
+  </data>
+  <data name="recoUISample" xml:space="preserve">
+    <value>prova a dire "Pozzanghere di fango" o "Nascondino"...</value>
+  </data>
+  <data name="AppBarSearchByText" xml:space="preserve">
+    <value>cerca</value>
+  </data>
+  <data name="AppBarSearchByVoice" xml:space="preserve">
+    <value>parla</value>
+  </data>
 </root>

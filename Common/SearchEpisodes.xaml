@@ -1,0 +1,136 @@
+﻿<phone:PhoneApplicationPage 
+    x:Class="Centapp.CartoonCommon.SearchEpisodes"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Portrait" Orientation="Portrait"
+    mc:Ignorable="d" d:DesignHeight="768" d:DesignWidth="480"
+    shell:SystemTray.IsVisible="False" 
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit">
+
+    <phone:PhoneApplicationPage.Resources>
+
+        <DataTemplate x:Key="AutocompleteBoxItemTemplate">
+            <Grid Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40" />
+                    <ColumnDefinition Width="100" />
+                    <ColumnDefinition Width="200" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock  FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" FontSize="15"
+                            Grid.Row="0" Grid.Column="0" 
+                            Text="{Binding Id}"
+                            Margin="10,0,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"/>
+
+                <Image  Grid.Row="0" Grid.Column="1" 
+                        Stretch="Fill"
+                        Width="75" Height="50"                           
+                        Source="{Binding ., Converter={StaticResource idToImageConverter}}"
+                        Margin="10,0"
+                        VerticalAlignment="Center">
+                </Image>
+
+                <TextBlock HorizontalAlignment="Stretch" 
+                           FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" FontSize="20"
+                           Grid.Row="0" Grid.Column="2" 
+                           Text="{Binding Title}"
+                           TextWrapping="Wrap" 
+                           Margin="0,0,4,0"
+                           VerticalAlignment="Center"/>
+            </Grid>
+        </DataTemplate>
+    </phone:PhoneApplicationPage.Resources>
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot">
+
+        <Grid.Background>
+            <ImageBrush ImageSource="Assets/Backgrounds/Search.png" Opacity="0.6" />
+        </Grid.Background>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!--TitlePanel contains the name of the application and page title-->
+
+        <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,10,12,0" Background="Transparent">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="36*"/>
+                <RowDefinition Height="41*"/>
+                <RowDefinition Height="223*"/>
+                <RowDefinition Height="20*"/>
+                <RowDefinition Height="80*"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock x:Name="TextBlockHelp" 
+                       Grid.Row="0" 
+                       FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" FontSize="30"
+                       Margin="20,0,0,0"
+                       Text="inserisci il nome dell'episodio!" HorizontalAlignment="Left" VerticalAlignment="Bottom" 
+                       />
+
+            <StackPanel Orientation="Horizontal" Grid.Row="1" >
+                <toolkit:AutoCompleteBox  Name="autoCompleteBox" 
+                                          HorizontalAlignment="Stretch"
+                                          Width="400"
+                                          VerticalAlignment="Center"
+                                          ItemTemplate="{StaticResource AutocompleteBoxItemTemplate}"
+                                          ValueMemberPath="Title" />
+                <Border Name="BorderClearButton" BorderThickness="0" BorderBrush="Gray" Margin="5,0,0,0" HorizontalAlignment="Stretch" VerticalAlignment="Center" Tap="BorderClearButton_Tap">
+                    <Image Source="Assets/Icons/Clear1.png" Height="46" Width="46" Margin="0" Opacity="0.8"></Image>
+                </Border>
+            </StackPanel>
+
+            <Image Name="episodePreviewImg"  
+                   Margin="15"
+                   Grid.Row="2" 
+                   Source="{Binding SelectedEpisode, Converter={StaticResource idToImageConverter}}"
+                   Stretch="Fill"
+                   HorizontalAlignment="Stretch"  VerticalAlignment="Stretch" 
+                   DataContext="{Binding}" />
+
+            <StackPanel Orientation="Horizontal"  Grid.Row="3" HorizontalAlignment="Center">
+                <TextBlock x:Name="episodeIdTextBlock" 
+                           FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" FontSize="30"
+                           Text="{Binding SelectedEpisode.Id}" 
+                           Width="50"
+                           HorizontalAlignment="Left"  VerticalAlignment="Stretch" />
+                <TextBlock x:Name="episodeTitleTextBlock" 
+                          FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig" FontSize="30"
+                          Text="{Binding SelectedEpisode.Title}" 
+                          HorizontalAlignment="Left" />
+            </StackPanel>
+
+            <Button Name="ButtonShowVideo"  
+                    Tap="ButtonShowVideo_Tap"
+                    Content="visualizza episodio" HorizontalAlignment="Stretch"  Grid.Row="4" 
+                    FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
+                    FontSize="40" Margin="0,35" />
+
+        </Grid>
+    </Grid>
+
+    <!--Sample code showing usage of ApplicationBar-->
+    <!--<phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="True">
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button1.png" Text="Button 1"/>
+            <shell:ApplicationBarIconButton IconUri="/Images/appbar_button2.png" Text="Button 2"/>
+            <shell:ApplicationBar.MenuItems>
+                <shell:ApplicationBarMenuItem Text="MenuItem 1"/>
+                <shell:ApplicationBarMenuItem Text="MenuItem 2"/>
+            </shell:ApplicationBar.MenuItems>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>-->
+
+</phone:PhoneApplicationPage>

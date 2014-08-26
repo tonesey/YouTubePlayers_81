@@ -1,0 +1,462 @@
+﻿<grammar version="1.0" xml:lang="it-IT" root="episodes" tag-format="semantics/1.0" xmlns="http://www.w3.org/2001/06/grammar" xmlns:sapi="http://schemas.microsoft.com/Speech/2002/06/SRGSExtensions">
+  <rule id="episodes" scope="public">
+    <one-of>
+      <item>
+        Pozzanghere di fango<tag> out.Id="1"</tag>
+      </item>
+      <item>
+        Il signor dinosauro si è perso<tag> out.Id="2"</tag>
+      </item>
+      <item>
+        La migliore amica<tag> out.Id="3"</tag>
+      </item>
+      <item>
+        Polly la pappagallina<tag> out.Id="4"</tag>
+      </item>
+      <item>
+        Nascondino<tag> out.Id="5"</tag>
+      </item>
+      <item>
+        L'asilo<tag> out.Id="6"</tag>
+      </item>
+      <item>
+        Mamma Pig al lavoro<tag> out.Id="7"</tag>
+      </item>
+      <item>
+        Palla al centro<tag> out.Id="8"</tag>
+      </item>
+      <item>
+        Papà   perde i suoi occhiali<tag> out.Id="9"</tag>
+      </item>
+      <item>
+        Giardinaggio<tag> out.Id="10"</tag>
+      </item>
+      <item>
+        George ha il singhiozzo<tag> out.Id="11"</tag>
+      </item>
+      <item>
+        Biciclette<tag> out.Id="12"</tag>
+      </item>
+      <item>
+        Segreti<tag> out.Id="13"</tag>
+      </item>
+      <item>
+        Far volare l'aquilone<tag> out.Id="14"</tag>
+      </item>
+      <item>
+        Pic Nic<tag> out.Id="15"</tag>
+      </item>
+      <item>
+        Strumenti musicali<tag> out.Id="16"</tag>
+      </item>
+      <item>
+        Rane e vermi e farfalle<tag> out.Id="17"</tag>
+      </item>
+      <item>
+        Travestimenti<tag> out.Id="18"</tag>
+      </item>
+      <item>
+        Scarpe nuove<tag> out.Id="19"</tag>
+      </item>
+      <item>
+        La festa della scuola<tag> out.Id="20"</tag>
+      </item>
+      <item>
+        Il compleanno della Mamma<tag> out.Id="21"</tag>
+      </item>
+      <item>
+        La Fatina dei dentini<tag> out.Id="22"</tag>
+      </item>
+      <item>
+        La macchina nuova<tag> out.Id="23"</tag>
+      </item>
+      <item>
+        Caccia al tesoro<tag> out.Id="24"</tag>
+      </item>
+      <item>
+        Non tanto bene<tag> out.Id="25"</tag>
+      </item>
+      <item>
+        Neve<tag> out.Id="26"</tag>
+      </item>
+      <item>
+        Il castello ventoso<tag> out.Id="27"</tag>
+      </item>
+      <item>
+        La cugina Chloè<tag> out.Id="28"</tag>
+      </item>
+      <item>
+        Frittelle<tag> out.Id="29"</tag>
+      </item>
+      <item>
+        I babysitter<tag> out.Id="30"</tag>
+      </item>
+      <item>
+        Lezione di danza<tag> out.Id="31"</tag>
+      </item>
+      <item>
+        Il temporale<tag> out.Id="32"</tag>
+      </item>
+      <item>
+        Lavare la macchina<tag> out.Id="33"</tag>
+      </item>
+      <item>
+        Pranzo<tag> out.Id="34"</tag>
+      </item>
+      <item>
+        Campeggio<tag> out.Id="35"</tag>
+      </item>
+      <item>
+        La Principessa assonnata<tag> out.Id="36"</tag>
+      </item>
+      <item>
+        La casa sull'albero<tag> out.Id="37"</tag>
+      </item>
+      <item>
+        Festa in maschera<tag> out.Id="38"</tag>
+      </item>
+      <item>
+        Il museo<tag> out.Id="39"</tag>
+      </item>
+      <item>
+        Una giornata molto calda<tag> out.Id="40"</tag>
+      </item>
+      <item>
+        Il teatrino di Chloè<tag> out.Id="41"</tag>
+      </item>
+      <item>
+        Papà fa ginnastica<tag> out.Id="42"</tag>
+      </item>
+      <item>
+        Mettiamo in ordine<tag> out.Id="43"</tag>
+      </item>
+      <item>
+        Il parco giochi<tag> out.Id="44"</tag>
+      </item>
+      <item>
+        Papà appende una foto<tag> out.Id="45"</tag>
+      </item>
+      <item>
+        Tutti al mare!<tag> out.Id="46"</tag>
+      </item>
+      <item>
+        Mr Zampe Fini<tag> out.Id="47"</tag>
+      </item>
+      <item>
+        La barca di Nonno Pig<tag> out.Id="48"</tag>
+      </item>
+      <item>
+        La spesa<tag> out.Id="49"</tag>
+      </item>
+      <item>
+        La mia festa di compleanno<tag> out.Id="50"</tag>
+      </item>
+      <item>
+        La telecamera di Papà<tag> out.Id="51"</tag>
+      </item>
+      <item>
+        La recita scolastica<tag> out.Id="52"</tag>
+      </item>
+      <item>
+        Bolle di sapone<tag> out.Id="53"</tag>
+      </item>
+      <item>
+        Emily Elefante<tag> out.Id="54"</tag>
+      </item>
+      <item>
+        Le vacanze di Polly<tag> out.Id="55"</tag>
+      </item>
+      <item>
+        Teddy va in gita<tag> out.Id="56"</tag>
+      </item>
+      <item>
+        Misteri<tag> out.Id="57"</tag>
+      </item>
+      <item>
+        L'amico di George<tag> out.Id="58"</tag>
+      </item>
+      <item>
+        Lo spaventapasseri<tag> out.Id="59"</tag>
+      </item>
+      <item>
+        Una giornata ventosa<tag> out.Id="60"</tag>
+      </item>
+      <item>
+        Le pozze fra le rocce<tag> out.Id="61"</tag>
+      </item>
+      <item>
+        Il riciclaggio dei rifiuti<tag> out.Id="62"</tag>
+      </item>
+      <item>
+        Barchette di carta<tag> out.Id="63"</tag>
+      </item>
+      <item>
+        Ingorgo stradale<tag> out.Id="64"</tag>
+      </item>
+      <item>
+        L'ora di andare a letto<tag> out.Id="65"</tag>
+      </item>
+      <item>
+        La giornata degli sport<tag> out.Id="66"</tag>
+      </item>
+      <item>
+        L'esame della vista<tag> out.Id="67"</tag>
+      </item>
+      <item>
+        Il distributore di benzina di nonno Cane<tag> out.Id="68"</tag>
+      </item>
+      <item>
+        Un giorno di nebbia<tag> out.Id="69"</tag>
+      </item>
+      <item>
+        La grande svendita<tag> out.Id="70"</tag>
+      </item>
+      <item>
+        La piscina<tag> out.Id="71"</tag>
+      </item>
+      <item>
+        Gli animaletti dell'orto<tag> out.Id="72"</tag>
+      </item>
+      <item>
+        L'ufficio di papà Pig<tag> out.Id="73"</tag>
+      </item>
+      <item>
+        L'isola dei pirati<tag> out.Id="74"</tag>
+      </item>
+      <item>
+        Il giro in mongolfiera<tag> out.Id="75"</tag>
+      </item>
+      <item>
+        Il compleanno di George<tag> out.Id="76"</tag>
+      </item>
+      <item>
+        L'amico immaginario<tag> out.Id="77"</tag>
+      </item>
+      <item>
+        Il dipinto<tag> out.Id="78"</tag>
+      </item>
+      <item>
+        Il trenino del nonno<tag> out.Id="79"</tag>
+      </item>
+      <item>
+        Il nuovo cuginetto<tag> out.Id="80"</tag>
+      </item>
+      <item>
+        Il giro in bici<tag> out.Id="81"</tag>
+      </item>
+      <item>
+        Rifugi<tag> out.Id="82"</tag>
+      </item>
+      <item>
+        Zoe Zebra la figlia del postino<tag> out.Id="83"</tag>
+      </item>
+      <item>
+        L'orologio a cucù<tag> out.Id="84"</tag>
+      </item>
+      <item>
+        Pattinaggio sul ghiaccio<tag> out.Id="85"</tag>
+      </item>
+      <item>
+        L'erba alta<tag> out.Id="86"</tag>
+      </item>
+      <item>
+        Dal dentista<tag> out.Id="87"</tag>
+      </item>
+      <item>
+        La gita in montagna<tag> out.Id="88"</tag>
+      </item>
+      <item>
+        Rebecca coniglio<tag> out.Id="89"</tag>
+      </item>
+      <item>
+        La gita nel bosco<tag> out.Id="90"</tag>
+      </item>
+      <item>
+        La soffitta dei nonni<tag> out.Id="91"</tag>
+      </item>
+      <item>
+        L'armadio dei giocattoli<tag> out.Id="92"</tag>
+      </item>
+      <item>
+        Il campeggio<tag> out.Id="93"</tag>
+      </item>
+      <item>
+        Il capitano papà Pig<tag> out.Id="94"</tag>
+      </item>
+      <item>
+        Il black out<tag> out.Id="95"</tag>
+      </item>
+      <item>
+        Giocare a palla<tag> out.Id="96"</tag>
+      </item>
+      <item>
+        Le stelle<tag> out.Id="97"</tag>
+      </item>
+      <item>
+        Il compleanno di papà Pig<tag> out.Id="98"</tag>
+      </item>
+      <item>
+        Il pigiama party<tag> out.Id="99"</tag>
+      </item>
+      <item>
+        Una fredda giornata d'inverno<tag> out.Id="100"</tag>
+      </item>
+      <item>
+        Tutti al lavoro<tag> out.Id="101"</tag>
+      </item>
+      <item>
+        L'arcobaleno<tag> out.Id="102"</tag>
+      </item>
+      <item>
+        La tosse<tag> out.Id="103"</tag>
+      </item>
+      <item>
+        La biblioteca<tag> out.Id="104"</tag>
+      </item>
+      <item>
+        Il camper<tag> out.Id="105"</tag>
+      </item>
+      <item>
+        Vacanza in campeggio<tag> out.Id="106"</tag>
+      </item>
+      <item>
+        Il concime<tag> out.Id="107"</tag>
+      </item>
+      <item>
+        Amici del cuore<tag> out.Id="108"</tag>
+      </item>
+      <item>
+        Corsa di beneficenza<tag> out.Id="109"</tag>
+      </item>
+      <item>
+        Il bucato<tag> out.Id="110"</tag>
+      </item>
+      <item>
+        Gita in barca<tag> out.Id="111"</tag>
+      </item>
+      <item>
+        L'ospite francese<tag> out.Id="112"</tag>
+      </item>
+      <item>
+        Il camion dei pompieri<tag> out.Id="113"</tag>
+      </item>
+      <item>
+        La principessa Peppa<tag> out.Id="114"</tag>
+      </item>
+      <item>
+        Teddy cuoredoro<tag> out.Id="115"</tag>
+      </item>
+      <item>
+        La festa dei pirati<tag> out.Id="116"</tag>
+      </item>
+      <item>
+        Il signor Patato<tag> out.Id="117"</tag>
+      </item>
+      <item>
+        Una gita in treno<tag> out.Id="118"</tag>
+      </item>
+      <item>
+        Il pollaio di nonna<tag> out.Id="119"</tag>
+      </item>
+      <item>
+        Un talento speciale<tag> out.Id="120"</tag>
+      </item>
+      <item>
+        Viaggio sulla Luna<tag> out.Id="121"</tag>
+      </item>
+      <item>
+        La regola del parco giochi<tag> out.Id="122"</tag>
+      </item>
+      <item>
+        La piccola Goldie<tag> out.Id="123"</tag>
+      </item>
+      <item>
+        Luna park<tag> out.Id="124"</tag>
+      </item>
+      <item>
+        I numeri<tag> out.Id="125"</tag>
+      </item>
+      <item>
+        Lavori in corso<tag> out.Id="126"</tag>
+      </item>
+      <item>
+        Freddy Volpe<tag> out.Id="127"</tag>
+      </item>
+      <item>
+        Fischiettando<tag> out.Id="128"</tag>
+      </item>
+      <item>
+        La tartaruga temeraria<tag> out.Id="129"</tag>
+      </item>
+      <item>
+        Una nevosa giornata al mare<tag> out.Id="130"</tag>
+      </item>
+      <item>
+        Il computer di nonno<tag> out.Id="131"</tag>
+      </item>
+      <item>
+        L'ospedale<tag> out.Id="132"</tag>
+      </item>
+      <item>
+        Primavera<tag> out.Id="133"</tag>
+      </item>
+      <item>
+        L'elicottero di soccorso<tag> out.Id="134"</tag>
+      </item>
+      <item>
+        Il piccolo Alex<tag> out.Id="135"</tag>
+      </item>
+      <item>
+        Il faro<tag> out.Id="136"</tag>
+      </item>
+      <item>
+        Lavori difficili<tag> out.Id="137"</tag>
+      </item>
+      <item>
+        Il club segreto<tag> out.Id="138"</tag>
+      </item>
+      <item>
+        Il cantiere navale<tag> out.Id="139"</tag>
+      </item>
+      <item>
+        Ritmo<tag> out.Id="140"</tag>
+      </item>
+      <item>
+        Il campione del mondo<tag> out.Id="141"</tag>
+      </item>
+      <item>
+        La chiacchierona<tag> out.Id="142"</tag>
+      </item>
+      <item>
+        Il super furgoncino<tag> out.Id="143"</tag>
+      </item>
+      <item>
+        Giochi da grandi<tag> out.Id="144"</tag>
+      </item>
+      <item>
+        Lezioni di ginnastica<tag> out.Id="145"</tag>
+      </item>
+      <item>
+        Il rovo di more<tag> out.Id="146"</tag>
+      </item>
+      <item>
+        Il servizio da the<tag> out.Id="147"</tag>
+      </item>
+      <item>
+        Aeroplanini di carta<tag> out.Id="148"</tag>
+      </item>
+      <item>
+        Il compleanno<tag> out.Id="149"</tag>
+      </item>
+      <item>
+        La pozzanghera più grande del mondo<tag> out.Id="150"</tag>
+      </item>
+      <item>
+        La capanna di Babbo Natale<tag> out.Id="151"</tag>
+      </item>
+      <item>
+        Arriva Babbo Natale<tag> out.Id="152"</tag>
+      </item>
+    </one-of>
+  </rule>
+</grammar>

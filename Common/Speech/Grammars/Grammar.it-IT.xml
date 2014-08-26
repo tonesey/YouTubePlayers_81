@@ -1,0 +1,306 @@
+﻿<grammar version="1.0" xml:lang="it-IT" root="episodes" tag-format="semantics/1.0" xmlns="http://www.w3.org/2001/06/grammar" xmlns:sapi="http://schemas.microsoft.com/Speech/2002/06/SRGSExtensions">
+  <rule id="episodes" scope="public">
+    <one-of>
+      <item>
+        Pingu il fotografo<tag> out.Id="96"</tag>
+      </item>
+      <item>
+        Il nuovo aquilone di Pingu<tag> out.Id="97"</tag>
+      </item>
+      <item>
+        Rumore<tag> out.Id="94"</tag>
+      </item>
+      <item>
+        Pingu e Pinga al circo<tag> out.Id="95"</tag>
+      </item>
+      <item>
+        Pingu nella grotta di ghiaccio<tag> out.Id="92"</tag>
+      </item>
+      <item>
+        Il nonno di Pingu è malato<tag> out.Id="93"</tag>
+      </item>
+      <item>
+        Lezioni di musica<tag> out.Id="90"</tag>
+      </item>
+      <item>
+        Pingu a scuola<tag> out.Id="91"</tag>
+      </item>
+      <item>
+        Pingu e i tanti pacchi<tag> out.Id="98"</tag>
+      </item>
+      <item>
+        Il compleanno di Pingu<tag> out.Id="99"</tag>
+      </item>
+      <item>
+        Pingu fa vedere quello che sa fare<tag> out.Id="78"</tag>
+      </item>
+      <item>
+        Pingu pulisce la neve<tag> out.Id="79"</tag>
+      </item>
+      <item>
+        Pingu e la giornata ventosa<tag> out.Id="70"</tag>
+      </item>
+      <item>
+        Pingu e la cartolina<tag> out.Id="71"</tag>
+      </item>
+      <item>
+        La scoperta di Pingu<tag> out.Id="72"</tag>
+      </item>
+      <item>
+        Pingu e il panettiere<tag> out.Id="73"</tag>
+      </item>
+      <item>
+        Pingu e la palla persa<tag> out.Id="74"</tag>
+      </item>
+      <item>
+        Lo svantaggio di Pingu<tag> out.Id="75"</tag>
+      </item>
+      <item>
+        Pingu non vuole aiutare<tag> out.Id="76"</tag>
+      </item>
+      <item>
+        Pingu in montagna<tag> out.Id="77"</tag>
+      </item>
+      <item>
+        Hockey su ghiaccio<tag> out.Id="87"</tag>
+      </item>
+      <item>
+        Pingu e la slitta<tag> out.Id="86"</tag>
+      </item>
+      <item>
+        Pingu va a sciare<tag> out.Id="85"</tag>
+      </item>
+      <item>
+        Pingu gioca a tennis<tag> out.Id="84"</tag>
+      </item>
+      <item>
+        Pingu e il barile<tag> out.Id="83"</tag>
+      </item>
+      <item>
+        Pingu gioca a nascondino<tag> out.Id="82"</tag>
+      </item>
+      <item>
+        Pingu va a pescare<tag> out.Id="81"</tag>
+      </item>
+      <item>
+        Pingu ha un giorno di riposo<tag> out.Id="80"</tag>
+      </item>
+      <item>
+        Pingu e pinga stanno svegli<tag> out.Id="89"</tag>
+      </item>
+      <item>
+        Pingu scappa<tag> out.Id="88"</tag>
+      </item>
+      <item>
+        Pingu  Chef<tag> out.Id="58"</tag>
+      </item>
+      <item>
+        Natale in casa Pingu<tag> out.Id="59"</tag>
+      </item>
+      <item>
+        L'ammiratore di Pingu<tag> out.Id="52"</tag>
+      </item>
+      <item>
+        Pingu e il gabbiano<tag> out.Id="53"</tag>
+      </item>
+      <item>
+        Pingu pilota<tag> out.Id="50"</tag>
+      </item>
+      <item>
+        Pingu dal dottore<tag> out.Id="51"</tag>
+      </item>
+      <item>
+        Pingu gioca a curling<tag> out.Id="56"</tag>
+      </item>
+      <item>
+        Pingu e il ghiacciaio<tag> out.Id="57"</tag>
+      </item>
+      <item>
+        Pingu fa surf<tag> out.Id="54"</tag>
+      </item>
+      <item>
+        Il primo bacio di Pingu<tag> out.Id="55"</tag>
+      </item>
+      <item>
+        Pingu vuole volare<tag> out.Id="69"</tag>
+      </item>
+      <item>
+        Pingi e la cartolina di S.Valentino<tag> out.Id="68"</tag>
+      </item>
+      <item>
+        Pingu aiuta il nonno<tag> out.Id="61"</tag>
+      </item>
+      <item>
+        Pingu va via<tag> out.Id="60"</tag>
+      </item>
+      <item>
+        Pingu perde la scommessa<tag> out.Id="63"</tag>
+      </item>
+      <item>
+        Pingu e la giornata storta<tag> out.Id="62"</tag>
+      </item>
+      <item>
+        Pingu rimbalza<tag> out.Id="65"</tag>
+      </item>
+      <item>
+        Pingu e la sua coppa<tag> out.Id="64"</tag>
+      </item>
+      <item>
+        Pingu scava un buco<tag> out.Id="67"</tag>
+      </item>
+      <item>
+        Pingu finisce il lavoro<tag> out.Id="66"</tag>
+      </item>
+      <item>
+        Pingu e il negozio di giocattoli<tag> out.Id="38"</tag>
+      </item>
+      <item>
+        Pingu e la vernice<tag> out.Id="39"</tag>
+      </item>
+      <item>
+        Pingu e la grande cattura<tag> out.Id="34"</tag>
+      </item>
+      <item>
+        Pingu fa un grande tuffo<tag> out.Id="35"</tag>
+      </item>
+      <item>
+        I genitori di Pingu non hanno tempo<tag> out.Id="36"</tag>
+      </item>
+      <item>
+        Pingu e l'aeroplano giocattolo<tag> out.Id="37"</tag>
+      </item>
+      <item>
+        Pingu e i vasi<tag> out.Id="30"</tag>
+      </item>
+      <item>
+        Pingu e il carnevale<tag> out.Id="31"</tag>
+      </item>
+      <item>
+        Il desiderio di Pingu<tag> out.Id="32"</tag>
+      </item>
+      <item>
+        Pingu ha mal di stomaco<tag> out.Id="33"</tag>
+      </item>
+      <item>
+        Pingu va al campeggio<tag> out.Id="49"</tag>
+      </item>
+      <item>
+        Pingu diventa geloso<tag> out.Id="48"</tag>
+      </item>
+      <item>
+        Pingu supereroe<tag> out.Id="43"</tag>
+      </item>
+      <item>
+        Pingu al vivaio<tag> out.Id="42"</tag>
+      </item>
+      <item>
+        Pingu costruisce un igloo<tag> out.Id="41"</tag>
+      </item>
+      <item>
+        Pingu e l'abominevole pupazzo<tag> out.Id="40"</tag>
+      </item>
+      <item>
+        Pingu e il magnete<tag> out.Id="47"</tag>
+      </item>
+      <item>
+        Pingu e l'organo<tag> out.Id="46"</tag>
+      </item>
+      <item>
+        Pingu si è perso<tag> out.Id="45"</tag>
+      </item>
+      <item>
+        Pingu e la gara di pesca<tag> out.Id="44"</tag>
+      </item>
+      <item>
+        Pingu aiuta con l'incubazione<tag> out.Id="18"</tag>
+      </item>
+      <item>
+        Pingu in paradiso<tag> out.Id="19"</tag>
+      </item>
+      <item>
+        Pingu al luna park<tag> out.Id="16"</tag>
+      </item>
+      <item>
+        Il sogno di Pingu<tag> out.Id="17"</tag>
+      </item>
+      <item>
+        Pingu il mago<tag> out.Id="14"</tag>
+      </item>
+      <item>
+        Pingu e lo snowboard<tag> out.Id="15"</tag>
+      </item>
+      <item>
+        Pingu equilibrista<tag> out.Id="12"</tag>
+      </item>
+      <item>
+        Pingu e le bretelle<tag> out.Id="13"</tag>
+      </item>
+      <item>
+        Pinga è nata<tag> out.Id="10"</tag>
+      </item>
+      <item>
+        Pingu e la scultura di ghiaccio<tag> out.Id="11"</tag>
+      </item>
+      <item>
+        Pingu e l'animale a scuola<tag> out.Id="29"</tag>
+      </item>
+      <item>
+        Pingu e il grosso pesce<tag> out.Id="28"</tag>
+      </item>
+      <item>
+        Pingu si lascia andare<tag> out.Id="25"</tag>
+      </item>
+      <item>
+        Pinga e il pallone<tag> out.Id="24"</tag>
+      </item>
+      <item>
+        Pingu e il fantasma<tag> out.Id="27"</tag>
+      </item>
+      <item>
+        Pingu commette un errore<tag> out.Id="26"</tag>
+      </item>
+      <item>
+        Pingu Boogaloo<tag> out.Id="21"</tag>
+      </item>
+      <item>
+        Pingu e l'avventura sulla luna<tag> out.Id="20"</tag>
+      </item>
+      <item>
+        Pingu in gita scolastica<tag> out.Id="23"</tag>
+      </item>
+      <item>
+        Pingu e la bambola<tag> out.Id="22"</tag>
+      </item>
+      <item>
+        Ecco Pingu<tag> out.Id="9"</tag>
+      </item>
+      <item>
+        Pingu e la macchina da cucire<tag> out.Id="8"</tag>
+      </item>
+      <item>
+        Pingu aiuta a consegnare la posta<tag> out.Id="7"</tag>
+      </item>
+      <item>
+        Pingu  puzzolente<tag> out.Id="6"</tag>
+      </item>
+      <item>
+        Pingu costruisce una torre<tag> out.Id="5"</tag>
+      </item>
+      <item>
+        Pingu al salone di bellezza<tag> out.Id="4"</tag>
+      </item>
+      <item>
+        Pingu e la visita in ospedale<tag> out.Id="3"</tag>
+      </item>
+      <item>
+        Pingu e il dono<tag> out.Id="2"</tag>
+      </item>
+      <item>
+        Pingu babysitter<tag> out.Id="1"</tag>
+      </item>
+      <item>
+        Pingu e il gioco dei pesci<tag> out.Id="100"</tag>
+      </item>
+    </one-of>
+  </rule>
+</grammar>

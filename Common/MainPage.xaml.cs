@@ -45,6 +45,10 @@ using Wp81Shared.Exceptions;
 using Telerik.Windows.Controls;
 using Centapp.CartoonCommon.Controls;
 using Windows.System;
+using Windows.Phone.Speech.Recognition;
+using Windows.Phone.Speech.Synthesis;
+using Newtonsoft.Json;
+using Centapp.CartoonCommon.JSON;
 
 
 namespace Centapp.CartoonCommon
@@ -72,6 +76,11 @@ namespace Centapp.CartoonCommon
         string _appVer = string.Empty;
         IsolatedStorageFile _curIsolatedStorage = IsolatedStorageFile.GetUserStoreForApplication();
 
+        #region speech
+        SpeechSynthesizer _tts = new SpeechSynthesizer();
+        SpeechRecognizerUI _recoWithUI = null;
+        #endregion
+
         #region settings
         IsolatedStorageSettings _settings = IsolatedStorageSettings.ApplicationSettings;
         string _usages_setting = "usages_count";
@@ -80,7 +89,6 @@ namespace Centapp.CartoonCommon
 
         private object _currentContextItem = null;
         private bool _userMessageShown = false;
-
 
         // Constructor
         public MainPage()
@@ -123,7 +131,6 @@ namespace Centapp.CartoonCommon
 
             _appVer = GenericHelper.GetAppversion();
 
-            SetCaptions();
             //AddContextMenus();
 
             PanoramaMainControl.SelectionChanged += new EventHandler<SelectionChangedEventArgs>(PanoramaMainControl_SelectionChanged);
@@ -143,6 +150,9 @@ namespace Centapp.CartoonCommon
 
             App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
             App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
+
+            //CreateGrammars();
+            InitReco();
         }
 
         void ViewModel_OnError(string msg, bool isFatalError)
@@ -226,11 +236,15 @@ namespace Centapp.CartoonCommon
             fourthListTxtNoInternet.Text = AppResources.noNetworkAvailable;
             favoritesListTxtNoInternet.Text = AppResources.noNetworkAvailable;
 
+            //AppbarBtnSearchByKeyboard.Text = AppResources.AppBarSearchByText;
+            //AppbarBtnSearchByVoice.Text = AppResources.AppBarSearchByVoice;
+
         }
 
         // Load data for the ViewModel Items
         private void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
+            SetCaptions();
             UpdateAppInfos();
             AddContextMenus();
         }
@@ -264,6 +278,11 @@ namespace Centapp.CartoonCommon
             //webBrowserTask.URL = "vnd.youtube:" + GenericHelper.GetYoutubeID(selectedItem.Url) + "?vndapp=youtube_mobile";
             //webBrowserTask.Show();
 
+            PlayEpisode(selectedItem);
+        }
+
+        private async Task PlayEpisode(ItemViewModel selectedItem)
+        {
             try
             {
                 if (AppInfo.Instance.AppIsOfflineSettingValue)
@@ -294,7 +313,7 @@ namespace Centapp.CartoonCommon
                         {
                             #region advertising OFF
                             Uri episodeUri = null;
-                            
+
                             if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.SDCard)
                             {
                                 App.ViewModel.IsDataLoading = true;
@@ -309,11 +328,11 @@ namespace Centapp.CartoonCommon
                             }
 
                             var launcher = new MediaPlayerLauncher
-                                      {
-                                          Controls = MediaPlaybackControls.All,
-                                          Location = MediaLocationType.Data,
-                                          Media = episodeUri
-                                      };
+                            {
+                                Controls = MediaPlaybackControls.All,
+                                Location = MediaLocationType.Data,
+                                Media = episodeUri
+                            };
                             launcher.Show();
 
                             //for universal apps
@@ -358,7 +377,6 @@ namespace Centapp.CartoonCommon
                             switch (MessageBox.Show(AppResources.DownloadEpisodesQuestion, "", MessageBoxButton.OKCancel))
                             {
                                 case MessageBoxResult.OK:
-
                                     await ExecBackup();
                                     return;
                             }
@@ -366,7 +384,6 @@ namespace Centapp.CartoonCommon
                     }
 
                     string id = GenericHelper.GetYoutubeID(selectedItem.Url);
-
 
                     if (AppInfo.Instance.IsAdvertisingEnabled)
                     {
@@ -417,9 +434,6 @@ namespace Centapp.CartoonCommon
                         {
                             MessageBox.Show(ex.Message);
                         }
-
-
-
                         #endregion
                     }
                     #endregion
@@ -482,6 +496,7 @@ namespace Centapp.CartoonCommon
 
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
             ToggleNoInternetWarningTxt(false);
 
             if (!NetworkInterface.GetIsNetworkAvailable() && !AppInfo.Instance.AppIsOfflineSettingValue)
@@ -499,8 +514,15 @@ namespace Centapp.CartoonCommon
             catch (Exception)
             {
             }
-            // your code here
-            // StopUsageTimer();
+
+
+
+            if (this.NavigationContext.QueryString.ContainsKey("autoplay"))
+            {
+                this.NavigationContext.QueryString.Clear();
+                PlayEpisode(App.ViewModel.SelectedEpisode);
+                return;
+            }
             base.OnNavigatedTo(e);
         }
 
@@ -590,7 +612,7 @@ namespace Centapp.CartoonCommon
             MenuItem menuItemBrokenlink1 = new MenuItem { Header = reportErrorText };
             contextMenu1.Items.Add(menuItemBrokenlink1);
             menuItemBrokenlink1.Click += new RoutedEventHandler(menuItemBrokenlink_Click);
-          
+
             ContextMenuService.SetContextMenu(firstList, contextMenu1);
 
             //lista 2
@@ -631,7 +653,7 @@ namespace Centapp.CartoonCommon
             MenuItem menuItemAdd3 = new MenuItem { Header = addToFavText };
             contextMenu3.Items.Add(menuItemAdd3);
             menuItemAdd3.Click += new RoutedEventHandler(menuItemAdd_Click);
-            
+
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 MenuItem menuItemShare3 = new MenuItem { Header = shareText };
@@ -658,7 +680,7 @@ namespace Centapp.CartoonCommon
             MenuItem menuItemAdd4 = new MenuItem { Header = addToFavText };
             contextMenu4.Items.Add(menuItemAdd4);
             menuItemAdd4.Click += new RoutedEventHandler(menuItemAdd_Click);
-            
+
 
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
@@ -670,7 +692,7 @@ namespace Centapp.CartoonCommon
             MenuItem menuItemBrokenlink4 = new MenuItem { Header = reportErrorText };
             contextMenu4.Items.Add(menuItemBrokenlink4);
             menuItemBrokenlink4.Click += new RoutedEventHandler(menuItemBrokenlink_Click);
-       
+
             ContextMenuService.SetContextMenu(fourthList, contextMenu4);
 
             //lista preferite
@@ -888,13 +910,22 @@ namespace Centapp.CartoonCommon
         }
         #endregion
 
-        private void searchEpisodesButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        private void AppbarBtnSearchByKeyboard_Click(object sender, EventArgs e)
         {
-            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
-                                                              Dispatcher,
-                                                              string.Format("/SearchEpisodes.xaml"));
+            GotoSearchPage();
         }
 
+        private void searchEpisodesButton_Tap(object sender, System.Windows.Input.GestureEventArgs e)
+        {
+            GotoSearchPage();
+        }
+
+        private void GotoSearchPage()
+        {
+            Wp81Shared.Helpers.NavigationHelper.SafeNavigateTo(NavigationService,
+                                                               Dispatcher,
+                                                               string.Format("/SearchEpisodes.xaml"));
+        }
 
         #region offline backup
 
@@ -1150,5 +1181,155 @@ namespace Centapp.CartoonCommon
                                                 string.Format(infoPage));
         }
 
+
+        #region speech
+
+        private void AppbarBtnSearchByVoice_Click(object sender, EventArgs e)
+        {
+            RecognizeText();
+        }
+
+        private void InitReco()
+        {
+            try
+            {
+                _recoWithUI = new SpeechRecognizerUI();
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+
+            // Display text to prompt the user's input.
+            _recoWithUI.Settings.ListenText = AppResources.recoUIText;
+
+            // Give an example of ideal speech input.
+            _recoWithUI.Settings.ExampleText = AppResources.recoUISample;
+            _recoWithUI.Settings.ShowConfirmation = true;
+            _recoWithUI.Settings.ReadoutEnabled = true;
+            _recoWithUI.Recognizer.Grammars.Clear();
+
+            // string cult = GetBestSupportedCultureName();
+            string cult = "it-IT";
+            Uri grammar = new Uri(string.Format("ms-appx:///Speech/Grammars/Grammar.{0}.xml", cult), UriKind.Absolute);
+            _recoWithUI.Recognizer.Grammars.AddGrammarFromUri("peppa", grammar);
+        }
+
+        //private string GetBestSupportedCultureName()
+        //{
+        //    var supportedCulture = _supportedUiCultures.FirstOrDefault(c => c.Name.Equals(Thread.CurrentThread.CurrentUICulture.Name));
+        //    return supportedCulture == null ? "en-US" : supportedCulture.Name;
+        //}
+
+        //private void PlayPinguSound()
+        //{
+        //    Dispatcher.BeginInvoke(() =>
+        //    {
+        //        //http://mnjoe.wordpress.com/2012/12/13/windows-phone-8-playing-sounds/
+        //        string soundFile = "Resources/sounds/nug.wav"; //Note no slash before the Assets folder, and it's a WAV file!
+        //        Stream stream = TitleContainer.OpenStream(soundFile);
+        //        SoundEffect effect = SoundEffect.FromStream(stream);
+        //        FrameworkDispatcher.Update();
+        //        effect.Play();
+        //    });
+        //}
+
+        private async void RecognizeText()
+        {
+            //_tts.SpeakTextAsync("Tell me what do you want to see!");
+            SpeechRecognitionUIResult recoResult = null;
+            // PlayPinguSound();
+            //Thread.Sleep(250);
+            // Load the grammar set and start recognition.
+            try
+            {
+                recoResult = await _recoWithUI.RecognizeWithUIAsync();
+            }
+            catch (InvalidOperationException ex1)
+            {
+                return;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
+
+            if (recoResult == null || recoResult.ResultStatus != SpeechRecognitionUIStatus.Succeeded)
+            {
+                return;
+            }
+
+            try
+            {
+                int episodeId = int.Parse(recoResult.RecognitionResult.Semantics["Id"].Value.ToString());
+                var episode = App.ViewModel.Items.First(e => e.Id == episodeId);
+                PlayEpisode(episode);
+            }
+            catch (Exception)
+            {
+            }
+        }
+
+        private void CreateGrammars()
+        {
+            try
+            {
+                XDocument xDoc = new XDocument();
+
+                //XElement grammarEl = new XElement("grammar",
+                //                                  new XAttribute("version", "1.0"),
+                //                                  new XAttribute(XNamespace.Xml + "lang", "it-IT"),
+                //                                  new XAttribute("root", "episodes"),
+                //                                  new XAttribute("tag-format", "semantics/1.0"),
+                //                                  new XAttribute("xmlns", "http://www.w3.org/2001/06/grammar"),
+                //                                  new XAttribute(XNamespace.Xmlns + "sapi", "http://schemas.microsoft.com/Speech/2002/06/SRGSExtensions"));
+
+                Assembly asm = Assembly.GetExecutingAssembly();
+                Stream stream = asm.GetManifestResourceStream("Centapp.CartoonCommon.Speech.GrammarsTemplate.xml");
+                xDoc = XDocument.Load(stream);
+
+                XElement ruleEl = new XElement("rule",
+                                                new XAttribute("id", "episodes"),
+                                                new XAttribute("scope", "public"));
+
+                XElement optionsEl = new XElement("one-of");
+                ruleEl.Add(optionsEl);
+
+                asm = Assembly.GetExecutingAssembly();
+                Stream localStream = asm.GetManifestResourceStream("Centapp.CartoonCommon.videosrc.json");
+
+                using (StreamReader reader = new StreamReader(localStream))
+                {
+                    var data = reader.ReadToEnd();
+                    var root = JsonConvert.DeserializeObject<RootObject>(data);
+                    List<Season> seasons = root.seasons;
+
+                    foreach (var season in seasons)
+                    {
+                        foreach (var episode in season.episodes)
+                        {
+                            //<one-of>
+                            //  <item> Spegni  <tag> out.Id="OFF" </tag> </item>
+                            //</one-of>
+                            string content = string.Format("<item>{0}<tag> out.Id=\"{1}\"</tag></item>", episode.name, episode.id);
+                            XElement el1 = XDocument.Parse(content).Root;
+                            optionsEl.Add(el1);
+                        }
+                        //seasonCount++;
+                    }
+                }
+
+                // xDoc.Root.Attribute(XNamespace.Xml + "lang").Value = cultureInfo.Name;
+                xDoc.Root.Attribute(XNamespace.Xml + "lang").Value = "it-IT";
+                xDoc.Root.Add(ruleEl);
+                string str = xDoc.ToString();
+            }
+            catch (Exception)
+            {
+            }
+        }
+        #endregion
+
+     
     }
 }

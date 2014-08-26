@@ -454,4 +454,12 @@
         </TextBlock>-->
 
     </Grid>
+
+    <phone:PhoneApplicationPage.ApplicationBar>
+        <shell:ApplicationBar IsVisible="True" IsMenuEnabled="False" Mode="Default" Opacity="0.5">
+            <shell:ApplicationBarIconButton x:Name="AppbarBtnSearchByKeyboard"  IconUri="/Assets/AppBar/Search-Find.png" Text="cerca" Click="AppbarBtnSearchByKeyboard_Click"/>
+            <shell:ApplicationBarIconButton x:Name="AppbarBtnSearchByVoice"  IconUri="/Assets/AppBar/Voice-Search.png" Text="parla" Click="AppbarBtnSearchByVoice_Click"/>
+        </shell:ApplicationBar>
+    </phone:PhoneApplicationPage.ApplicationBar>
+
 </phone:PhoneApplicationPage>

@@ -387,4 +387,16 @@ Do you want to backup right now?</value>
   <data name="sendToMovieMaker" xml:space="preserve">
     <value>send to Movie Maker</value>
   </data>
+  <data name="recoUIText" xml:space="preserve">
+    <value>tell me what episode you want :)</value>
+  </data>
+  <data name="recoUISample" xml:space="preserve">
+    <value>prova a dire "Pozzanghere di fango" o "Nascondino"...</value>
+  </data>
+  <data name="AppBarSearchByText" xml:space="preserve">
+    <value>write</value>
+  </data>
+  <data name="AppBarSearchByVoice" xml:space="preserve">
+    <value>speak</value>
+  </data>
 </root>
