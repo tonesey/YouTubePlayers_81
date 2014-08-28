@@ -106,6 +106,14 @@ namespace Centapp.CartoonCommon
         // This code will not execute when the application is reactivated
         private void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            try
+            {
+                FlurryWP8SDK.Api.StartSession("5QZM2HPYVQWCX5WQVM9D");
+            }
+            catch (Exception)
+            {
+            }
+
             FeedbackHelper.Default.Launching();
             InitApp();
             LittleWatson.CheckForPreviousException(AppResources.ExceptionMessage, AppResources.ExceptionMessageTitle);
@@ -236,6 +244,15 @@ namespace Centapp.CartoonCommon
         // This code will not execute when the application is first launched
         private void Application_Activated(object sender, ActivatedEventArgs e)
         {
+
+            try
+            {
+                FlurryWP8SDK.Api.StartSession("5QZM2HPYVQWCX5WQVM9D");
+            }
+            catch (Exception)
+            {
+            }
+
             if (_wasApplicationTerminated)
             {
                 // real tombstone, new App instance   

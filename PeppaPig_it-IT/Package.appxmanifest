@@ -36,6 +36,7 @@
   <Capabilities>
     <Capability Name="removableStorage" />
     <Capability Name="musicLibrary" />
+    <Capability Name="internetClientServer" />
     <DeviceCapability Name="microphone" />
   </Capabilities>
   <Extensions>
