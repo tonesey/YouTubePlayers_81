@@ -24,7 +24,7 @@
         </Grid.Background>
 
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <!--<Image Source="/Resources/big/PinguBuy.jpg" Margin="0,5,0,0" Height="300" Width="270" />-->
+            
             <TextBlock x:Name="InfoTextBlock1" 
                        TextWrapping="Wrap" 
                        Text="$Sorry, but you can watch only two episodes daily and set only one favorite episode into trial version..." 

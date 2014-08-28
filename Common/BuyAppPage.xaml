@@ -24,7 +24,7 @@
         </Grid.Background>
 
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <Image Source="/Resources/BuyApp.jpg" Margin="0,5,0,0" Height="300" Width="270" />
+            <Image Source="/Assets/Backgrounds/BuyApp.jpg" Margin="0,5,0,0" Height="300" Width="270" />
             <TextBlock x:Name="InfoTextBlock2" 
                        FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                        TextWrapping="Wrap" 

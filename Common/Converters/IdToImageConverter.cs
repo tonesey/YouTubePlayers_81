@@ -24,7 +24,6 @@ namespace Centapp.CartoonCommon.Converters
 
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
-                //return new BitmapImage(new Uri(string.Format("/Resources/thumb/{0}.png", (int)value), UriKind.Relative));
                 return new BitmapImage(YouTube.GetThumbnailUri(GenericHelper.GetYoutubeID((value as ItemViewModel).Url)));
             }
 

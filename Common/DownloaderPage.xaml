@@ -30,7 +30,7 @@
         <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,20,12,0">
 
             <Grid.Background>
-                <ImageBrush ImageSource="PageBackground1.jpg" Opacity="0.2" />
+                <ImageBrush ImageSource="Assets/Backgrounds/PageBackground1.jpg" Opacity="0.2" />
             </Grid.Background>
 
             <Grid>
@@ -77,7 +77,7 @@
                                         <ColumnDefinition Width="100"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/backup.png"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/backup.png"></Image>
                                     <TextBlock x:Name="ButtonStartBackupEpisodesText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,-1,0,-2" 

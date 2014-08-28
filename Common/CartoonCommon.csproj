@@ -328,43 +328,33 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="PanoramaBackground.png" />
+    <Resource Include="Assets\Buttons\backup.png" />
+    <Resource Include="Assets\Buttons\buy.png" />
+    <Resource Include="Assets\Buttons\info.png" />
+    <Resource Include="Assets\Buttons\mail.png" />
+    <Resource Include="Assets\Buttons\other.png" />
+    <Resource Include="Assets\Buttons\rate.png" />
+    <Resource Include="Assets\Buttons\search.png" />
+    <Resource Include="Assets\PanoramaHeaders\favorite.png" />
+    <Resource Include="Assets\PanoramaHeaders\app_header.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\buttons\backup.png" />
-    <Resource Include="Resources\buttons\buy.png" />
-    <Resource Include="Resources\buttons\info.png" />
-    <Resource Include="Resources\buttons\mail.png" />
-    <Resource Include="Resources\buttons\other.png" />
-    <Resource Include="Resources\buttons\rate.png" />
-    <Resource Include="Resources\buttons\search.png" />
-    <Resource Include="Resources\icons\favorite.png" />
-    <Resource Include="Resources\icons\app_header.png" />
+    <Resource Include="Assets\PanoramaHeaders\list.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\icons\list.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Assets\Backgrounds\Search.png" />
-    <Resource Include="Assets\Backgrounds\Search_tr.png" />
     <Content Include="Assets\AppBar\Search-Find.png" />
     <Content Include="Assets\AppBar\Voice-Search.png" />
-    <Content Include="Assets\Icons\Clear.png" />
+    <Resource Include="Assets\Backgrounds\PageBackground1.jpg" />
     <Content Include="Assets\Icons\Clear1.png" />
     <Content Include="banner_hunter.png" />
     <Content Include="README_FIRST.txt" />
-    <Content Include="Assets\AppBar\mic.png" />
-    <Content Include="Assets\AppBar\mic48.png" />
-    <Content Include="Assets\AppBar\search.png" />
-    <Content Include="Assets\AppBar\search24.png" />
-    <Content Include="todo.txt" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Cancel.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Check.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Delete.png" />
     <Content Include="Toolkit.Content\ApplicationBar.Select.png" />
-    <Resource Include="Resources\icons\other.png" />
-    <Content Include="Resources\mqdefault.jpg" />
+    <Resource Include="Assets\PanoramaHeaders\other.png" />
+    <Content Include="Assets\Thumbs\mqdefault.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -127,7 +127,7 @@
                            IsEnabled="{Binding IsNotDataLoading}">
 
             <controls:Panorama.Background>
-                <ImageBrush ImageSource="PanoramaBackground.png" Opacity="0.5"/>
+                <ImageBrush ImageSource="Assets/Backgrounds/PanoramaBackground.png" Opacity="0.5"/>
             </controls:Panorama.Background>
 
             <!-- lista 1 -->
@@ -138,7 +138,7 @@
                                                 ConverterParameter = 0 }">
                 <controls:PanoramaItem.Header>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="Resources/icons/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
+                        <Image Source="Assets/PanoramaHeaders/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
                         <TextBlock  Name="TextBlockFirstPivotItem"
                                     Style="{StaticResource PanoramaHeaderTextStyle}"
                                     Text="{Binding Items_Chunk1, 
@@ -162,7 +162,7 @@
                                                 ConverterParameter = 1 }">
                 <controls:PanoramaItem.Header>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="Resources/icons/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
+                        <Image Source="Assets/PanoramaHeaders/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
                         <TextBlock Style="{StaticResource PanoramaHeaderTextStyle}"
                                    FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                    Text="{Binding Items_Chunk2, 
@@ -184,7 +184,7 @@
                                                 ConverterParameter = 2 }">
                 <controls:PanoramaItem.Header>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="Resources/icons/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
+                        <Image Source="Assets/PanoramaHeaders/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
                         <TextBlock Style="{StaticResource PanoramaHeaderTextStyle}"
                                    FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                    Text="{Binding Items_Chunk3, 
@@ -206,7 +206,7 @@
                                                 ConverterParameter = 3 }">
                 <controls:PanoramaItem.Header>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="Resources/icons/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
+                        <Image Source="Assets/PanoramaHeaders/list.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
                         <TextBlock Style="{StaticResource PanoramaHeaderTextStyle}"
                                    FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                    Text="{Binding Items_Chunk4, 
@@ -225,7 +225,7 @@
             <controls:PanoramaItem>
                 <controls:PanoramaItem.Header>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="Resources/icons/favorite.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
+                        <Image Source="Assets/PanoramaHeaders/favorite.png" Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
                         <TextBlock x:Name="favoritesHeader" Style="{StaticResource PanoramaHeaderTextStyle}" FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig">$favorites</TextBlock>
                     </StackPanel>
                 </controls:PanoramaItem.Header>
@@ -280,7 +280,7 @@
                 
                 <controls:PanoramaItem.Header>
                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <Image Source="Resources/icons/app_header.png"  Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
+                        <Image Source="Assets/PanoramaHeaders/app_header.png"  Style="{StaticResource PanoramaHeaderImageStyle}"></Image>
                         <TextBlock x:Name="appHeader" Style="{StaticResource PanoramaHeaderTextStyle}">$app</TextBlock>
                     </StackPanel>
                 </controls:PanoramaItem.Header>
@@ -298,7 +298,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/backup.png"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/buttons/backup.png"></Image>
                                     <TextBlock x:Name="backupEpisodesText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -321,7 +321,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/rate.png" Height="36" Width="36"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/rate.png" Height="36" Width="36"></Image>
                                     <TextBlock x:Name="rateAppButtonText" 
                                                FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -344,7 +344,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/mail.png"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/mail.png"></Image>
                                     <TextBlock x:Name="writeAnEmailButtonText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -367,7 +367,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/info.png"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/info.png"></Image>
                                     <TextBlock x:Name="infoButtonText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -391,7 +391,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/buy.png"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/buy.png"></Image>
                                     <TextBlock x:Name="buyAppButtonText" 
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
                                                 VerticalAlignment="Center">$Buy full version</TextBlock>
@@ -415,7 +415,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Resources/buttons/search.png"></Image>
+                                    <Image Grid.Column="0" Source="/Assets/Buttons/search.png"></Image>
                                     <TextBlock x:Name="searchEpisodesButtonText" 
                                                  FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                  Grid.Column="1" FontSize="32" Margin="10,0,0,0" 

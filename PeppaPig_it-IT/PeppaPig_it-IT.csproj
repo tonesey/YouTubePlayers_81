@@ -396,48 +396,52 @@
     <Content Include="..\Common\Assets\AppBar\Voice-Search.png">
       <Link>Assets\AppBar\Voice-Search.png</Link>
     </Content>
-    <Content Include="..\Common\Resources\buttons\backup.png">
-      <Link>Resources\buttons\backup.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\buttons\buy.png">
-      <Link>Resources\buttons\buy.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\buttons\info.png">
-      <Link>Resources\buttons\info.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\buttons\mail.png">
-      <Link>Resources\buttons\mail.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\buttons\other.png">
-      <Link>Resources\buttons\other.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\buttons\rate.png">
-      <Link>Resources\buttons\rate.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\buttons\search.png">
-      <Link>Resources\buttons\search.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\icons\app_header.png">
-      <Link>Resources\icons\app_header.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\icons\favorite.png">
-      <Link>Resources\icons\favorite.png</Link>
-    </Content>
-    <Content Include="..\Common\Resources\icons\list.png">
-      <Link>Resources\icons\list.png</Link>
+    <Resource Include="..\Common\Assets\Buttons\backup.png">
+      <Link>Assets\Buttons\backup.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Buttons\buy.png">
+      <Link>Assets\Buttons\buy.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Buttons\info.png">
+      <Link>Assets\Buttons\info.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Buttons\mail.png">
+      <Link>Assets\Buttons\mail.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Buttons\other.png">
+      <Link>Assets\Buttons\other.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Buttons\rate.png">
+      <Link>Assets\Buttons\rate.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Buttons\search.png">
+      <Link>Assets\Buttons\search.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\Backgrounds\PageBackground1.jpg">
+      <Link>Assets\Backgrounds\PageBackground1.jpg</Link>
+    </Resource>
+    <Content Include="..\Common\Assets\Icons\Clear1.png">
+      <Link>Assets\Icons\Clear1.png</Link>
     </Content>
     <Resource Include="Mkt\art.png" />
-    <Resource Include="..\Common\Resources\mqdefault.jpg">
-      <Link>Resources\mqdefault.jpg</Link>
-    </Resource>
-    <Resource Include="..\Common\Resources\icons\other.png">
-      <Link>Resources\icons\other.png</Link>
-    </Resource>
     <Resource Include="Assets\Backgrounds\Search.png" />
-    <Resource Include="Assets\Backgrounds\Search_tr.png" />
+    <Resource Include="..\Common\Assets\PanoramaHeaders\app_header.png">
+      <Link>Assets\PanoramaHeaders\app_header.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\PanoramaHeaders\favorite.png">
+      <Link>Assets\PanoramaHeaders\favorite.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\PanoramaHeaders\list.png">
+      <Link>Assets\PanoramaHeaders\list.png</Link>
+    </Resource>
+    <Resource Include="..\Common\Assets\PanoramaHeaders\other.png">
+      <Link>Assets\PanoramaHeaders\other.png</Link>
+    </Resource>
+    <Content Include="..\Common\Assets\Thumbs\mqdefault.jpg">
+      <Link>Assets\Thumbs\mqdefault.jpg</Link>
+    </Content>
+    <Content Include="Assets\Backgrounds\BuyApp.jpg" />
     <Content Include="Assets\BadgeLogo.png" />
-    <Content Include="Assets\Icons\Clear.png" />
-    <Content Include="Assets\Icons\Clear1.png" />
     <Content Include="Assets\Logo.png" />
     <Content Include="Assets\SplashScreen.png" />
     <Content Include="Assets\SquareTile150x150.png" />
@@ -452,7 +456,6 @@
     <Resource Include="Mkt\thumb300.png" />
     <Content Include="Mkt\screen0_it-IT.png" />
     <Content Include="README_FIRST.txt" />
-    <Content Include="Resources\BuyApp.jpg" />
     <EmbeddedResource Include="Speech\GrammarsTemplate.xml" />
     <Content Include="Speech\Grammars\Grammar.it-IT.xml" />
     <Content Include="Toolkit.Content\ApplicationBar.Add.png" />
@@ -474,8 +477,7 @@
     <Content Include="Background.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Resource Include="PageBackground1.jpg" />
-    <Resource Include="PanoramaBackground.png" />
+    <Resource Include="Assets\Backgrounds\PanoramaBackground.png" />
     <Content Include="SplashScreenImage.jpg" />
   </ItemGroup>
   <ItemGroup>
