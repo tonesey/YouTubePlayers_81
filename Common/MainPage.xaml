@@ -298,7 +298,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Buttons/buttons/backup.png"></Image>
+                                    <Image Grid.Column="0" Source="Assets/Buttons/backup.png"></Image>
                                     <TextBlock x:Name="backupEpisodesText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -321,7 +321,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Buttons/rate.png" Height="36" Width="36"></Image>
+                                    <Image Grid.Column="0" Source="Assets/Buttons/rate.png" Height="36" Width="36"></Image>
                                     <TextBlock x:Name="rateAppButtonText" 
                                                FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -344,7 +344,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Buttons/mail.png"></Image>
+                                    <Image Grid.Column="0" Source="Assets/Buttons/mail.png"></Image>
                                     <TextBlock x:Name="writeAnEmailButtonText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 
@@ -367,7 +367,7 @@
                                         <ColumnDefinition Width="70"></ColumnDefinition>
                                         <ColumnDefinition Width="*"></ColumnDefinition>
                                     </Grid.ColumnDefinitions>
-                                    <Image Grid.Column="0" Source="/Assets/Buttons/info.png"></Image>
+                                    <Image Grid.Column="0" Source="Assets/Buttons/info.png"></Image>
                                     <TextBlock x:Name="infoButtonText" 
                                                 FontFamily=".\Fonts\Peppa Pig.TTF#Peppa Pig"
                                                 Grid.Column="1" FontSize="32" Margin="10,0,0,0" 

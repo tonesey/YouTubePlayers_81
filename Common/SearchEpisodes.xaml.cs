@@ -28,6 +28,7 @@ namespace Centapp.CartoonCommon
             autoCompleteBox.ItemFilter += SearchTitle;
             autoCompleteBox.SelectionChanged += new SelectionChangedEventHandler(autoCompleteBox_SelectionChanged);
             Loaded += SearchEpisodes_Loaded;
+            ButtonShowVideo.Visibility = App.ViewModel.SelectedEpisode != null ? Visibility.Visible : Visibility.Collapsed;
         }
 
         void SearchEpisodes_Loaded(object sender, RoutedEventArgs e)
