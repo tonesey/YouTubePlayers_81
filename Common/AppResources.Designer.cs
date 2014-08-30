@@ -539,6 +539,15 @@ namespace Centapp.CartoonCommon {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No voice commands detected.
+        /// </summary>
+        internal static string NoVoiceCommandsDetected {
+            get {
+                return ResourceManager.GetString("NoVoiceCommandsDetected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sorry but current episodes offline backup is not more valid: this version changed episodes catalogue and a new backup is neeeded!... a lot of new episodes were added!
         ///Do you want to backup right now?.
         /// </summary>

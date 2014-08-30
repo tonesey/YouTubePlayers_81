@@ -32,6 +32,7 @@ using Microsoft.Phone.Info;
 using Wp81Shared.Exceptions;
 using Wp81Shared.Helpers;
 using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace Centapp.CartoonCommon
 {
@@ -104,7 +105,7 @@ namespace Centapp.CartoonCommon
 
         // Code to execute when the application is launching (eg, from Start)
         // This code will not execute when the application is reactivated
-        private void Application_Launching(object sender, LaunchingEventArgs e)
+        private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
             try
             {
@@ -115,23 +116,26 @@ namespace Centapp.CartoonCommon
             }
 
             FeedbackHelper.Default.Launching();
-            InitApp();
+            await InitApp();
             LittleWatson.CheckForPreviousException(AppResources.ExceptionMessage, AppResources.ExceptionMessageTitle);
         }
 
-        private void InitApp()
+        private async Task InitApp()
         {
             ParseAppInfo();
             CheckTrialState();
 
+            App.ViewModel.Logger.Reset();
+
             //GenericHelper.Instance.SetAppIsOffline(true, BackupSupportType.SDCard);
-            GenericHelper.Instance.ReadAppSettings();
+            await GenericHelper.Instance.ReadAppSettings();
             if (!AppInfo.Instance.AppIsOfflineSettingValue && !NetworkInterface.GetIsNetworkAvailable())
             {
                 Deployment.Current.Dispatcher.BeginInvoke(() =>
                 {
                     MessageBox.Show(AppResources.noNetworkAvailableAppRestartRequired);
                     Application.Current.Terminate();
+                    return;
                 });
             }
             App.ViewModel.LoadData();

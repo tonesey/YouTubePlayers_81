@@ -389,4 +389,13 @@ Perchè non ci dai 5 stelle sullo store? :)</value>
   <data name="AppBarSearchByVoice" xml:space="preserve">
     <value>parla</value>
   </data>
+  <data name="NoVoiceCommandsDetected" xml:space="preserve">
+    <value>Non è ancora stato configurato il supporto ai comandi vocali sul tuo telefono! 
+
+Per attivarlo: 
+- "Impostazioni" -&gt;"Comandi vocali" 
+- in "Lingua comandi vocali" selezionare "Italiano" (scaricando se richiesto il file)
+- selezionare l'opzione "Attiva il servizio di riconoscimento vocale"
+- riavviare l'app</value>
+  </data>
 </root>

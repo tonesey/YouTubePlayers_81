@@ -29,6 +29,7 @@ using Centapp.CartoonCommon.Utility;
 using System.Xml;
 using System.Globalization;
 using Wp81Shared.Helpers;
+using Windows.Web.Http;
 
 
 namespace Centapp.CartoonCommon.ViewModels
@@ -39,7 +40,7 @@ namespace Centapp.CartoonCommon.ViewModels
 
     public class MainViewModel : INotifyPropertyChanged
     {
-
+        string _indexFileUri;
 
         int _dwnRetryCounter = 0;
 
@@ -72,6 +73,8 @@ namespace Centapp.CartoonCommon.ViewModels
 
         public MainViewModel()
         {
+            _indexFileUri = string.Format("http://centapp.altervista.org/{0}", AppInfo.Instance.IndexFile);
+
             //IsNetworkAvailable = true;
             this.Items = new ObservableCollection<ItemViewModel>();
             this.Items_Chunk1 = new ObservableCollection<ItemViewModel>();
@@ -333,12 +336,26 @@ namespace Centapp.CartoonCommon.ViewModels
         }
 
         #region online management
-        public void DownloadItemsAsynch(string indexFileUrl)
+        public async void DownloadItemsAsynch()
         {
 #if !NOINTERNET
-            WebClient client = new WebClient();
-            client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
-            client.OpenReadAsync(new Uri(indexFileUrl + "?" + Guid.NewGuid()), UriKind.Absolute);
+            //WebClient client = new WebClient();
+            //client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
+            //client.OpenReadAsync(new Uri(indexFileUrl + "?" + Guid.NewGuid()), UriKind.Absolute);
+
+            try
+            {
+                HttpClient client = new HttpClient();
+                string data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
+                SaveIndexToIsostoreJSON(data);
+                BuildItemsFromJson(data, false);
+            }
+            catch (Exception)
+            {
+                if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
+                throw;
+            }
+
 #else
             Assembly asm = Assembly.GetExecutingAssembly();
             Stream localStream = asm.GetManifestResourceStream("Centapp.CartoonCommon.videosrc.json");
@@ -346,44 +363,41 @@ namespace Centapp.CartoonCommon.ViewModels
 #endif
         }
 
-        void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
-        {
-            string errMsg = string.Empty;
-            bool indexFileLoadedFromIsostore = false;
-            Stream webStream = null;
-
-            App.ViewModel.Logger.Log("[client_OpenReadCompleted]");
-
-            if (AppInfo.Instance.UseJSon)
-            {
-#if DEBUGOFFLINE
-                webStream = (Stream)sender;
-#endif
-                if (e.Error != null)
-                {
-                    if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
-                    return;
-                }
-                try
-                {
-                    webStream = e.Result;
-
-                    using (StreamReader reader = new StreamReader(webStream))
-                    {
-                        var data = reader.ReadToEnd();
-                        SaveIndexToIsostoreJSON(data);
-                        BuildItemsFromJson(data, false);
-                    }
-                }
-                finally
-                {
-                    if (webStream != null)
-                    {
-                        webStream.Close();
-                    }
-                }
-            }
-        }
+        //        void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
+        //        {
+        //            string errMsg = string.Empty;
+        //            bool indexFileLoadedFromIsostore = false;
+        //            Stream webStream = null;
+        //            App.ViewModel.Logger.Log("[client_OpenReadCompleted]");
+        //            if (AppInfo.Instance.UseJSon)
+        //            {
+        //#if DEBUGOFFLINE
+        //                webStream = (Stream)sender;
+        //#endif
+        //                if (e.Error != null)
+        //                {
+        //                    if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
+        //                    return;
+        //                }
+        //                try
+        //                {
+        //                    webStream = e.Result;
+        //                    using (StreamReader reader = new StreamReader(webStream))
+        //                    {
+        //                        var data = reader.ReadToEnd();
+        //                        SaveIndexToIsostoreJSON(data);
+        //                        BuildItemsFromJson(data, false);
+        //                    }
+        //                }
+        //                finally
+        //                {
+        //                    if (webStream != null)
+        //                    {
+        //                        webStream.Close();
+        //                    }
+        //                }
+        //            }
+        //        }
 
         #region load/save index isostore
 
@@ -414,11 +428,19 @@ namespace Centapp.CartoonCommon.ViewModels
             }
         }
 
+       // static int internalcount = 0;
+
         private static string LoadIndexFromIsostoreJSON()
         {
             string str = null;
             try
             {
+                //internalcount++;
+                //if (internalcount % 2 != 0)
+                //{
+                //    throw new Exception("eccezione malefica!!");
+                //}
+
                 using (IsolatedStorageFile isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     if (isoStore.FileExists(AppInfo.OfflineIndexFileNameJSON))
@@ -601,17 +623,55 @@ namespace Centapp.CartoonCommon.ViewModels
 
         #endregion
 
-        public void LoadData()
+        public async void LoadData()
         {
             IsDataLoading = true;
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
-                DownloadItemsAsynch(string.Format("http://centapp.altervista.org/{0}", AppInfo.Instance.IndexFile));
+                DownloadItemsAsynch();
             }
             else
             {
-                var json = LoadIndexFromIsostoreJSON();
-                BuildItemsFromJson(json, true);
+                string json = string.Empty;
+                int retryCounter = 0;
+                bool dataReadOk = false;
+                bool dwnRecoverRequired = false;
+
+                do
+                {
+                    retryCounter++;
+                    try
+                    {
+                        json = LoadIndexFromIsostoreJSON();
+                        BuildItemsFromJson(json, true);
+                        dataReadOk = true;
+                    }
+                    catch (Exception)
+                    {
+                        if (retryCounter <= 3)
+                        {
+                            dwnRecoverRequired = true;
+                        }
+                    }
+
+                    if (dwnRecoverRequired)
+                    {
+                        try
+                        {
+                            HttpClient client = new HttpClient();
+                            string data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
+                            SaveIndexToIsostoreJSON(data);
+                        }
+                        catch (Exception)
+                        {
+                        }
+                    }
+                } while (retryCounter <= 3 && !dataReadOk);
+
+                if (!dataReadOk)
+                {
+                    if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
+                }
             }
         }
 

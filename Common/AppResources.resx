@@ -399,4 +399,7 @@ Do you want to backup right now?</value>
   <data name="AppBarSearchByVoice" xml:space="preserve">
     <value>speak</value>
   </data>
+  <data name="NoVoiceCommandsDetected" xml:space="preserve">
+    <value>No voice commands detected</value>
+  </data>
 </root>

@@ -89,6 +89,7 @@ namespace Centapp.CartoonCommon
 
         private object _currentContextItem = null;
         private bool _userMessageShown = false;
+       
 
         // Constructor
         public MainPage()
@@ -110,7 +111,6 @@ namespace Centapp.CartoonCommon
                 Thread.CurrentThread.CurrentUICulture = new CultureInfo("it");
             }
 
-
             // Set the data context of the listbox control to the sample data
             DataContext = App.ViewModel;
 
@@ -120,26 +120,32 @@ namespace Centapp.CartoonCommon
             App.ViewModel.OnUserMessageRequired -= ViewModel_OnUserMessageRequired;
             App.ViewModel.OnUserMessageRequired += ViewModel_OnUserMessageRequired;
 
+            this.Loaded -= new RoutedEventHandler(MainPage_Loaded);
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
+
+
+            firstList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
+            secondList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
+            thirdList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
+            fourthList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
+            favoritesList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
 
             firstList.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
             secondList.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
             thirdList.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
             fourthList.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
-
             favoritesList.Tap += new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
 
             _appVer = GenericHelper.GetAppversion();
 
             //AddContextMenus();
 
+            PanoramaMainControl.SelectionChanged -= new EventHandler<SelectionChangedEventArgs>(PanoramaMainControl_SelectionChanged);
             PanoramaMainControl.SelectionChanged += new EventHandler<SelectionChangedEventArgs>(PanoramaMainControl_SelectionChanged);
 
             CheckOtherAppsPanoramaItem();
 
-            App.ViewModel.Logger.Reset();
-
-            if (!string.IsNullOrEmpty(AppInfo.Instance.CustomFirstPivotItemName))
+              if (!string.IsNullOrEmpty(AppInfo.Instance.CustomFirstPivotItemName))
             {
                 TextBlockFirstPivotItem.Text = AppInfo.Instance.CustomFirstPivotItemName;
             }
@@ -1186,6 +1192,14 @@ namespace Centapp.CartoonCommon
 
         private void AppbarBtnSearchByVoice_Click(object sender, EventArgs e)
         {
+            var localRec = CheckLocalRecognizer();
+            if (localRec == null)
+            {
+                MessageBox.Show(AppResources.NoVoiceCommandsDetected);
+                AppInfo.Instance.InitRecoKoMessageShown = true;
+                return;
+            }
+
             RecognizeText();
         }
 
@@ -1193,26 +1207,47 @@ namespace Centapp.CartoonCommon
         {
             try
             {
+                var localRec = CheckLocalRecognizer();
+                if (localRec == null) {
+                    if (!AppInfo.Instance.InitRecoKoMessageShown)
+                    {
+                        MessageBox.Show(AppResources.NoVoiceCommandsDetected);
+                        AppInfo.Instance.InitRecoKoMessageShown = true;
+                    }
+                    return;
+                }
+
                 _recoWithUI = new SpeechRecognizerUI();
+                if (localRec != null)
+                {
+                    _recoWithUI.Recognizer.SetRecognizer(localRec);
+                }
+
+                // Display text to prompt the user's input.
+                _recoWithUI.Settings.ListenText = AppResources.recoUIText;
+
+                // Give an example of ideal speech input.
+                _recoWithUI.Settings.ExampleText = AppResources.recoUISample;
+                _recoWithUI.Settings.ShowConfirmation = true;
+                _recoWithUI.Settings.ReadoutEnabled = true;
+                _recoWithUI.Recognizer.Grammars.Clear();
+
+                // string cult = GetBestSupportedCultureName();
+                string cult = "it-IT";
+                Uri grammar = new Uri(string.Format("ms-appx:///Speech/Grammars/Grammar.{0}.xml", cult), UriKind.Absolute);
+                _recoWithUI.Recognizer.Grammars.AddGrammarFromUri("peppa", grammar);
             }
             catch (Exception ex)
             {
+                App.ViewModel.Logger.Log("[Mainpage][InitReco] ex = " + ex.Message + "\n" + ex.StackTrace);
                 throw;
             }
+        }
 
-            // Display text to prompt the user's input.
-            _recoWithUI.Settings.ListenText = AppResources.recoUIText;
-
-            // Give an example of ideal speech input.
-            _recoWithUI.Settings.ExampleText = AppResources.recoUISample;
-            _recoWithUI.Settings.ShowConfirmation = true;
-            _recoWithUI.Settings.ReadoutEnabled = true;
-            _recoWithUI.Recognizer.Grammars.Clear();
-
-            // string cult = GetBestSupportedCultureName();
-            string cult = "it-IT";
-            Uri grammar = new Uri(string.Format("ms-appx:///Speech/Grammars/Grammar.{0}.xml", cult), UriKind.Absolute);
-            _recoWithUI.Recognizer.Grammars.AddGrammarFromUri("peppa", grammar);
+        private static SpeechRecognizerInformation CheckLocalRecognizer()
+        {
+            var localRec = InstalledSpeechRecognizers.All.Where(r => r.Language == "it-IT").FirstOrDefault();
+            return localRec;
         }
 
         //private string GetBestSupportedCultureName()
@@ -1330,6 +1365,6 @@ namespace Centapp.CartoonCommon
         }
         #endregion
 
-     
+
     }
 }
