@@ -255,6 +255,9 @@
       <Link>DownloaderPage.xaml.cs</Link>
       <DependentUpon>DownloaderPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="..\Common\Helpers\FlurryHelper.cs">
+      <Link>Helpers\FlurryHelper.cs</Link>
+    </Compile>
     <Compile Include="..\Common\Helpers\GenericHelper.cs">
       <Link>Helpers\GenericHelper.cs</Link>
     </Compile>

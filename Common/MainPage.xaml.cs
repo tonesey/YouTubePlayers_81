@@ -89,7 +89,7 @@ namespace Centapp.CartoonCommon
 
         private object _currentContextItem = null;
         private bool _userMessageShown = false;
-       
+
 
         // Constructor
         public MainPage()
@@ -123,7 +123,6 @@ namespace Centapp.CartoonCommon
             this.Loaded -= new RoutedEventHandler(MainPage_Loaded);
             this.Loaded += new RoutedEventHandler(MainPage_Loaded);
 
-
             firstList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
             secondList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
             thirdList.Tap -= new EventHandler<System.Windows.Input.GestureEventArgs>(itemsList_Tap);
@@ -145,7 +144,7 @@ namespace Centapp.CartoonCommon
 
             CheckOtherAppsPanoramaItem();
 
-              if (!string.IsNullOrEmpty(AppInfo.Instance.CustomFirstPivotItemName))
+            if (!string.IsNullOrEmpty(AppInfo.Instance.CustomFirstPivotItemName))
             {
                 TextBlockFirstPivotItem.Text = AppInfo.Instance.CustomFirstPivotItemName;
             }
@@ -1208,7 +1207,8 @@ namespace Centapp.CartoonCommon
             try
             {
                 var localRec = CheckLocalRecognizer();
-                if (localRec == null) {
+                if (localRec == null)
+                {
                     if (!AppInfo.Instance.InitRecoKoMessageShown)
                     {
                         MessageBox.Show(AppResources.NoVoiceCommandsDetected);

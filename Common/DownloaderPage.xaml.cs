@@ -386,6 +386,9 @@ namespace Centapp.CartoonCommon
                             GenericHelper.Instance.SetAppIsOffline(true, AppInfo.Instance.CurrentBackupSupport);
                             App.ViewModel.LoadData();
                             App.ViewModel.BackupStage = BackupStageEn.DwnCompletedWithSuccess;
+
+                            FlurryWP8SDK.Api.LogEvent("DownloadCompleted");
+
                             Dispatcher.BeginInvoke(() =>
                             {
                                 //MessageBox.Show(elapsed.Seconds.ToString());

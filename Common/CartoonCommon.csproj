@@ -202,6 +202,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="Helpers\FlurryHelper.cs" />
     <Compile Include="InfoPagePivot.xaml.cs">
       <DependentUpon>InfoPagePivot.xaml</DependentUpon>
     </Compile>

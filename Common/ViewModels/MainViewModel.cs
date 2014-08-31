@@ -30,6 +30,7 @@ using System.Xml;
 using System.Globalization;
 using Wp81Shared.Helpers;
 using Windows.Web.Http;
+using System.Threading.Tasks;
 
 
 namespace Centapp.CartoonCommon.ViewModels
@@ -336,7 +337,7 @@ namespace Centapp.CartoonCommon.ViewModels
         }
 
         #region online management
-        public async void DownloadItemsAsynch()
+        public async Task DownloadItemsAsynch()
         {
 #if !NOINTERNET
             //WebClient client = new WebClient();
@@ -623,31 +624,43 @@ namespace Centapp.CartoonCommon.ViewModels
 
         #endregion
 
-        public async void LoadData()
+        public async Task LoadData()
         {
+            App.ViewModel.Logger.Log("[MainViewModel][LoadData]");
             IsDataLoading = true;
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
+                App.ViewModel.Logger.Log("[MainViewModel][LoadData] online");
                 DownloadItemsAsynch();
             }
             else
             {
+                App.ViewModel.Logger.Log("[MainViewModel][LoadData] offline");
                 string json = string.Empty;
                 int retryCounter = 0;
                 bool dataReadOk = false;
                 bool dwnRecoverRequired = false;
+                Exception lastException = null;
 
                 do
                 {
                     retryCounter++;
                     try
                     {
+                        App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] START loading data from isostore (retry {0})", retryCounter));
                         json = LoadIndexFromIsostoreJSON();
+                        App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] LoadIndexFromIsostoreJSON OK (retry {0})", retryCounter));
                         BuildItemsFromJson(json, true);
+                        throw new Exception("Errore malvagio");
+                        App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] BuildItemsFromJson OK (retry {0})", retryCounter));
                         dataReadOk = true;
+                        App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] END loading data from isostore OK! (retry {0})", retryCounter));
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] error! (retry {0}): {1}", retryCounter, ex.Message + "\n" + ex.StackTrace));
+                        lastException = ex;
+                        FlurryHelper.LogException("[MainViewModel][LoadData] retry = " + retryCounter, ex);
                         if (retryCounter <= 3)
                         {
                             dwnRecoverRequired = true;
@@ -658,19 +671,23 @@ namespace Centapp.CartoonCommon.ViewModels
                     {
                         try
                         {
+                            App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] dwn recover START (retry {0})", retryCounter));
                             HttpClient client = new HttpClient();
                             string data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
                             SaveIndexToIsostoreJSON(data);
+                            App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] dwn recover END (retry {0})", retryCounter));
                         }
-                        catch (Exception)
+                        catch (Exception ex)
                         {
+                            App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] dwn recover error! (retry {0}): {1}", retryCounter, ex.Message + "\n" + ex.StackTrace));
                         }
                     }
                 } while (retryCounter <= 3 && !dataReadOk);
 
                 if (!dataReadOk)
                 {
-                    if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
+                   // if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
+                    throw lastException;
                 }
             }
         }

@@ -107,6 +107,8 @@ namespace Centapp.CartoonCommon
         // This code will not execute when the application is reactivated
         private async void Application_Launching(object sender, LaunchingEventArgs e)
         {
+            LittleWatson.CheckForPreviousException(AppResources.ExceptionMessage, AppResources.ExceptionMessageTitle);
+
             try
             {
                 FlurryWP8SDK.Api.StartSession("5QZM2HPYVQWCX5WQVM9D");
@@ -115,16 +117,15 @@ namespace Centapp.CartoonCommon
             {
             }
 
-            FeedbackHelper.Default.Launching();
             await InitApp();
-            LittleWatson.CheckForPreviousException(AppResources.ExceptionMessage, AppResources.ExceptionMessageTitle);
+
+            FeedbackHelper.Default.Launching();
         }
 
         private async Task InitApp()
         {
             ParseAppInfo();
             CheckTrialState();
-
             App.ViewModel.Logger.Reset();
 
             //GenericHelper.Instance.SetAppIsOffline(true, BackupSupportType.SDCard);
@@ -138,7 +139,8 @@ namespace Centapp.CartoonCommon
                     return;
                 });
             }
-            App.ViewModel.LoadData();
+            
+            await App.ViewModel.LoadData();
         }
 
         private static void ParseAppInfo()
@@ -303,6 +305,8 @@ namespace Centapp.CartoonCommon
 
             if (!(e.ExceptionObject is ForcedExitException))
             {
+                FlurryWP8SDK.Api.LogError("Application_UnhandledException", e.ExceptionObject);
+
                 string extraInfos = string.Empty;
                 extraInfos += "--------------------------------------------\n";
                 extraInfos = "- App version: " + GenericHelper.GetAppversion() + "\n" +
