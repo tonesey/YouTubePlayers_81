@@ -340,14 +340,44 @@ namespace Centapp.CartoonCommon.ViewModels
         public async Task DownloadItemsAsynch()
         {
 #if !NOINTERNET
+
+            //1.
             //WebClient client = new WebClient();
             //client.OpenReadCompleted += new OpenReadCompletedEventHandler(client_OpenReadCompleted);
-            //client.OpenReadAsync(new Uri(indexFileUrl + "?" + Guid.NewGuid()), UriKind.Absolute);
 
+            //2.
+            //WebClient client = new WebClient();
+            //client.OpenReadCompleted += (o, e) =>
+            //{
+            //    Stream webStream = null;
+            //    try
+            //    {
+            //        webStream = e.Result;
+            //        using (StreamReader reader = new StreamReader(webStream))
+            //        {
+            //            var data = reader.ReadToEnd();
+            //            SaveIndexToIsostoreJSON(data);
+            //            BuildItemsFromJson(data, false);
+            //        }
+            //    }
+            //    finally
+            //    {
+            //        if (webStream != null)
+            //        {
+            //            webStream.Close();
+            //        }
+            //    }
+            //};
+            //client.OpenReadAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
+
+            //3. UI non bloccata a patto di usare la await anche sul chiamante!
             try
             {
-                HttpClient client = new HttpClient();
-                string data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
+                string data = null;
+                using (HttpClient client = new HttpClient())
+                {
+                    data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
+                }
                 SaveIndexToIsostoreJSON(data);
                 BuildItemsFromJson(data, false);
             }
@@ -356,49 +386,12 @@ namespace Centapp.CartoonCommon.ViewModels
                 if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
                 throw;
             }
-
 #else
             Assembly asm = Assembly.GetExecutingAssembly();
             Stream localStream = asm.GetManifestResourceStream("Centapp.CartoonCommon.videosrc.json");
             client_OpenReadCompleted(localStream, null);
 #endif
         }
-
-        //        void client_OpenReadCompleted(object sender, OpenReadCompletedEventArgs e)
-        //        {
-        //            string errMsg = string.Empty;
-        //            bool indexFileLoadedFromIsostore = false;
-        //            Stream webStream = null;
-        //            App.ViewModel.Logger.Log("[client_OpenReadCompleted]");
-        //            if (AppInfo.Instance.UseJSon)
-        //            {
-        //#if DEBUGOFFLINE
-        //                webStream = (Stream)sender;
-        //#endif
-        //                if (e.Error != null)
-        //                {
-        //                    if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
-        //                    return;
-        //                }
-        //                try
-        //                {
-        //                    webStream = e.Result;
-        //                    using (StreamReader reader = new StreamReader(webStream))
-        //                    {
-        //                        var data = reader.ReadToEnd();
-        //                        SaveIndexToIsostoreJSON(data);
-        //                        BuildItemsFromJson(data, false);
-        //                    }
-        //                }
-        //                finally
-        //                {
-        //                    if (webStream != null)
-        //                    {
-        //                        webStream.Close();
-        //                    }
-        //                }
-        //            }
-        //        }
 
         #region load/save index isostore
 
@@ -429,7 +422,7 @@ namespace Centapp.CartoonCommon.ViewModels
             }
         }
 
-       // static int internalcount = 0;
+        // static int internalcount = 0;
 
         private static string LoadIndexFromIsostoreJSON()
         {
@@ -631,7 +624,7 @@ namespace Centapp.CartoonCommon.ViewModels
             if (!AppInfo.Instance.AppIsOfflineSettingValue)
             {
                 App.ViewModel.Logger.Log("[MainViewModel][LoadData] online");
-                DownloadItemsAsynch();
+                await DownloadItemsAsynch();
             }
             else
             {
@@ -651,7 +644,7 @@ namespace Centapp.CartoonCommon.ViewModels
                         json = LoadIndexFromIsostoreJSON();
                         App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] LoadIndexFromIsostoreJSON OK (retry {0})", retryCounter));
                         BuildItemsFromJson(json, true);
-                        throw new Exception("Errore malvagio");
+                        //throw new Exception("Errore malvagio");
                         App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] BuildItemsFromJson OK (retry {0})", retryCounter));
                         dataReadOk = true;
                         App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] END loading data from isostore OK! (retry {0})", retryCounter));
@@ -686,7 +679,7 @@ namespace Centapp.CartoonCommon.ViewModels
 
                 if (!dataReadOk)
                 {
-                   // if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
+                    // if (OnError != null) OnError(AppResources.ServerTemporaryUnavailable, true);
                     throw lastException;
                 }
             }
