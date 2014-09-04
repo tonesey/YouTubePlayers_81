@@ -156,7 +156,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.OnLoadCompleted -= new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
             App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
 
-            //CreateGrammars();
+            CreateGrammars();
             
         }
 

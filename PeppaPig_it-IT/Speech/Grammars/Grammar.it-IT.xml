@@ -5,7 +5,7 @@
         Pozzanghere di fango<tag> out.Id="1"</tag>
       </item>
       <item>
-        Il signor dinosauro si è perso<tag> out.Id="2"</tag>
+        Il signor dinosauro si e' perso<tag> out.Id="2"</tag>
       </item>
       <item>
         La migliore amica<tag> out.Id="3"</tag>
@@ -26,7 +26,7 @@
         Palla al centro<tag> out.Id="8"</tag>
       </item>
       <item>
-        Papà   perde i suoi occhiali<tag> out.Id="9"</tag>
+        Papa' perde i suoi occhiali<tag> out.Id="9"</tag>
       </item>
       <item>
         Giardinaggio<tag> out.Id="10"</tag>
@@ -83,7 +83,7 @@
         Il castello ventoso<tag> out.Id="27"</tag>
       </item>
       <item>
-        La cugina Chloè<tag> out.Id="28"</tag>
+        La cugina Chloe'<tag> out.Id="28"</tag>
       </item>
       <item>
         Frittelle<tag> out.Id="29"</tag>
@@ -122,10 +122,10 @@
         Una giornata molto calda<tag> out.Id="40"</tag>
       </item>
       <item>
-        Il teatrino di Chloè<tag> out.Id="41"</tag>
+        Il teatrino di Chloe'<tag> out.Id="41"</tag>
       </item>
       <item>
-        Papà fa ginnastica<tag> out.Id="42"</tag>
+        Papa' fa ginnastica<tag> out.Id="42"</tag>
       </item>
       <item>
         Mettiamo in ordine<tag> out.Id="43"</tag>
@@ -134,7 +134,7 @@
         Il parco giochi<tag> out.Id="44"</tag>
       </item>
       <item>
-        Papà appende una foto<tag> out.Id="45"</tag>
+        Papa' appende una foto<tag> out.Id="45"</tag>
       </item>
       <item>
         Tutti al mare!<tag> out.Id="46"</tag>
@@ -152,7 +152,7 @@
         La mia festa di compleanno<tag> out.Id="50"</tag>
       </item>
       <item>
-        La telecamera di Papà<tag> out.Id="51"</tag>
+        La telecamera di Papa'<tag> out.Id="51"</tag>
       </item>
       <item>
         La recita scolastica<tag> out.Id="52"</tag>
@@ -218,7 +218,7 @@
         Gli animaletti dell'orto<tag> out.Id="72"</tag>
       </item>
       <item>
-        L'ufficio di papà Pig<tag> out.Id="73"</tag>
+        L'ufficio di papa' Pig<tag> out.Id="73"</tag>
       </item>
       <item>
         L'isola dei pirati<tag> out.Id="74"</tag>
@@ -251,7 +251,7 @@
         Zoe Zebra la figlia del postino<tag> out.Id="83"</tag>
       </item>
       <item>
-        L'orologio a cucù<tag> out.Id="84"</tag>
+        L'orologio a cucu'<tag> out.Id="84"</tag>
       </item>
       <item>
         Pattinaggio sul ghiaccio<tag> out.Id="85"</tag>
@@ -281,7 +281,7 @@
         Il campeggio<tag> out.Id="93"</tag>
       </item>
       <item>
-        Il capitano papà Pig<tag> out.Id="94"</tag>
+        Il capitano papa' Pig<tag> out.Id="94"</tag>
       </item>
       <item>
         Il black out<tag> out.Id="95"</tag>
@@ -293,7 +293,7 @@
         Le stelle<tag> out.Id="97"</tag>
       </item>
       <item>
-        Il compleanno di papà Pig<tag> out.Id="98"</tag>
+        Il compleanno di papa' Pig<tag> out.Id="98"</tag>
       </item>
       <item>
         Il pigiama party<tag> out.Id="99"</tag>
@@ -449,13 +449,169 @@
         Il compleanno<tag> out.Id="149"</tag>
       </item>
       <item>
-        La pozzanghera più grande del mondo<tag> out.Id="150"</tag>
+        La pozzanghera piu' grande del mondo<tag> out.Id="150"</tag>
       </item>
       <item>
         La capanna di Babbo Natale<tag> out.Id="151"</tag>
       </item>
       <item>
         Arriva Babbo Natale<tag> out.Id="152"</tag>
+      </item>
+      <item>
+        La citta' delle patate<tag> out.Id="153"</tag>
+      </item>
+      <item>
+        Una nuova casa<tag> out.Id="154"</tag>
+      </item>
+      <item>
+        Pallacanestro<tag> out.Id="155"</tag>
+      </item>
+      <item>
+        Cavallino pie' veloce<tag> out.Id="156"</tag>
+      </item>
+      <item>
+        Il tartarughino pestifero<tag> out.Id="157"</tag>
+      </item>
+      <item>
+        La bottega del Signor Volpe<tag> out.Id="158"</tag>
+      </item>
+      <item>
+        Ombre<tag> out.Id="159"</tag>
+      </item>
+      <item>
+        La Giornata della pace<tag> out.Id="160"</tag>
+      </item>
+      <item>
+        Giochi da pioggia<tag> out.Id="161"</tag>
+      </item>
+      <item>
+        Il pancione<tag> out.Id="162"</tag>
+      </item>
+      <item>
+        Pedro il Cowboy<tag> out.Id="163"</tag>
+      </item>
+      <item>
+        Il giardino fiorito<tag> out.Id="164"</tag>
+      </item>
+      <item>
+        La veterinaria volante<tag> out.Id="165"</tag>
+      </item>
+      <item>
+        Kylie Canguro<tag> out.Id="166"</tag>
+      </item>
+      <item>
+        Il ritorno di Capitan Cane<tag> out.Id="167"</tag>
+      </item>
+      <item>
+        Il parco dei dinosauri<tag> out.Id="168"</tag>
+      </item>
+      <item>
+        Le favole della buonanotte<tag> out.Id="169"</tag>
+      </item>
+      <item>
+        Recupero chiavi<tag> out.Id="170"</tag>
+      </item>
+      <item>
+        Il dinosauro nuovo<tag> out.Id="171"</tag>
+      </item>
+      <item>
+        Il treno di Nonno Pig<tag> out.Id="172"</tag>
+      </item>
+      <item>
+        Gara di animali<tag> out.Id="173"</tag>
+      </item>
+      <item>
+        La ragnatela<tag> out.Id="174"</tag>
+      </item>
+      <item>
+        Chiasso notturno<tag> out.Id="175"</tag>
+      </item>
+      <item>
+        Il pozzo dei desideri<tag> out.Id="176"</tag>
+      </item>
+      <item>
+        Lo spettacolo di Natale<tag> out.Id="177"</tag>
+      </item>
+      <item>
+        Festa d'addio<tag> out.Id="178"</tag>
+      </item>
+      <item>
+        La regina<tag> out.Id="179"</tag>
+      </item>
+      <item>
+        L'isola deserta<tag> out.Id="180"</tag>
+      </item>
+      <item>
+        Profumo<tag> out.Id="181"</tag>
+      </item>
+      <item>
+        Festa di beneficenza<tag> out.Id="182"</tag>
+      </item>
+      <item>
+        L'acquario<tag> out.Id="183"</tag>
+      </item>
+      <item>
+        La gara automobilistica<tag> out.Id="184"</tag>
+      </item>
+      <item>
+        La barchetta<tag> out.Id="185"</tag>
+      </item>
+      <item>
+        Il recinto della sabbia<tag> out.Id="186"</tag>
+      </item>
+      <item>
+        Buonanotte animaletti<tag> out.Id="187"</tag>
+      </item>
+      <item>
+        Vacanze al sole<tag> out.Id="188"</tag>
+      </item>
+      <item>
+        La casa delle vacanze<tag> out.Id="189"</tag>
+      </item>
+      <item>
+        Viva la pizza!<tag> out.Id="190"</tag>
+      </item>
+      <item>
+        Fine delle vacanze<tag> out.Id="191"</tag>
+      </item>
+      <item>
+        Gli specchi<tag> out.Id="192"</tag>
+      </item>
+      <item>
+        Pedro fa tardi<tag> out.Id="193"</tag>
+      </item>
+      <item>
+        Giochi all'aperto<tag> out.Id="194"</tag>
+      </item>
+      <item>
+        Gita in barca<tag> out.Id="195"</tag>
+      </item>
+      <item>
+        Il palloncino di George<tag> out.Id="196"</tag>
+      </item>
+      <item>
+        La teiera del signor Toro<tag> out.Id="197"</tag>
+      </item>
+      <item>
+        Viva la frutta<tag> out.Id="198"</tag>
+      </item>
+      <item>
+        Il circo di Peppa<tag> out.Id="199"</tag>
+      </item>
+      <item>
+        La fontana dei pesci<tag> out.Id="200"</tag>
+      </item>
+      <item>
+        Campioni di sci<tag> out.Id="201"</tag>
+      </item>
+      <item>
+        Nonno Coniglio nello spazio<tag> out.Id="202"</tag>
+      </item>
+      <item>
+        I bei vecchi tempi<tag> out.Id="203"</tag>
+      </item>
+      <item>
+        Il tesoro dei pirati<tag> out.Id="204"</tag>
       </item>
     </one-of>
   </rule>

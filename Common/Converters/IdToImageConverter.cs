@@ -21,7 +21,7 @@ namespace Centapp.CartoonCommon.Converters
 
 #if DEBUGOFFLINE
             return null;
-#endif 
+#endif
 
             if (value == null) return null;
 
@@ -31,7 +31,8 @@ namespace Centapp.CartoonCommon.Converters
             }
 
             BitmapImage image = new BitmapImage();
-            lock (_readLock) {
+            lock (_readLock)
+            {
                 using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                 {
                     var curThumbName = string.Format("thumb_{0}.png", (value as ItemViewModel).Id);
@@ -41,7 +42,7 @@ namespace Centapp.CartoonCommon.Converters
                         curThumbName = string.Format("thumb_1.png");
                     }
                     //using (var stream = IsolatedStorageFile.GetUserStoreForApplication().OpenFile(curThumbName, System.IO.FileMode.Open))
-                    using (var stream = new IsolatedStorageFileStream(curThumbName, FileMode.Open, FileAccess.Read, FileShare.None, isoStore)
+                    using (var stream = new IsolatedStorageFileStream(curThumbName, FileMode.Open, FileAccess.Read, FileShare.None, isoStore))
                     {
                         image.SetSource(stream);
                     }
