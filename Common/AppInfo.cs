@@ -37,7 +37,7 @@ namespace Centapp.CartoonCommon
         #region runtime settings not persisted
         public StorageFolder SDBackupFolder { set; get; }
 
-        public bool InitRecoKoMessageShown { set; get; }
+        public bool RecognizerInited { set; get; }
         #endregion
 
         #region readonly settings from app.config

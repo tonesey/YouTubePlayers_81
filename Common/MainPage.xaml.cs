@@ -157,7 +157,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.OnLoadCompleted += new OnLoadCompletedHandler(ViewModel_OnLoadCompleted);
 
             //CreateGrammars();
-            InitReco();
+            
         }
 
         void ViewModel_OnError(string msg, bool isFatalError)
@@ -1194,9 +1194,13 @@ namespace Centapp.CartoonCommon
             var localRec = CheckLocalRecognizer();
             if (localRec == null)
             {
-                MessageBox.Show(AppResources.NoVoiceCommandsDetected);
-                AppInfo.Instance.InitRecoKoMessageShown = true;
+                MessageBox.Show(AppResources.NoVoiceCommandsDetected);               
                 return;
+            }
+
+            if (!AppInfo.Instance.RecognizerInited)
+            {
+                InitReco();
             }
 
             RecognizeText();
@@ -1206,13 +1210,14 @@ namespace Centapp.CartoonCommon
         {
             try
             {
+                AppInfo.Instance.RecognizerInited = false;
                 var localRec = CheckLocalRecognizer();
                 if (localRec == null)
                 {
-                    if (!AppInfo.Instance.InitRecoKoMessageShown)
+                    if (!AppInfo.Instance.RecognizerInited)
                     {
                         MessageBox.Show(AppResources.NoVoiceCommandsDetected);
-                        AppInfo.Instance.InitRecoKoMessageShown = true;
+                        AppInfo.Instance.RecognizerInited = true;
                     }
                     return;
                 }
@@ -1236,6 +1241,7 @@ namespace Centapp.CartoonCommon
                 string cult = "it-IT";
                 Uri grammar = new Uri(string.Format("ms-appx:///Speech/Grammars/Grammar.{0}.xml", cult), UriKind.Absolute);
                 _recoWithUI.Recognizer.Grammars.AddGrammarFromUri("peppa", grammar);
+                AppInfo.Instance.RecognizerInited = true;
             }
             catch (Exception ex)
             {
