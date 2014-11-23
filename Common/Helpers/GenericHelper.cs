@@ -135,7 +135,7 @@ namespace Centapp.CartoonCommon.Helpers
         }
 
         #region SD card
-        internal async Task RemoveOfflineData()
+        internal async Task RemoveOfflineEpisodes()
         {
             if (AppInfo.Instance.OfflineSupportTypeSettingValue == BackupSupportType.IsolatedStorage)
             {

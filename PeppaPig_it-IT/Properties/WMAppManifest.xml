@@ -4,7 +4,7 @@
   <Languages xmlns="">
     <Language code="it" />
   </Languages>
-  <App xmlns="" ProductID="{2d034f2d-836b-466c-9ca2-a7bb6b24e3f8}" Title="Peppa Pig" RuntimeType="Silverlight" Version="2.1.6" Genre="apps.normal" Author="Centapp" Description="Episodi Peppa Pig" Publisher="Centapp" PublisherID="{68dec18f-239f-4612-a7be-70327947b555}" SDOptOut="true">
+  <App xmlns="" ProductID="{2d034f2d-836b-466c-9ca2-a7bb6b24e3f8}" Title="Peppa Pig" RuntimeType="Silverlight" Version="2.1.7" Genre="apps.normal" Author="Centapp" Description="Episodi Peppa Pig" Publisher="Centapp" PublisherID="{68dec18f-239f-4612-a7be-70327947b555}" SDOptOut="true">
     <IconPath IsRelative="true" IsResource="false">ApplicationIcon.png</IconPath>
     <Capabilities>
       <!--<Capability Name="ID_CAP_IDENTITY_DEVICE" />

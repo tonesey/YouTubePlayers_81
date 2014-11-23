@@ -651,6 +651,7 @@ namespace Centapp.CartoonCommon.ViewModels
                     }
                     catch (Exception ex)
                     {
+                        Thread.Sleep(1500);
                         App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] error! (retry {0}): {1}", retryCounter, ex.Message + "\n" + ex.StackTrace));
                         lastException = ex;
                         FlurryHelper.LogException("[MainViewModel][LoadData] retry = " + retryCounter, ex);
@@ -665,9 +666,7 @@ namespace Centapp.CartoonCommon.ViewModels
                         try
                         {
                             App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] dwn recover START (retry {0})", retryCounter));
-                            HttpClient client = new HttpClient();
-                            string data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
-                            SaveIndexToIsostoreJSON(data);
+                            await DownloadAndSaveIndexToIsostore();
                             App.ViewModel.Logger.Log(string.Format("[MainViewModel][LoadData] dwn recover END (retry {0})", retryCounter));
                         }
                         catch (Exception ex)
@@ -683,6 +682,13 @@ namespace Centapp.CartoonCommon.ViewModels
                     throw lastException;
                 }
             }
+        }
+
+        public async Task DownloadAndSaveIndexToIsostore()
+        {
+            HttpClient client = new HttpClient();
+            string data = await client.GetStringAsync(new Uri(_indexFileUri + "?" + Guid.NewGuid()));
+            SaveIndexToIsostoreJSON(data);
         }
 
         #region favorites

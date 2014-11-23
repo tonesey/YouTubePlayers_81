@@ -111,11 +111,13 @@ namespace Centapp.CartoonCommon
             App.ViewModel.BackupStage = BackupStageEn.CheckingLinks;
             App.ViewModel.DwnInProgress = true;
 
-#if DEBUG
-            var episodes = App.ViewModel.Items.Take(3).ToList();
-#else
+            //#if DEBUG
+            //            var episodes = App.ViewModel.Items.Take(3).ToList();
+            //#else
+            //            var episodes = App.ViewModel.Items;
+            //#endif
+
             var episodes = App.ViewModel.Items;
-#endif
 
             App.ViewModel.Logger.Log("[Init] episodies initial count: " + episodes.Count);
             //App.ViewModel.Logger.Log("[Init] _incrementalBackup = " + _incrementalBackup);
@@ -126,7 +128,8 @@ namespace Centapp.CartoonCommon
             if (AppInfo.Instance.CurrentBackupSupport == BackupSupportType.SDCard)
             {
                 bool sdFolderInitResult = await GenericHelper.Instance.InitSDBackupFolder();
-                if (!sdFolderInitResult) {
+                if (!sdFolderInitResult)
+                {
                     //sd card not found
                     MessageBox.Show(AppResources.CannotFindSDCard);
                     NavigationService.GoBack();
@@ -137,7 +140,7 @@ namespace Centapp.CartoonCommon
             if (AppInfo.Instance.CurrentBackupSupport == BackupSupportType.SDCard)
             {
                 var folderFiles = await AppInfo.Instance.SDBackupFolder.GetFilesAsync();
-                foreach (StorageFile ep in folderFiles.Where(ep => ep.Name.StartsWith("ep")))        
+                foreach (StorageFile ep in folderFiles.Where(ep => ep.Name.StartsWith("ep")))
                 {
                     alreadyStoredFiles.Add(ep.Name);
                 }
@@ -205,7 +208,7 @@ namespace Centapp.CartoonCommon
             App.ViewModel.DwnCurEpisode = _currentQueue.First();
         }
 
-      
+
 
         private void SetCaptions()
         {
@@ -312,31 +315,46 @@ namespace Centapp.CartoonCommon
                             break;
                     }
 
+                    int attempt = 0;
+                    int maxAttempts = 5;
+                    bool uriOk = false;
+
                     switch (_backupOperation)
                     {
                         case BackupOperationEn.Download:
                             App.ViewModel.Logger.Log("[ProcessItem] ##### starting download of: " + _curEpisode.Id);
-                            //completed(null, ex) => http error
-                            //completed(null, null) => url not found (eg quality not found)
-                            //completed(uri, null) => success
-                            var uri = await YouTube.GetVideoUriAsync(GenericHelper.GetYoutubeID(_curEpisode.Url), YouTubeQuality.Quality480P);
-                            if (uri != null)
+                            YouTubeUri uri = null;
+                            do
+                            {
+                                attempt++;
+                                uri = await YouTube.GetVideoUriAsync(GenericHelper.GetYoutubeID(_curEpisode.Url), YouTubeQuality.Quality480P);
+                                uriOk = uri != null;
+                            } while (!uriOk && attempt <= maxAttempts);
+
+                            if (uriOk)
                             {
                                 App.ViewModel.Logger.Log("[ProcessItem] URI before download OK!");
                                 _curEpisode.ActualMP4Uri = uri;
                                 _client.OpenReadAsync(_curEpisode.ActualMP4Uri.Uri);
+                            }
+                            else
+                            {
+                                throw new Exception(string.Format("[ep {0}] [ProcessItem] cannot find episode: {1}", new object[] { _curEpisode.Id, _curEpisode.Url }));
                             }
                             //ProcessItem() in questo caso è chiamata dalla callback in "client_OpenReadCompleted"
                             break;
 
                         case BackupOperationEn.UrlChecks:
                             #region url checks
-                            //App.ViewModel.Logger.Log("[ProcessItem] requesting URI for: " + _curEpisode.Id);
-                            //YouTube.GetVideoUri(GenericHelper.GetYoutubeID(_curEpisode.Url), YouTubeQuality.Quality480P, (uri, ex) =>
+                            YouTubeUri uri1 = null;
+                            do
+                            {
+                                attempt++;
+                                uri1 = await YouTube.GetVideoUriAsync(GenericHelper.GetYoutubeID(_curEpisode.Url), YouTubeQuality.Quality480P);
+                                uriOk = uri1 != null;
+                            } while (!uriOk && attempt <= maxAttempts);
 
-                            var uri1 = await YouTube.GetVideoUriAsync(GenericHelper.GetYoutubeID(_curEpisode.Url), YouTubeQuality.Quality480P);
-
-                            if (uri1 != null)
+                            if (uriOk)
                             {
                                 _curEpisode.ActualMP4Uri = uri1;
                                 //save thumb offline
@@ -346,7 +364,6 @@ namespace Centapp.CartoonCommon
                                     WriteableBitmap img = new WriteableBitmap((int)ImagePreview.Width, (int)ImagePreview.Height);
                                     img.Render(ImagePreview, null);
                                     img.Invalidate();
-
                                     //TODO portare su SD?
                                     using (var isoStore = IsolatedStorageFile.GetUserStoreForApplication())
                                     {
@@ -360,9 +377,13 @@ namespace Centapp.CartoonCommon
                                         }
                                     }
                                 });
-
-                                ProcessItem();
                             }
+                            else
+                            {
+                                _wrongEpisodes.Add(_curEpisode);
+                            }
+
+                            ProcessItem();
                             #endregion
                             break;
                     }
@@ -582,7 +603,7 @@ namespace Centapp.CartoonCommon
                     }
                     else
                     {
-                        throw new Exception(string.Format("[ep {0}] isostore write error: {1}",  new object[] { _curEpisode.Id, ex.Message }),  ex);
+                        throw new Exception(string.Format("[ep {0}] isostore write error: {1}", new object[] { _curEpisode.Id, ex.Message }), ex);
 
                     }
                     //}

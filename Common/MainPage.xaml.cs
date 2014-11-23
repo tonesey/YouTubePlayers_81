@@ -997,7 +997,10 @@ namespace Centapp.CartoonCommon
                     return;
                 }
                 GenericHelper.Instance.SetAppIsOffline(false);
-                await GenericHelper.Instance.RemoveOfflineData();
+                await GenericHelper.Instance.RemoveOfflineEpisodes();
+
+                //download and save index again
+                await App.ViewModel.DownloadAndSaveIndexToIsostore();
             }
 
             MediaInfo mInfo = await CheckAvailableSpace(backupSupportType);
